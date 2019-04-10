@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>
+         Oracle 12C PDC基础 - xiaobio 
+    </title>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Life it self">
+
+    <link rel="stylesheet" type="text/css" href="asset/cuckoo.css">
+    <link rel="stylesheet" type="text/css" href="asset/main.css">
+    <link rel="stylesheet" type="text/css" href="asset/atom-one-light.css">
+
+    <link rel="alternate" type="application/atom+xml" href="atom.xml" title="xiaobio">
+
+    <script src="asset/highlight.pack.js"></script>
+<!--    <script>hljs.initHighlightingOnLoad();</script>-->
+</head>
+
+<body>
+    <header class="site-header cuckoo">
+        <div class="wrapper">
+            <a class="site-title" href="index.html">xiaobio</a>
+            <nav class="site-nav">
+                <a href="#" class="menu-icon">
+                    <svg viewBox="0 0 18 15">
+                        <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"></path>
+                        <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"></path>
+                        <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"></path>
+                    </svg>
+                </a>
+                <div class="trigger">
+                    
+                        <a class="page-link" href="index.html">Home</a>
+                    
+                        <a class="page-link" href="archives.html">Archives</a>
+                    
+                        <a class="page-link" href="about.html">About</a>
+                    
+                </div>
+            </nav>
+        </div>
+    </header>
+</body>
+
+</html>
+ <div class="page-content cuckoo">
+    <div class="wrapper">
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+            <header class="post-header">
+                <h1 class="post-title" itemprop="name headline">Oracle 12C PDC基础</h1>
+                <div class="post-description">
+                    
+                </div>
+            </header>
+            <div class="post-content" itemprop="articleBody">
+                <h2 id="toc_0">查看pdb开启状态</h2>
+
+<p><code>select con_id, dbid, guid, name , open_mode from v$pdbs;</code></p>
+
+<h2 id="toc_1">建立连接</h2>
+
+<h3 id="toc_2">进入cdb</h3>
+
+<pre class="line-numbers"><code class="language-text">sqlplus /nolog
+conn sys/sys as dba
+sqlplus sys/sys@localhost:1521/orcl as sysdba
+</code></pre>
+
+<h3 id="toc_3">进入pdb</h3>
+
+<p>pdb可以通过alter session container进入，也可以直接通过tns方式（如下）登录<br/>
+<code>sqlplus sys/sys@localhost:1521/pdborcl as sysdba</code></p>
+
+<span id="more"></span><!-- more -->
+
+<h2 id="toc_4">显示所有的plaggable db</h2>
+
+<p><code>show pdbs;</code>       </p>
+
+<h2 id="toc_5">查看当前连接名称</h2>
+
+<p><code>show con_name;</code>    </p>
+
+<h2 id="toc_6">新建pdb</h2>
+
+<pre class="line-numbers"><code class="language-text">CREATE PLUGGABLE DATABASE xff_db ADMIN USER xff IDENTIFIED BY xifenfei
+STORAGE (MAXSIZE 2G MAX_SHARED_TEMP_SIZE 100M)
+DEFAULT TABLESPACE xifenfei
+DATAFILE &#39;/u01/app/oracle/oradata/xifenfei/xff/xifenfei01.dbf&#39; SIZE 25M AUTOEXTEND ON  5  PATH_PREFIX = &#39;/u01/app/oracle/oradata/xifenfei/xff/&#39;
+FILE_NAME_CONVERT = (&#39;/u01/app/oracle/oradata/xifenfei/pdbseed/&#39;, 
+&#39;/u01/app/oracle/oradata/xifenfei/xff/&#39;);
+#### 删除PDB
+DROP PLUGGABLE DATABASE xff_db INCLUDING DATAFILES;
+</code></pre>
+
+<h2 id="toc_7">Unplugging PDB</h2>
+
+<p><code>alter pluggable database FF close immediate;</code><br/>
+<code>alter  pluggable database ff UNPLUG into &#39;/tmp/ff.xml&#39;;</code></p>
+
+<h2 id="toc_8">Plug Unplugging PDB</h2>
+
+<pre class="line-numbers"><code class="language-text">create pluggable database ff using &#39;/tmp/ff.xml&#39; copy file_name_convert=(&#39;/u01/app/oracle/oradata/xifenfei/FF/&#39;,&#39;/u01/app/oracle/oradata/xff_l/xff&#39;);
+exec DBMS_PDB.SYNC_PDB();
+</code></pre>
+
+<h2 id="toc_9">启动关闭PDB</h2>
+
+<ul>
+<li>pdb的管理可以在cdb中进行也可以在pdb中进行,</li>
+<li>如果是cdb中进行,需要PLUGGABLE关键字（如下alter）,</li>
+<li>如果是pdb中直接和普通数据库一样(startup/shutdown immediate)</li>
+</ul>
+
+<h3 id="toc_10">打开单个pdb</h3>
+
+<p><code>lter pluggable database pdborcl open;</code></p>
+
+<h3 id="toc_11">打开所有pdb</h3>
+
+<p><code>alter pluggable database all open;</code></p>
+
+<h3 id="toc_12">关闭所有pdb</h3>
+
+<p><code>alter pluggable database all close immediate;</code></p>
+
+<h3 id="toc_13">进入pdb</h3>
+
+<pre class="line-numbers"><code class="language-text">alter session set container=pdborcl;
+--//
+conn sys/sys@localhost:1521/pdborcl as sysdba;
+</code></pre>
+
+<h3 id="toc_14">进入cdb</h3>
+
+<pre class="line-numbers"><code class="language-text">alter session set container=cdb$root;
+--//
+conn / as sysdba;
+</code></pre>
+
+<h2 id="toc_15">创建用户</h2>
+
+<ul>
+<li>创建用户默认的是container=all,在cdb中只能创建全局用户(c##开头),</li>
+<li>会在cdb和所有的pdb中创建该用户(但是pdb中的全局用户需要另外授权才能够在pdb中访问)。</li>
+<li>在pdb中只能创建的用户为本地用户</li>
+</ul>
+
+<h3 id="toc_16">创建全局用户</h3>
+
+<p><code>create user c##xff identified by xifenfei;</code></p>
+
+<h3 id="toc_17">创建本地用户</h3>
+
+<p><code>alter session set container=pdborcl;</code><br/>
+<code>create user xxx identified by 123;</code></p>
+
+<h3 id="toc_18">用户授权</h3>
+
+<ul>
+<li>用户授权默认情况下是只会给当前container,在cdb中也可以指定container=all,对所有open的pdb且存在该用户都进行授权</li>
+</ul>
+
+<pre class="line-numbers"><code class="language-text">grant connect to c##xff;
+grant resource to c##xff container=all
+</code></pre>
+
+<h3 id="toc_19">修改参数</h3>
+
+<ul>
+<li>在cdb中修改,pdb会继承进去;如果在pdb中修改会覆盖pdb从cdb中继承的参数含义</li>
+</ul>
+
+<pre class="line-numbers"><code class="language-text">alter system set open_cursors=500 container=all;
+show parameter open_cursors;
+alter session set container=pdborcl;
+show parameter open_cursors;
+--//
+alter system set open_cursors=100;
+show parameter open_cursors;
+conn / as sysdba
+show parameter open_cursors;
+</code></pre>
+
+<h2 id="toc_20">使用触发器实现PDB自动启动</h2>
+
+<pre class="line-numbers"><code class="language-text">--先连接  
+conn / as sysdba  
+  
+--创建触发器  
+CREATE OR REPLACE TRIGGER open_pdbs  
+AFTER STARTUP ON DATABASE  
+BEGIN  
+EXECUTE IMMEDIATE &#39;ALTER PLUGGABLE DATABASE ALL OPEN&#39;;  
+END open_pdbs;
+\   --sqlplus中结束脚本编写
+</code></pre>
+
+            </div>
+            <div>
+                
+                
+                
+            </div>
+        </article>
+    </div>
+</div>
+
+<script src="asset/jquery-3.3.1.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $('#footer').show()
+    })
+</script>
+  <footer id="footer" class="cuckoo page-footer" style="display: none">
+    <div class="wrapper">
+        <p>Designed and Written by <a href="mailto:forrestchang7@gmail.com">Jiayuan Zhang</a></p>
+    </div>
+</footer>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({TeX: { equationNumbers: { autoNumber: "AMS" } }});</script>
+

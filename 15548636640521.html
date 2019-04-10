@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>
+         Linux Oracle常规操作及脚本 - xiaobio 
+    </title>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Life it self">
+
+    <link rel="stylesheet" type="text/css" href="asset/cuckoo.css">
+    <link rel="stylesheet" type="text/css" href="asset/main.css">
+    <link rel="stylesheet" type="text/css" href="asset/atom-one-light.css">
+
+    <link rel="alternate" type="application/atom+xml" href="atom.xml" title="xiaobio">
+
+    <script src="asset/highlight.pack.js"></script>
+<!--    <script>hljs.initHighlightingOnLoad();</script>-->
+</head>
+
+<body>
+    <header class="site-header cuckoo">
+        <div class="wrapper">
+            <a class="site-title" href="index.html">xiaobio</a>
+            <nav class="site-nav">
+                <a href="#" class="menu-icon">
+                    <svg viewBox="0 0 18 15">
+                        <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"></path>
+                        <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"></path>
+                        <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"></path>
+                    </svg>
+                </a>
+                <div class="trigger">
+                    
+                        <a class="page-link" href="index.html">Home</a>
+                    
+                        <a class="page-link" href="archives.html">Archives</a>
+                    
+                        <a class="page-link" href="about.html">About</a>
+                    
+                </div>
+            </nav>
+        </div>
+    </header>
+</body>
+
+</html>
+ <div class="page-content cuckoo">
+    <div class="wrapper">
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+            <header class="post-header">
+                <h1 class="post-title" itemprop="name headline">Linux Oracle常规操作及脚本</h1>
+                <div class="post-description">
+                    
+                </div>
+            </header>
+            <div class="post-content" itemprop="articleBody">
+                <h2 id="toc_0">启动数据库</h2>
+
+<pre class="line-numbers"><code class="language-text">su - oracle
+sqlplus /nolog
+conn /as sysdba
+startup  
+</code></pre>
+
+<h2 id="toc_1">启动监听</h2>
+
+<pre class="line-numbers"><code class="language-text">lsnrctl start
+lsnrctl status
+</code></pre>
+
+<span id="more"></span><!-- more -->
+
+<h2 id="toc_2">数据库配置助理，进行数据库安装、删除和修改</h2>
+
+<p><code>$/oracle/oracle/app/product/101/bin/dbca</code></p>
+
+<h2 id="toc_3">数据库网络服务配置管理</h2>
+
+<p><code>$/oracle/oracle/app/product/101/bin/netca</code></p>
+
+<h2 id="toc_4">数据库网络服务和监听配置助理</h2>
+
+<p><code>$/oracle/oracle/app/product/101/bin/netmgr</code></p>
+
+<h2 id="toc_5">关闭oracle</h2>
+
+<pre class="line-numbers"><code class="language-text">su - oracle   
+sqlplus /nolog   
+conn /as sysdba   
+shutdown immediate   
+exit   
+lsnrctl stop   
+exit  
+</code></pre>
+
+<h2 id="toc_6">关闭一个insstance：</h2>
+
+<p><code>srvctl stop instance  -d SID -i instance</code></p>
+
+<h1 id="toc_7">部分记录</h1>
+
+<p><code>alter table ningbo_rela_new modify (TERMINAL_BRAND varchar2(100))</code></p>
+
+<pre class="line-numbers"><code class="language-text">create table ningbo_rela_new
+(
+  RI_QI varchar2(50),
+  USER_MAC varchar2(50) ,
+  USER_ACCOUNT varchar2(50),
+  TERMINAL_TYPE varchar2(50),
+  TERMINAL_BRAND varchar2(50),
+  ON_TIME varchar2(50),
+  LEAVE_TIME varchar2(50),
+  APMAC varchar2(50),
+  AP_NAME varchar2(500),
+  WLAN_NAME varchar2(500),
+  CITY_NAME varchar2(50),
+  AREA_NAME varchar2(50),
+  NASID varchar2(50)
+)
+</code></pre>
+
+<p><code>alter table TABLE_NAME rename column FIELD_NAME to NEW_FIELD_NAME;</code></p>
+
+<pre class="line-numbers"><code class="language-text">create table student (
+studentid int primary key not null,
+studentname varchar(8),
+age int);
+</code></pre>
+
+<p><code>alter table test1<br/>
+add (name varchar2(30) default ‘无名氏’ not null);</code></p>
+
+<p><code>alter user da default tablespace da;</code></p>
+
+<h2 id="toc_8">批量删除脚本</h2>
+
+<p><code>sqlplus -S /nolog &lt;&lt;EOF<br/>
+connect / as sysdba;<br/>
+删除脚本<br/>
+EOF</code></p>
+
+<p>后台执行<code>nohup shell命令 &amp;</code></p>
+
+<h2 id="toc_9">修改默认表空间</h2>
+
+<p><code>alter user da default tablespace da</code></p>
+
+<h2 id="toc_10">查看表信息</h2>
+
+<p><code>desc table_name</code></p>
+
+<h2 id="toc_11">查看连接用户session</h2>
+
+<pre class="line-numbers"><code class="language-sql">SELECT b.spid, a.SID, b.osuser, a.machine, a.username, a.event,a.sql_text
+  FROM (SELECT b.username, b.machine, a.event, a.SID, b.serial#, c.sql_text
+          FROM v$session_wait a, v$session b, v$sql c
+         WHERE a.SID = b.SID AND b.sql_id = c.sql_id) a,
+       (SELECT spid, osuser, s.program, s.SID
+          FROM v$session s, v$process p
+         WHERE s.paddr = p.addr) b
+ WHERE a.SID = b.SID
+ ```
+ 
+## 删除表空间
+ 
+`DROP TABLESPACE da_temp INCLUDING CONTENTS AND DATAFILES;`
+
+## 创建表空间
+
+```sql
+CREATE TEMPORARY TABLESPACE da_TEMP01 TEMPFILE 
+  &#39;/data1/dadb/da_temp01.dbf&#39; SIZE 100M AUTOEXTEND ON NEXT 50M MAXSIZE 5G
+TABLESPACE GROUP &#39;&#39;
+EXTENT MANAGEMENT LOCAL UNIFORM SIZE 1M;
+</code></pre>
+
+<h2 id="toc_12">修改默认表空间</h2>
+
+<p><code>ALTER DATABASE DEFAULT TEMPORARY TABLESPACE da_temp01</code></p>
+
+<h2 id="toc_13">查看imei不为空或者不是0在所有imei中占的比例----日常数据库</h2>
+
+<pre class="line-numbers"><code class="language-sql">select 
+sum(case when ms_imei is null then 0 else 1 end) No_imei,
+sum(case when ms_imei=0 then 0 when ms_imei is null then 0 else 1 end) No_add0_imei,
+count(*) No_user,
+sum(case when ms_imei is null then 0 else 1 end)/count(*)   No_rate,
+sum(case when ms_imei=0 then 0 when ms_imei is null then 0 else 1 end)/count(*)  No_add0_rate
+
+from gb t where imsi&gt;0
+</code></pre>
+
+<h2 id="toc_14">查看imei不为空或者不是0在所有imei中占的比例----应用数据库</h2>
+
+<pre class="line-numbers"><code class="language-sql">select 
+sum(case when imei is null then 0 else 1 end) &quot;2G_IMEI_No&quot;,
+sum(case when imei_td is null then 0 else 1 end) &quot;3G_IMEI_td_No&quot;,
+sum(case when imei is null then 0 when imei=0 then 0 else 1 end) &quot;2G_add0_IMEI_No&quot;,
+sum(case when imei_td is null then 0 when imei_td=0 then 0 else 1 end) &quot;3G_add0_IMEI_td_No&quot;,
+count(*) ALL_No,
+sum(case when imei is null then 0 else 1 end)/count(*) &quot;2G_IMEI_RATE&quot;,
+sum(case when imei_td is null then 0 else 1 end)/count(*)  &quot;3G_IMEI_td_RATE&quot;,
+sum(case when imei is null then 0 when imei=0 then 0 else 1 end)/count(*) &quot;2G_add0_IMEI_Rate&quot;,
+sum(case when imei_td is null then 0 when imei_td=0 then 0 else 1 end)/count(*) &quot;3G_add0_IMEI_td_Rate&quot;
+from CFG_CUSTOMER
+</code></pre>
+
+<h2 id="toc_15">查看imei不为空在所有imei中占的比例----应用数据库库</h2>
+
+<pre class="line-numbers"><code class="language-sql">select 
+sum(case when imei is null then 0 else 1 end) &quot;2G_IMEI_No&quot;,
+sum(case when imei_td is null then 0 else 1 end) &quot;3G_IMEI_td_No&quot;,
+count(*) ALL_No,
+sum(case when imei is null then 0 else 1 end)/count(*) &quot;2G_IMEI_RATE&quot;,
+sum(case when imei_td is null then 0 else 1 end)/count(*)  &quot;3G_IMEI_td_RATE&quot;
+
+from CFG_CUSTOMER
+</code></pre>
+
+<h1 id="toc_16">表空间相关操作</h1>
+
+<h2 id="toc_17">mount状态offline表空间</h2>
+
+<p><code>alter database datafile &#39;/data2/space1/DAT_DAILY_OTHER.1.DBF&#39; offline drop;</code></p>
+
+<h2 id="toc_18">删除表空间</h2>
+
+<p><code>drop tablespace DAT_DAILY_OTHER including CONTENTS and datafiles;</code></p>
+
+<h2 id="toc_19">创建大文件表空间</h2>
+
+<pre class="line-numbers"><code class="language-sql">CREATE BIGFILE TABLESPACE DAT_DAILY_OTHER DATAFILE 
+  &#39;/data2/dailydb/DAT_DAILY_OTHER.1.DBF&#39; SIZE 5120M AUTOEXTEND ON NEXT 10240M MAXSIZE 34359738344K
+NOLOGGING
+DEFAULT 
+COMPRESS BASIC 
+ONLINE
+EXTENT MANAGEMENT LOCAL UNIFORM SIZE 256K
+BLOCKSIZE 8K
+SEGMENT SPACE MANAGEMENT AUTO
+FLASHBACK ON;
+</code></pre>
+
+            </div>
+            <div>
+                
+                
+                
+            </div>
+        </article>
+    </div>
+</div>
+
+<script src="asset/jquery-3.3.1.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $('#footer').show()
+    })
+</script>
+  <footer id="footer" class="cuckoo page-footer" style="display: none">
+    <div class="wrapper">
+        <p>Designed and Written by <a href="mailto:forrestchang7@gmail.com">Jiayuan Zhang</a></p>
+    </div>
+</footer>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({TeX: { equationNumbers: { autoNumber: "AMS" } }});</script>
+

@@ -1,0 +1,1233 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>
+         Oracle常规函数 - xiaobio 
+    </title>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Life it self">
+
+    <link rel="stylesheet" type="text/css" href="asset/cuckoo.css">
+    <link rel="stylesheet" type="text/css" href="asset/main.css">
+    <link rel="stylesheet" type="text/css" href="asset/atom-one-light.css">
+
+    <link rel="alternate" type="application/atom+xml" href="atom.xml" title="xiaobio">
+
+    <script src="asset/highlight.pack.js"></script>
+<!--    <script>hljs.initHighlightingOnLoad();</script>-->
+</head>
+
+<body>
+    <header class="site-header cuckoo">
+        <div class="wrapper">
+            <a class="site-title" href="index.html">xiaobio</a>
+            <nav class="site-nav">
+                <a href="#" class="menu-icon">
+                    <svg viewBox="0 0 18 15">
+                        <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"></path>
+                        <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"></path>
+                        <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"></path>
+                    </svg>
+                </a>
+                <div class="trigger">
+                    
+                        <a class="page-link" href="index.html">Home</a>
+                    
+                        <a class="page-link" href="archives.html">Archives</a>
+                    
+                        <a class="page-link" href="about.html">About</a>
+                    
+                </div>
+            </nav>
+        </div>
+    </header>
+</body>
+
+</html>
+ <div class="page-content cuckoo">
+    <div class="wrapper">
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+            <header class="post-header">
+                <h1 class="post-title" itemprop="name headline">Oracle常规函数</h1>
+                <div class="post-description">
+                    
+                </div>
+            </header>
+            <div class="post-content" itemprop="articleBody">
+                <h2 id="toc_0">数值型常用函数</h2>
+
+<ol>
+<li><p>ceil(n)</p>
+<p>大于或等于数值n的最小整数<br/>
+<code>select ceil(10.6) from dual; 11</code></p></li>
+<li><p>floor(n)</p>
+<p>小于等于数值n的最大整数　<br/>
+<code>select ceil(10.6) from dual; 10</code></p></li>
+<li><p>mod(m,n)</p>
+<p>m除以n的余数,若n=0,则返回m <br/>
+<code>select mod(7,5) from dual; 2</code></p></li>
+<li><p>power(m,n)</p>
+<p>m的n次方<br/>
+<code>select power(3,2) from dual; 9</code></p></li>
+<li><p>round(n,m)</p>
+<p>将n四舍五入,保留小数点后m位,省掉m就是到整数，m是负数就是小数点 前几位</p>
+<pre class="line-numbers"><code class="language-sql">SELECT round(23.75123) FROM dual;　 --返回23
+select round(1234.5678,2) from dual; 1234.57<br/>
+SELECT round(23.75123, -1) FROM dual; --返回20
+</code></pre></li>
+<li><p>trunc(n,[m])</p>
+<p>该函数用于截取数字。<br/>
+如果省掉m，就截去小数部分，<br/>
+如果m是正数就截取到小数点的m位后，<br/>
+如果m是负数，则截取到小数点的前m位。<br/>
+<code>SELECT trunc(23.75123) FROM dual; --返回23</code><br/>
+<code>SELECT trunc(23.75123, -1) FROM dual; --返回20</code><br/>
+<code>SELECT trunc(23.75123, 1) FROM dual; --返回23.7</code></p></li>
+</ol>
+
+<span id="more"></span><!-- more -->
+
+<ol>
+<li><p>sign(n) </p>
+<p>若n=0,则返回,否则,n&gt;0,则返回,n&lt;0,则返回-1 <br/>
+select sign(12) from dual; 1</p></li>
+<li><p>sqrt(n) </p>
+<p>n的平方根<br/>
+select sqrt(25) from dual ; 5</p></li>
+<li><p>nvl</p>
+<p>select nvl(1,&#39;a&#39;) from dual;相当于isnull</p></li>
+</ol>
+
+<h2 id="toc_1">常用字符函数</h2>
+
+<ol>
+<li><p>initcap(char) </p>
+<p>把每个字符串的第一个字符换成大写　　<br/>
+select initicap(&#39;mr.ecop&#39;) from dual; Mr.Ecop</p></li>
+<li><p>lower(char) </p>
+<p>整个字符串换成小写　　　　　　　　　<br/>
+select lower(&#39;MR.ecop&#39;) from dual; mr.ecop</p></li>
+<li><p>UPPER(string)</p>
+<p>返回大写的“string”。<br/>
+示例 SELECT UPPER(&#39;aptech computer education&#39;) FROM dual;</p></li>
+<li><p>replace(char,str1,str2) </p>
+<p>字符串中所有str1换成str2 <br/>
+select replace(&#39;Scott&#39;,&#39;s&#39;,&#39;Boy&#39;) from dual; Boycott</p></li>
+<li><p>substr(char,m,n) </p>
+<p>取出从m字符开始的n个字符的子串,如果我们不指定n，则从m开始截取到string的尾部　<br/>
+如果m为负数就是从左开始数.　<br/>
+select substr(&#39;ABCDEF&#39;,2,2) from dual; CD<br/>
+select substr(&#39;1234567&#39;,-3,2) from dual;56</p></li>
+<li><p>length(char) <br/>
+求字符串的长度　　　　<br/>
+select length(&#39;ACD&#39;) from dual; 3</p></li>
+<li><p>vsize<br/>
+select vsize(&#39;HELLO21可&#39;) from dual;9<br/>
+select length(&#39;HELLO21可&#39;) from dual;8</p></li>
+<li><p>|| <br/>
+并置运算符　　　<br/>
+select &#39;ABCD&#39;||&#39;EFGH&#39; from dual; ABCDEFGH</p></li>
+<li><p>CONCAT (char1, char2)<br/>
+返回连接“char2”的“char1”。<br/>
+SELECT CONCAT(&#39;zq_&#39;, &#39;test&#39;) FROM dual; zq_test</p></li>
+<li><p>LPAD(char1,n [,char2])<br/>
+返回“char1”，左起由“char2”中的字符补充到“n”个字符长。如果“char1”比“n”长，则函数返回“char1”的前“n”个字符。<br/>
+示例 SELECT LPAD(ename,15,&#39;*&#39;) FROM emp;<br/>
+SELECT lpad(&#39;zqtest&#39;,2,&#39;a&#39;) FROM dual; zq<br/>
+SELECT lpad(&#39;zqtest&#39;,10,&#39;a&#39;) FROM dual; aaaazqtest</p></li>
+<li><p>RPAD(char1, n [,char2])<br/>
+返回“char1”，右侧用“char2”中的字符补充到“n”个字符长。如果 “char1”比“n”长，则函数返回“char1”的前“n”个字符。<br/>
+示例 SELECT RPAD(ename,15,&#39;*&#39;) FROM emp;</p></li>
+<li><p>LTRIM(string,trim_set)<br/>
+从左边删除字符，此处“string”是数据库的列，或者是字面字符串，而“trim_set”是我们要去掉的字符的集合。<br/>
+示例 SELECT LTRIM(&#39;abcdab&#39;,&#39;a&#39;) FROM DUAL;</p></li>
+<li><p>RTRIM(string,trim_set)<br/>
+从右侧删除字符，此处“string”是数据库的列，或者是字面字符串，而“trim_set”是我们要去掉的字符的集合。<br/>
+示例 SELECT RTRIM(&#39;abcdef&#39;, &#39;f&#39;) FROM DUAL;</p></li>
+<li><p>SOUNDEX(char)<br/>
+返回包含“char”的表意字符的字符串。它允许比较英语中拼写不同而发音类似的字。<br/>
+示例 SELECT ename FROM emp<br/>
+WHERE SOUNDEX(ename) = SoUNDEX(&#39;SMYTHE&#39;);</p></li>
+<li><p>TRANSLATE(string, if, then)<br/>
+“if”中字符的位置，并检查“then”的相同位置，然后用该位置的字符替换 “string”中的字符。<br/>
+示例 SELECT TRANSLATE(ename,&#39;AEIOU&#39;, &#39;XXXXX&#39;) FROM emp;<br/>
+SELECT TRANSLATE(&#39;abcdef&#39;, &#39;ef&#39;,&#39;zz&#39;) FROM DUAL; abcdzz</p></li>
+<li><p>ASCII(string)<br/>
+该命令是“American Standard Code for Information Interchange”的缩写。它是使用数字表示可打印字符的基本规则。该函数返回 “string”中第一个（最左边）字符的 ASCII 值。<br/>
+示例 SELECT ASCII(&#39;APTECH&#39;) from dual;</p></li>
+<li><p>INSTR (string, set[, start[, occurrence] ] )<br/>
+该命令“string”中从“start”位置开始查找字符集合的位置，再查找“set”出现的第一次、第二次等等的“occurrence”（次数）。“start”的值也可以是负数，代表从字符串结尾开始向反方向搜索。该函数也用于数字和日期数据类型。<br/>
+select instr(&#39;azhangsanbcd&#39;, &#39;zhangsan&#39;) from dual; --返回2<br/>
+select instr(&#39;oracle traning&#39;, &#39;ra&#39;, 1, 1) instring from dual; --返回2<br/>
+select instr(&#39;oracle traning&#39;, &#39;ra&#39;, 1, 2) instring from dual; --返回9<br/>
+select instr(&#39;oracle traning&#39;, &#39;ra&#39;, 1, 3) instring from dual; --返回0，根据条件，由于ra只出现二次，第四个参数，就是说第次出现ra的位置，显然第3次是没有再出现了，所以结果返回。注意空格也算一个字符<br/>
+select instr(&#39;abc&#39;,&#39;d&#39;) from dual;  --返回0</p></li>
+<li><p>获取字符串中某个字符的个数regexp_count<br/>
+select regexp_count(group_imsi,&#39;,&#39;)+1 as imsi_num,<br/>
+seq,startdate,enddate <br/>
+from t_complain_imsi_history t order by seq desc</p></li>
+<li><p>日期型函数</p></li>
+<li><p>sysdate <br/>
+当前日期和时间 <br/>
+select sysdate from dual;</p></li>
+<li><p>last_day 　<br/>
+本月最后一天 <br/>
+select last_day(sysdate) from dual; 2014/7/31 17:14:43</p></li>
+<li><p>add_months(d,n)　<br/>
+当前日期d后推n个月 <br/>
+select add_months(sysdate,2) from dual; 2014/9/17 17:16:44</p></li>
+<li><p>months_between(d,n)<br/>
+日期d和n相差月数 <br/>
+select months_between(sysdate,to_date(&#39;20140817&#39;,&#39;YYYYMMDD&#39;)) from dual; -1</p></li>
+<li><p>next_day(d,day) <br/>
+返回下一个星期第几天的日期。美国是从周日开算的。next_day(sysdate,6)是从当前开始下一个星期五<br/>
+select next_day(sysdate,1) from dual; </p></li>
+<li><p>特殊格式的日期型函数(格式)<br/>
+Y或YY或YYY 年的最后一位，两位，三位 select to_char(sysdate,&#39;YYY&#39;) from dual;<br/>
+Q 季度,1-3月为第一季度　　　　      select to_char(sysdate,&#39;Q&#39;) from dual;<br/>
+MM 　月份数　　　　　　　　　　　    select to_char(sysdate,&#39;MM&#39;) from dual;<br/>
+RM 月份的罗马表示                   select to_char(sysdate,&#39;RM&#39;) from dual; IV<br/>
+month 用个字符表示的月份名         select to_char(sysdate,&#39;month&#39;) from dual;<br/>
+ww 当年第几周　　　　　　　　　     select to_char(sysdate,&#39;ww&#39;) from dual;<br/>
+w 本月第几周　　　　　　　　　      select to_char(sysdate,&#39;w&#39;) from dual;<br/>
+DDD 当年第几天,一月一日为,二月一日 select to_char(sysdate,&#39;DDD&#39;) from dual;<br/>
+DD 当月第几天       select to_char(sysdate,&#39;DD&#39;) from dual;<br/>
+D 周内第几天     select to_char(sysdate,&#39;D&#39;) from dual; 如　sunday<br/>
+DY 周内第几天缩写　　　　　　　select to_char(sysdate,&#39;DY&#39;) from dual; 如　sun<br/>
+hh12 12小时制小时数　　　　　　　select to_char(sysdate,&#39;hh12&#39;) from dual;<br/>
+hh24 24小时制小时数　　　　　　　select to_char(sysdate,&#39;hh24&#39;) from dual;<br/>
+Mi 分钟数　　　　　　　　　　　select to_char(sysdate,&#39;Mi&#39;) from dual;<br/>
+ss 秒数　　　　　　　　　　　　select to_char(sysdate,&#39;ss&#39;) from dual;<br/>
+select to_char(sysdate,&#39;YYYY-MM-DD HH:24:mi:ss&#39;) from dual;</p></li>
+<li><p>时间加减<br/>
+select to_char(sysdate,&#39;yyyy-mm-dd hh24:mi:ss&#39;),to_char(sysdate+n<em>365,&#39;yyyy-mm-dd hh24:mi:ss&#39;) as newTime from dual        //改变时间-年<br/>
+select add_months(sysdate,n) as newTime from dual                                 //改变时间-月<br/>
+select to_char(sysdate+n,&#39;yyyy-mm-dd hh24:mi:ss&#39;) as newTime from dual       //改变时间-日<br/>
+select to_char(sysdate+n/24,&#39;yyyy-mm-dd hh24:mi:ss&#39;) as newTime from dual    //改变时间-时<br/>
+select to_char(sysdate+n/24/60,&#39;yyyy-mm-dd hh24:mi:ss&#39;) as newTime from dual  //改变时间-分<br/>
+select to_char(sysdate+n/24/60/60,&#39;yyyy-mm-dd hh24:mi:ss&#39;) as newTime from dual;//改变时间-秒<br/>
+返回星期几<br/>
+select to_char(to_date(&#39;2002-08-26&#39;,&#39;yyyy-mm-dd&#39;),&#39;day&#39;) from dual; 星期一<br/><br/>
+select to_char(to_date(&#39;2002-08-26&#39;,&#39;yyyy-mm-dd&#39;),&#39;day&#39;,&#39;NLS_DATE_LANGUAGE = American&#39;) from dual; monday<br/><br/>
+间隔天数<br/>
+select floor(sysdate - to_date(&#39;20020405&#39;,&#39;yyyymmdd&#39;)) from dual;<br/>
+ 查找2002-02-28至2002-02-01间除星期六和七的天数，美国是周日第一天<br/>
+select count(</em>) from ( select rownum-1 rnum from all_objects<br/><br/>
+   where rownum &lt;= to_date(&#39;2002-02-28&#39;,&#39;yyyy-mm-dd&#39;) - to_date(&#39;2002-02-01&#39;,&#39;yyyy-mm-dd&#39;)+1<br/><br/>
+    ) where to_char( to_date(&#39;2002-02-01&#39;,&#39;yyyy-mm-dd&#39;)+rnum-1, &#39;D&#39; ) not in ( &#39;1&#39;, &#39;7&#39; )  </p></li>
+<li><p>日期转换毫秒<br/>
+SELECT TO_NUMBER(TO_DATE(&#39;2005-03-29 12:30:45&#39;, &#39;YYYY-MM-DD HH24:MI:SS&#39;) -<br/><br/>
+             TO_DATE(&#39;1970-01-01 8:0:0&#39;, &#39;YYYY-MM-DD HH24:MI:SS&#39;)) * 24 * 60 * 60 * 1000<br/><br/>
+FROM DUAL;<br/><br/>
+ <br/>
+ <br/>
+--毫秒转换日期<br/>
+ <br/>
+ <br/>
+SELECT TO_CHAR(1112070645000 / (1000 * 60 * 60 * 24) +<br/><br/>
+    TO_DATE(&#39;1970-01-01 08:00:00&#39;, &#39;YYYY-MM-DD HH:MI:SS&#39;), &#39;YYYY-MM-DD HH:MI:SS&#39;) AS CDATE<br/><br/>
+FROM DUAL;<br/><br/>
+SELECT TO_CHAR(1112070645123 / (1000 * 60 * 60 * 24) +<br/><br/>
+    TO_DATE(&#39;1970-01-01 08:00:00&#39;, &#39;YYYY-MM-DD HH:MI:SS&#39;), &#39;YYYY-MM-DD HH:MI:SS&#39;)||&#39;.&#39;||substr(1112070645123,-3) AS CDATE<br/><br/>
+FROM DUAL;  </p></li>
+</ol>
+
+<p>CREATE OR REPLACE FUNCTION msToTimestamp(I_MILLISECONDS NUMBER)<br/>
+ RETURN varchar2 AS<br/>
+  V_TIMESTAMPSTR VARCHAR2(40);<br/>
+BEGIN<br/>
+  select TO_CHAR(substr(I_MILLISECONDS,1,length(I_MILLISECONDS)-3) / ( 60 * 60 * 24) +TO_DATE(&#39;1970-01-01 08:00:00&#39;, &#39;YYYY-MM-DD HH24:MI:SS&#39;), &#39;YYYY-MM-DD HH24:MI:SS&#39;)||&#39;.&#39;||substr(I_MILLISECONDS,-3)<br/>
+  into V_TIMESTAMPSTR<br/>
+  from dual;<br/>
+  RETURN V_TIMESTAMPSTR;<br/>
+EXCEPTION<br/>
+  WHEN OTHERS THEN<br/>
+    RETURN NULL;<br/>
+END;</p>
+
+<ol>
+<li>周、月、季开始结束时间<br/>
+--周<br/>
+SELECT TRUNC(TO_DATE(&#39;2013-11-25 10:31:11&#39;,&#39;YYYY-MM-DD HH24:MI:SS&#39;),&#39;D&#39;) + 1 ASA FROM DUAL;<br/>
+SELECT TRUNC(sysdate,&#39;D&#39;) + 7 AS A FROM DUAL;<br/>
+获取今天是周几<br/>
+select to_char(sysdate,&#39;day&#39;,&#39;NLS_DATE_LANGUAGE=AMERICAN&#39;) day from dual;<br/>
+--月<br/>
+SELECT TRUNC(TO_DATE(&#39;2013-11-25 10:31:11&#39;,&#39;YYYY-MM-DD HH24:MI:SS&#39;),&#39;MM&#39;) AS A FROM DUAL;<br/>
+SELECT LAST_DAY(TO_DATE(&#39;2013-11-25 10:31:11&#39;,&#39;YYYY-MM-DD HH24:MI:SS&#39;)) AS A FROM DUAL;<br/>
+--季<br/>
+SELECT TRUNC(TO_DATE(&#39;2013-11-25 10:31:11&#39;,&#39;YYYY-MM-DD HH24:MI:SS&#39;),&#39;Q&#39;) AS A FROM DUAL;<br/>
+SELECT ADD_MONTHS(TRUNC(TO_DATE(&#39;2013-11-25 10:31:11&#39;,&#39;YYYY-MM-DDHH24:MI:SS&#39;),&#39;Q&#39;),3)-1 AS A FROM DUAL;</li>
+<li>timestamp 计算毫秒差<br/>
+create or replace function diffTimestamp(s in TIMESTAMP, e in TIMESTAMP)<br/>
+return number is<br/>
+Result number;<br/>
+begin<br/>
+select extract(day from inter) * 24 * 60 * 60*1000 +<br/>
+     extract(hour from inter) * 60 * 60*1000 +<br/>
+     extract(minute from inter) * 60*1000 +<br/>
+     extract(second from inter) * 1000 &quot;mseconds&quot;<br/>
+INTO Result<br/>
+from (select e - s inter from dual);<br/>
+return(Result);<br/>
+end diffTimestamp;</li>
+</ol>
+
+<p>实例</p>
+
+<ol>
+<li>循环取出表的行<br/>
+begin<br/>
+for zqtest in (select column_value c_code from table(pkg_public.splitstring(&#39;1,2,3,4,5,6&#39;, &#39;,&#39;))) loop<br/>
+   dbms_output.put_line(zqtest.c_code);<br/>
+end loop;<br/>
+end;<br/>
+declare <br/>
+v_sql varchar2(500);<br/>
+num number;<br/>
+begin<br/>
+for zqtest in (select table_name from user_tables where table_name like&#39;DW_%&#39; and table_name not like&#39;%_D&#39; and table_name&lt;&gt;’DW_FT_SE_CL3_US_AN_60_H’) loop<br/>
+   v_sql:=&#39;select count(*) from &#39;||zqtest.table_name||&#39; where rpt_time&gt;=trunc(sysdate,&#39;&#39;dd&#39;&#39;) <br/>
+and  rpt_time&lt;trunc(sysdate+1,&#39;&#39;dd&#39;&#39;) and rownum=1&#39;;<br/>
+    execute immediate v_sql into num;<br/>
+   if num=0 then <br/>
+   dbms_output.put_line(zqtest.table_name);<br/>
+   end if;<br/>
+end loop;<br/>
+end;</li>
+<li>建立分区表<br/>
+CREATE TABLE SQMDB.RTP_HTTP_USER_PEAK_AREA_D<br/>
+(<br/>
+  SDATE            DATE,<br/>
+  AREA             VARCHAR2(20 BYTE),<br/>
+  PEAKHOUR         NUMBER,<br/>
+  NO_OF_HTTP_SUCC  NUMBER,<br/>
+  NO_OF_USER       NUMBER,<br/>
+  APP              VARCHAR2(50 BYTE),<br/>
+  NETWORK_TYPE     NUMBER<br/>
+)<br/>
+TABLESPACE SQM_OTHER<br/>
+PARTITION BY RANGE (SDATE)<br/>
+INTERVAL( NUMTODSINTERVAL(1,&#39;DAY&#39;))<br/>
+(  <br/>
+  PARTITION PART_INIT VALUES LESS THAN (TO_DATE(&#39; 2016-01-01 00:00:00&#39;, &#39;SYYYY-MM-DD HH24:MI:SS&#39;, &#39;NLS_CALENDAR=GREGORIAN&#39;))<br/>
+    NOLOGGING<br/>
+    NOCOMPRESS <br/>
+    TABLESPACE SQM_OTHER<br/>
+)<br/>
+NOCACHE<br/>
+NOPARALLEL<br/>
+MONITORING; </li>
+</ol>
+
+<p>TABLESPACE sqm_volte_i<br/>
+PARTITION BY RANGE (s1_endtime)<br/>
+INTERVAL( NUMTODSINTERVAL(1,&#39;Hour&#39;))<br/>
+(<br/><br/>
+ partition PART_INIT values less than (TIMESTAMP&#39; 2016-01-01 00:00:00&#39;)<br/>
+    NOLOGGING<br/>
+    NOCOMPRESS <br/>
+    TABLESPACE sqm_volte_i<br/>
+)<br/>
+NOCACHE<br/>
+NOPARALLEL<br/>
+MONITORING;</p>
+
+<ol>
+<li>游标<br/>
+declare <br/>
+   --类型定义<br/>
+   cursor c_job<br/>
+   is<br/>
+   select imsi, ts, ci  from v_zqtest_imsici;<br/>
+   --定义一个游标变量<br/>
+   c_row c_job%rowtype;<br/>
+begin<br/>
+   open c_job;<br/>
+     loop<br/>
+       --提取一行数据到c_row<br/>
+       fetch c_job into c_row;<br/>
+       --判读是否提取到值，没取到值就退出<br/>
+       --取到值c_job%notfound 是false <br/>
+       --取不到值c_job%notfound 是true<br/>
+       exit when c_job%notfound;<br/>
+        dbms_output.put_line(c_row.ts||&#39;-&#39;||c_row.imsi||&#39;-&#39;||c_row.ci||&#39;-&#39;||c_row.ci);<br/>
+     end loop;<br/>
+   --关闭游标<br/>
+  close c_job;<br/>
+end;</li>
+<li><p>判断表名是否存在<br/>
+declare<br/><br/>
+    num   number;<br/><br/>
+begin<br/><br/>
+    select count(1) into num from all_tables where TABLE_NAME = upper(&#39;zqtest_pingpeng_gb&#39;) and OWNER=&#39;DAILY&#39;;<br/><br/>
+    if   num=1   then<br/><br/>
+        execute immediate &#39;drop table zqtest_pingpeng_gb&#39;;<br/><br/>
+    end   if;      </p>
+<p>end;   </p></li>
+<li><p>建立DBLink<br/>
+CREATE PUBLIC DATABASE LINK SQMDB<br/>
+CONNECT TO sqmdb<br/>
+IDENTIFIED BY mdasil<br/>
+USING &#39;127.0.0.1:1521/sqmmt2&#39;;<br/>
+select * from cfg_customer_group@SQMDB;</p></li>
+<li><p>row_number()和 dense_rank()和rank()区别<br/>
+SQL&gt; select region_id, customer_id, sum(customer_sales) total,<br/>
+  2         rank() over(order by sum(customer_sales) desc) rank,<br/>
+  3         dense_rank() over(order by sum(customer_sales) desc nulls last) dense_rank,<br/>
+  4         row_number() over(order by sum(customer_sales) desc nulls first) row_number<br/>
+  5    from user_order<br/>
+  6   group by region_id, customer_id;</p></li>
+</ol>
+
+<p> REGION_ID CUSTOMER_ID      TOTAL       RANK DENSE_RANK ROW_NUMBER<br/>
+---------- ----------- ---------- ---------- ---------- ----------<br/>
+            <br/>
+         8          18                1253840         11         11         11<br/>
+         5           2                 1224992         12         12         12<br/>
+         9          23                1224992         12         12         13<br/>
+         9          24                1224992         12         12         14<br/>
+        10          30               1216858         15           13            15<br/>
+SQL&gt; select region_id, customer_id, <br/>
+               sum(customer_sales) total,<br/>
+  2         rank() over(partition by region_id<br/>
+                        order by sum(customer_sales) desc) rank,<br/>
+  3         dense_rank() over(partition by region_id<br/>
+                        order by sum(customer_sales) desc) dense_rank,<br/>
+  4         row_number() over(partition by region_id<br/>
+                        order by sum(customer_sales) desc) row_number<br/>
+  5    from user_order<br/>
+  6   group by region_id, customer_id;</p>
+
+<p> REGION_ID CUSTOMER_ID      TOTAL       RANK DENSE_RANK ROW_NUMBER<br/>
+---------- ----------- ---------- ---------- ---------- ----------<br/>
+         5           4                1878275          1          1          1<br/>
+         5           2                1224992          2          2          2<br/>
+         5           5                1169926          3          3          3<br/>
+         6           6                1788836          1          1          1<br/>
+         6           9                1208959          2          2          2<br/>
+         6          10               1196748          3          3          3       </p>
+
+<ol>
+<li>找最大最小行 min() keep( dense_rank first)<br/>
+select a.imsi,b.road_line,<br/>
+       min(a.procedure_start_time) keep(dense_rank first ORDER BY a.procedure_start_time) over(PARTITION BY a.imsi,b.road_line) ts1,<br/>
+       MIN(a.cell_id) keep(dense_rank first ORDER BY a.procedure_start_time) over(PARTITION BY a.imsi,b.road_line) ci1,<br/>
+       max(a.procedure_start_time) keep(dense_rank last ORDER BY a.procedure_start_time) over(PARTITION BY a.imsi,b.road_line) ts2,<br/>
+       max(a.cell_id) keep(dense_rank last ORDER BY a.procedure_start_time) over(PARTITION BY a.imsi,b.road_line) ci2,<br/>
+       row_number() over(partition by a.imsi,b.road_line order by a.procedure_start_time desc) rn<br/>
+  from zqtest_XDR_S1_MME a,zqtest_imsilist b,zqtest_cilist c</li>
+<li>找前一行 lag后一行 lead<br/>
+with dat as <br/>
+(<br/>
+select 1 as s_id,&#39;a&#39; as s_type,&#39;1aaa&#39; as s_name from dual union all<br/>
+select 2 as s_id,&#39;a&#39; as s_type,&#39;2aaa&#39; as s_name from dual union all<br/>
+select 3 as s_id,&#39;a&#39; as s_type,&#39;3aaa&#39; as s_name from dual union all<br/>
+select 4 as s_id,&#39;a&#39; as s_type,&#39;4aaa&#39; as s_name from dual union all<br/>
+select 5 as s_id,&#39;a&#39; as s_type,&#39;5aaa&#39; as s_name from dual union all<br/>
+select 1 as s_id,&#39;b&#39; as s_type,&#39;1bbb&#39; as s_name from dual union all<br/>
+select 2 as s_id,&#39;b&#39; as s_type,&#39;2bbb&#39; as s_name from dual union all<br/>
+select 3 as s_id,&#39;b&#39; as s_type,&#39;3bbb&#39; as s_name from dual <br/>
+)<br/>
+select s_id,s_type,s_name,<br/>
+lag(s_name,1,&#39;最大了&#39;) over(partition by s_type order by s_id desc) as 前一行,<br/>
+lead(s_name,1,&#39;最小了&#39;) over(partition by s_type order by s_id desc) as  后一行<br/>
+from dat</li>
+<li>ratio_to_report 算占比<br/>
+with dat as <br/>
+(<br/>
+select 1 as s_id,&#39;a&#39; as s_type,&#39;1aaa&#39; as s_name from dual union all<br/>
+select 2 as s_id,&#39;a&#39; as s_type,&#39;1aaa&#39; as s_name from dual union all<br/>
+select 3 as s_id,&#39;a&#39; as s_type,&#39;1aaa&#39; as s_name from dual union all<br/>
+select 4 as s_id,&#39;a&#39; as s_type,&#39;4aaa&#39; as s_name from dual union all<br/>
+select 5 as s_id,&#39;a&#39; as s_type,&#39;5aaa&#39; as s_name from dual union all<br/>
+select 1 as s_id,&#39;b&#39; as s_type,&#39;1bbb&#39; as s_name from dual union all<br/>
+select 2 as s_id,&#39;b&#39; as s_type,&#39;1bbb&#39; as s_name from dual union all<br/>
+select 3 as s_id,&#39;b&#39; as s_type,&#39;3bbb&#39; as s_name from dual <br/>
+)<br/>
+select s_id,s_type,s_name,<br/>
+round(ratio_to_report(s_id) over(partition by s_type,s_name)*100,2) from dat</li>
+<li><p>查找所有表去掉小时重表<br/>
+select table_name from ( <br/>
+select <br/>
+rtrim( table_name, &#39;0123456789_&#39;) as table_name<br/>
+from user_tables where table_name not like&#39;TEMP%&#39; and table_name not like&#39;%TEMP&#39;<br/>
+) group by table_name</p></li>
+<li><p>停tomcat，看进程<br/>
+ps -ef | grep tomcat</p></li>
+<li><p>新建用户<br/>
+CREATE USER RTDB<br/>
+IDENTIFIED BY mdasil --密码<br/>
+DEFAULT TABLESPACE RTDB--空间要先建立<br/>
+TEMPORARY TABLESPACE other_temp --临时空间要改<br/>
+PROFILE DEFAULT<br/>
+ACCOUNT UNLOCK;<br/>
+-- 5 Roles for RTDB <br/>
+GRANT AQ_ADMINISTRATOR_ROLE TO RTDB WITH ADMIN OPTION;<br/>
+GRANT CONNECT TO RTDB WITH ADMIN OPTION;<br/>
+GRANT DBA TO RTDB WITH ADMIN OPTION;<br/>
+GRANT MGMT_USER TO RTDB;<br/>
+GRANT RESOURCE TO RTDB WITH ADMIN OPTION;<br/>
+ALTER USER RTDB DEFAULT ROLE ALL;<br/>
+-- 25 System Privileges for RTDB <br/>
+GRANT ADMINISTER ANY SQL TUNING SET TO RTDB WITH ADMIN OPTION;<br/>
+GRANT ADMINISTER DATABASE TRIGGER TO RTDB WITH ADMIN OPTION;<br/>
+GRANT ADMINISTER SQL TUNING SET TO RTDB WITH ADMIN OPTION;<br/>
+GRANT ALTER ANY TRIGGER TO RTDB WITH ADMIN OPTION;<br/>
+GRANT CREATE ANY PROCEDURE TO RTDB WITH ADMIN OPTION;<br/>
+GRANT CREATE ANY TABLE TO RTDB WITH ADMIN OPTION;<br/>
+GRANT CREATE ANY TRIGGER TO RTDB WITH ADMIN OPTION;<br/>
+GRANT CREATE ANY VIEW TO RTDB WITH ADMIN OPTION;<br/>
+GRANT CREATE MATERIALIZED VIEW TO RTDB;<br/>
+GRANT CREATE PROCEDURE TO RTDB;<br/>
+GRANT CREATE SEQUENCE TO RTDB;<br/>
+GRANT CREATE SESSION TO RTDB WITH ADMIN OPTION;<br/>
+GRANT CREATE TABLE TO RTDB;<br/>
+GRANT CREATE TRIGGER TO RTDB;<br/>
+GRANT CREATE VIEW TO RTDB;<br/>
+GRANT DELETE ANY TABLE TO RTDB WITH ADMIN OPTION;<br/>
+GRANT DROP ANY TABLE TO RTDB;<br/>
+GRANT DROP ANY VIEW TO RTDB;<br/>
+GRANT EXECUTE ANY CLASS TO RTDB WITH ADMIN OPTION;<br/>
+GRANT EXECUTE ANY PROCEDURE TO RTDB WITH ADMIN OPTION;<br/>
+GRANT GLOBAL QUERY REWRITE TO RTDB;<br/>
+GRANT INSERT ANY TABLE TO RTDB WITH ADMIN OPTION;<br/>
+GRANT SELECT ANY TABLE TO RTDB WITH ADMIN OPTION;<br/>
+GRANT UNLIMITED TABLESPACE TO RTDB WITH ADMIN OPTION;<br/>
+GRANT UPDATE ANY TABLE TO RTDB WITH ADMIN OPTION;</p></li>
+<li><p>导入导出数据结构<br/>
+create or replace directory UTL_FILE_DIR as &#39;/opt/oracle/utl_file&#39;; --建立directory<br/>
+select * from dba_directories –查询directory<br/>
+export ORACLE_SID=sqmmt23g 指定实例<br/>
+echo $ORACLE_SID　显示当前实例<br/>
+expdp sqmdb/mdasil schemas=sqmdb directory=dmpdir dumpfile=sqmdb1016.dmp content=metadata_only<br/>
+impdp rtdb/mdasil schemas=rtdb directory=dmpdir dumpfile=zqtest_1031.dmp<br/>
+导出所有cfg和sch开头的表，并去掉其中的CFG_CUSTOMER_GROUP_H表的数<br/>
+expdp sqmdb/mdasil tables=CFG%,SCH% directory=dmpdir dumpfile=sqmdb_data1118.dmp exclude=table:&quot;like&#39;CFG_CUSTOMER_GROUP_H&#39;&quot;<br/>
+impdp sqmdb/mdasil directory=DATA_PUMP_DIR dumpfile=sqmdb_data1118.dmp TABLE_EXISTS_ACTION=append</p></li>
+</ol>
+
+<p>expdp sqmdb/mdasil schemas=sqmdb directory = dmpdir dumpfile = sqmdb_test.dmp include=table:&quot; in (select table_name from user_tables where table_name like\&#39;RPT_VOLTE%\&#39;or table_name like\&#39;RPT_WLQ_86%\&#39; or table_name like\&#39;CFG_86%\&#39; or table_name like\&#39;CFG_WLQ%\&#39; or table_name like \&#39;CFG_WLQ_ALARM_LIMIT\&#39;)&quot; include = view:&quot;in (select view_name from user_views where view_name like\&#39;V_86%\&#39; or view_name like\&#39;V_WQL%\&#39;  or view_name like\&#39;V_WLQ%\&#39;)&quot; include = procedure:&quot; in (select object_name from user_procedures where object_name like \&#39;SP_86%\&#39; or object_name like \&#39;SP_WQL%\&#39; or object_name like \&#39;SP_WLQ%\&#39; or  object_name like \&#39;SP_IS_TABLE_EXISTS_DBLINK\&#39; or object_name like \&#39;DAILY_VOL_86%\&#39; or object_name like \&#39;DAILY_VOL_WLQ\&#39;)&quot; content=metadata_only<br/>
+14. 上传文件<br/>
+最近在部署系统时接触了一些文件传输命令，分别做一下简单记录：</p>
+
+<ol>
+<li>sftp 是一个交互式文件传输程式。它类似于 ftp, 但它进行加密传输，比FTP有更高的安全性。下边就简单介绍一下如何远程连接主机，进行文件的上传和下载，以及一些相关操作。<br/>
+举例，如远程主机的 IP 是 202.206.64.33或者是域名www.hebust.edu.cn,用户名是  fyt ,在命令行模式下:sftp fyt@202.206.64.33或者  <a href="mailto:fyt@www.hebust.edu.cn">fyt@www.hebust.edu.cn</a>。回车提示输入密码。进入提示符sftp&gt;<br/>
+如果登陆远程机器不是为了上传下载文件，而是要修改远程主机上的某些文件。可以<br/>
+ssh  fyt@202.206.64.33 （其实sftp就是ssh 的一个程式。）<br/>
+sftp&gt; get /var/www/fuyatao/index.php  /home/fuyatao/<br/>
+这条语句将从远程主机的  /var/www/fuyatao/目录下将 index.php 下载到本地  /home/fuyatao/目录下。<br/>
+sftp&gt; put /home/fuyatao/downloads/Linuxgl.pdf /var/www/fuyatao/<br/>
+这条语句将把本地 /home/fuyatao/downloads/目录下的 linuxgl.pdf文件上传至远程主机/var/www/fuyatao/ 目录下。<br/>
+你如果不知道远程主机的目录是什么样， pwd命令可以帮您查询远程主机的当前路径。查询本机当前工作目录 lpwd.<br/>
+改变路径可以用cd ，改变本机路径可以用 lcd;<br/>
+ls rm rmdir mkdir 这些命令都可以使用。同理调用本机都是加 l , 即 lls lrm.<br/>
+要离开sftp，用exit 或quit、 bye 均可。详细情况可以查阅 man  sftp.<br/>
+如果觉得在命令行模式下不太方便，可以 sudo apt-get install gftp。在图形界面下操作就简便多了。<br/>
+2.scpSCP ：secure copy (remote file copy program) 也是一个基于SSH安全协议的文件传输命令。与sftp不同的是，它只提供主机间的文件传输功能，没有文件管理的功能。<br/>
+复制local_file 到远程目录remote_folder下<br/>
+scp local_file remote_user@host:remote_folder<br/>
+复制local_folder 到远程remote_folder（需要加参数 -r 递归）<br/>
+scp –r local_folder remote_user@host:remote_folder<br/>
+以上命令反过来写就是远程复制到本地<br/>
+3.sz/rzsz/rz 是基于ZModem传输协议的命令。对传输的数据会进行核查，并且有很好的传输性能。使用起来更是非常方便，但前提是window端需要有能够支持ZModem的telnet或者SSH客户端，例如secureCRT。<br/>
+首先需要在secureCRT中可以配置相关的本地下载和上传目录，然后用rz、sz命令即可方便的传输文件数据。<br/>
+下载数据到本地下载目录：sz filename1 filename2 …<br/>
+上传数据到远程：执行rz –be 命令，客户端会弹出上传窗口，用户自行选择(可多选)要上传的文件即可。</li>
+<li>编译存储过程卡死处理<br/>
+SELECT * FROM V\(DB_OBJECT_CACHE WHERE name=upper(&#39;sp_user_complain_p0_V_sh&#39;) AND LOCKS!=&#39;0&#39;;  --查看lock数；一般来说是有test没有关完，又同时去改过程造成的。<br/>
+select SID from V\)ACCESS WHERE object=upper(&#39;sp_user_complain_p0_V_sh&#39;);<br/>
+这句执行太慢，可以用下面这句来找出测试窗口。<br/>
+select * <br/>
+FROM v\(session a,v\)sqltext c<br/>
+WHERE a.sql_address=c.address(+) and action like &#39;%Test%&#39;<br/>
+ORDER BY c.piece<br/>
+找出对应的sid和serial#；最后杀掉就可以了<br/>
+SELECT SID,SERIAL#,PADDR FROM V\(SESSION WHERE SID in (id...)<br/>
+SELECT * FROM V\)DB_OBJECT_CACHE WHERE name=upper(&#39;daily_kqi_g1_yn_v2&#39;) AND LOCKS!=&#39;0&#39;<br/>
+select sid,sql_text from v\(open_cursor where UPPER(sql_text) like &#39;%DAILY_KQI_G1_YN_V2%&#39;<br/>
+SELECT SID,SERIAL#,PADDR FROM V\)SESSION WHERE SID in (360)</li>
+<li>在触发器中添v\(sesseion语句.<br/>
+这需要用sys用户以sysdba 方式登陆，再执行<br/>
+Grant 语句将v_\)seeeion的 select on 权限给对应的用户。</li>
+<li><p>导出用户权限<br/>
+select dbms_metadata.get_ddl(&#39;USER&#39;,&#39;SQMDB&#39;) from  dual;<br/>
+select dbms_metadata.get_granted_ddl(&#39;OBJECT_GRANT&#39;,&#39;SQMDB&#39;) from   dual;<br/>
+select dbms_metadata.get_granted_ddl(&#39;ROLE_GRANT&#39;,&#39;SQMDB&#39;) from   dual;<br/>
+select dbms_metadata.get_granted_ddl(&#39;SYSTEM_GRANT&#39;,&#39;SQMDB&#39;) from   dual;<br/>
+--表空间创建语句<br/>
+select dbms_metadata.get_ddl(&#39;TABLESPACE&#39;,&#39;SQMDB&#39;) from dual;<br/>
+--全实例的表空间及文件名，把这个结果集记录下来，以后重新建立<br/>
+select * FROM SYS.DBA_DATA_FILES</p></li>
+<li><p>查看所有代码<br/>
+select distinct type from all_source where owner=&#39;SQMDB&#39; –不包含视图</p></li>
+<li><p>部分聚合，百分占比<br/>
+with dat as( <br/>
+select 1 as ci,100 as traffic,23 as user_num from dual union all<br/>
+select 1 as ci,100 as traffic,24 as user_num from dual union all<br/>
+select 2 as ci,100 as traffic,40 as user_num from dual union all<br/>
+select 2 as ci,100 as traffic,60 as user_num from dual union all<br/>
+select 3 as ci,100 as traffic,20 as user_num from dual union all<br/>
+select 3 as ci,100 as traffic,30 as user_num from dual union all<br/>
+select 3 as ci,100 as traffic,50 as user_num from dual <br/>
+)<br/>
+select ci,user_num,round(ratio_to_report(user_num) over(PARTITION BY ci)<em>100,2),<br/>
+round(ratio_to_report(user_num) over()</em>100,2)<br/>
+from dat</p></li>
+<li><p>escape 转义<br/>
+%   零或者多个字符<br/>
+_    单一任何字符（下划线）<br/>
+\     特殊字符<br/>
+select table_name from user_tables  where table_name like &#39;T_BULK_%_6151&#39; escape &#39;\&#39;</p></li>
+<li><p>DBlink进行远程联接时可优化，如下<br/>
+/<em>+driving_site(a)</em>/可以指定某个表在远程服务器上运行。<br/>
+select /<em>+driving_site(a)</em>/ a.sdate,a.imsi,<br/>
+sum(case when a.network_type=2 then total_traffic end) as total_traffic_2g,<br/>
+sum(case when a.network_type=3 then total_traffic end) as total_traffic_3g,<br/>
+sum(case when c.network_type=2 then c.online_time_parallel end) online_time_2g,<br/>
+sum(case when c.network_type=3 then c.online_time_parallel end) online_time_3g<br/>
+from sqmdb.rpt_KQI_Setup_IMSI@sqmdb_23g a inner join TEMP__0000224667 b on a.imsi=b.imsi<br/>
+left join sqmdb.RPT_HTTP_PARALLEL@sqmdb_23g c on a.imsi=c.imsi and a.sdate=c.sdate<br/>
+where  a.sdate&gt;= to_date(&#39;2015-04-28 07:00:00&#39;,&#39;yyyy-mm-dd hh24:mi:ss&#39;)<br/>
+and a.sdate &lt; to_date(&#39;2015-04-28 12:00:00&#39;,&#39;yyyy-mm-dd hh24:mi:ss&#39;)<br/>
+--and a.imsi in(460008243147992,460006641328596)<br/>
+group by a.sdate,a.imsi</p></li>
+<li><p>materialize  物化视图，有时可优化with dat</p></li>
+</ol>
+
+<p>原因找到了，就得想办法把执行计划的FILTER去掉。开始想加HINT，但是实验了很多HINT，都不起作用。最后的结果还一样，后来想到WITH AS 能提高SQL的查询速度，就把影响SQL执行的那段SQL放到WITH AS里面，结果还是一样。后来尝试把HINT MATERIALIZE和WITH AS 结合使用，修改成如下的SQL，查询速度立即提升了很多。</p>
+
+<ol>
+<li>WITH PARAMS AS  </li>
+<li> (SELECT &#39;&#39; USER_ID, &#39;&#39; SDATE, &#39;%&#39; || &#39;&#39; || &#39;%&#39; SNAME FROM DUAL),  </li>
+<li>USERNAMEDATA AS  </li>
+<li> (SELECT /<em>+ materialize </em>/  </li>
+<li>   AU.USERNAME  </li>
+<li>    FROM ALL_USERS AU  </li>
+<li><p>在用hit时如果表指定了别名，hit里也要用别名。<br/>
+ select/<em>+ parallel(a,4) driving_site(a)</em>/ imsi,CIfrom s1dss2_2015081610 a  <br/>
+where succflag=0 group by imsi,CI</p></li>
+<li><p>看所有定时任务<br/>
+select * from  user_jobs</p></li>
+<li><p>建立联合主键<br/>
+alter table xxx add constraints xxx_pk primary key (c1,c2,c3,c4,c5....);</p></li>
+<li><p>重启oracle实例<br/>
+\(  su - oracle<br/>
+\)  lsnrctl stop<br/>
+\(  sqlplus &quot;/as sysdba&quot;<br/>
+SQL&gt;  shutdown immediate; 这一句关闭实例<br/>
+SQL&gt;  quit<br/>
+\)  lsnrctl start<br/>
+$  sqlplus /nolog<br/>
+SQL&gt;  connect / as sysdba<br/>
+SQL&gt;  startup; 这一句开启实例</p></li>
+</ol>
+
+<p>--重启监听<br/>
+[oracle@nokia ~]$ lsnrctl start<br/>
+--查看有那些实例</p>
+
+<ol>
+<li>sqlplus sysdba登陆卡住<br/>
+[oracle@ycdecoder1 ~]$ sqlplus -prelim / as sysdba<br/>
+SQL*Plus: Release 11.2.0.1.0 Production on Mon Oct 10 16:31:42 2016<br/>
+Copyright (c) 1982, 2009, Oracle.  All rights reserved.<br/>
+SQL&gt; shutdown abort<br/>
+;ORACLE instance shut down.</li>
+<li>Clob字段插入数据<br/>
+insert into sch_datatable_script values(9999,&#39;zqtest&#39;,empty_clob(),0)</li>
+</ol>
+
+<p>DECLARE<br/>
+  lobloc CLOB;<br/>
+  buffer VARCHAR2(2000);<br/>
+  amount NUMBER := 20;<br/>
+  offset NUMBER := 1;<br/>
+BEGIN<br/>
+  --初始化要写入的数据<br/><br/>
+  buffer := &#39;This is a writing example&#39;;<br/>
+  amount := length(buffer);<br/>
+  SELECT script<br/>
+    INTO lobloc --   获取定位器并锁定行<br/><br/>
+    FROM sch_datatable_script<br/>
+   WHERE oid=9999 FOR UPDATE;<br/>
+  dbms_lob.writeappend(lobloc,<br/>
+                 amount,<br/>
+                 buffer);<br/>
+  COMMIT;<br/>
+END;<br/>
+29. 看表和视图的依赖关系<br/>
+select * from user_dependencies where referenced_name=upper(&#39;rpt_dev_product_d&#39;)<br/>
+30. long 字段查询<br/>
+create table zqtest_01 as<br/>
+select view_name,TO_LOB(text) as a from user_views</p>
+
+<p>select * from zqtest_01 where a like&#39;%其他%&#39;<br/>
+31. 查看历史上耗资源SQL<br/>
+select b.username username,a.disk_reads reads,trunc(a.CPU_TIME/1000/60) as cputime,<br/>
+    a.executions exec,a.disk_reads/decode(a.executions,0,1,a.executions) rds_exec_ratio,<br/>
+    a.sql_text Statement,a.SQL_FULLTEXT,<br/>
+    c.MACHINE,c.TERMINAL,c.PROGRAM,c.<br/>
+from  v\(sqlarea a,dba_users b,v\)session c<br/>
+where a.parsing_user_id=b.user_id<br/>
+ and a.disk_reads &gt; 100000<br/>
+ and  a.hash_value = c.sql_hash_value(+)<br/>
+order by a.disk_reads desc;<br/>
+32. 删除用户<br/>
+[oracle@ZZLTEDATABASE ~]\( export ORACLE_SID=sqmmt<br/>
+[oracle@ZZLTEDATABASE ~]\) echo \(ORACLE_SID<br/>
+sqmmt<br/>
+[oracle@ZZLTEDATABASE ~]\) sqlplus / as sysdba<br/>
+SQL&gt; drop user bcdb_v2 cascade;</p>
+
+<ol>
+<li>手动锁表<br/>
+lock table tablename in exclusive mode<br/>
+这个表示手动锁表tablename<br/>
+其他的事物只能读，不能写，如果你要写数据只能等待该过程执行完成，否则阻塞所有要修改操作会话。<br/>
+可以这么说编上面过程除非特殊情况需要这样，真正的应用系统不会这么干。 这样应用只会使你的事物串行执行，对于并发系统这就是自寻死路</li>
+<li><p>redo log相关操作<br/>
+--查看redo log 切换频率<br/>
+select sequence#,first_time,nexttime,round(((first_time-nexttime)<em>24)</em>60,2) diff <br/>
+from (<br/>
+select sequence#,first_time, lag(first_time) over(order by sequence#) nexttime<br/>
+from v\(log_history <br/>
+where thread#=1<br/>
+) order by sequence# desc<br/>
+--查看文件地址<br/>
+SELECT dbn.name &quot;DB_Name&quot; ,logf.group#, logf.status, logf.MEMBER<br/>
+FROM v\)logfile logf,v\(database dbn;<br/>
+查看文件大小<br/>
+SELECT dbn.name &quot;DB_Name&quot; ,log1.group#, log1.thread#, log1.sequence#, log1.BYTES/1024/1024 &quot;SIZE(MB)&quot;, log1.members, log1.archived, log1.status,<br/>
+   to_char(log1.first_change#) &quot;FIRST_CHANGE#&quot;, log1.first_time<br/>
+FROM v\)log log1,v$database dbn;</p></li>
+<li><p>列拼接</p></li>
+</ol>
+
+<p>select table_name,listagg(lower(column_name),&#39;,&#39;) within GROUP (order by table_name) from user_tab_cols where lower(table_name) =&#39;cfg_cell_rule_v3&#39;<br/>
+group by table_name<br/>
+with temp as(<br/>
+  select &#39;China&#39; nation ,&#39;Guangzhou&#39; city from dual union all<br/>
+  select &#39;China&#39; nation ,&#39;Shanghai&#39; city from dual union all<br/>
+  select &#39;China&#39; nation ,&#39;Beijing&#39; city from dual union all<br/>
+  select &#39;USA&#39; nation ,&#39;New York&#39; city from dual union all<br/>
+  select &#39;USA&#39; nation ,&#39;Bostom&#39; city from dual union all<br/>
+  select &#39;Japan&#39; nation ,&#39;Tokyo&#39; city from dual <br/>
+)<br/>
+select nation,listagg(city,&#39;,&#39;) within GROUP (order by city)<br/>
+from temp<br/>
+group by nation</p>
+
+<p>with temp as(<br/>
+  select 500 population, &#39;China&#39; nation ,&#39;Guangzhou&#39; city from dual union all<br/>
+  select 1500 population, &#39;China&#39; nation ,&#39;Shanghai&#39; city from dual union all<br/>
+  select 500 population, &#39;China&#39; nation ,&#39;Beijing&#39; city from dual union all<br/>
+  select 1000 population, &#39;USA&#39; nation ,&#39;New York&#39; city from dual union all<br/>
+  select 500 population, &#39;USA&#39; nation ,&#39;Bostom&#39; city from dual union all<br/>
+  select 500 population, &#39;Japan&#39; nation ,&#39;Tokyo&#39; city from dual <br/>
+)<br/>
+select population,<br/>
+       nation,<br/>
+       city,<br/>
+       listagg(city,&#39;,&#39;) within GROUP (order by city) over (partition by nation) rank<br/>
+from temp</p>
+
+<p>with temp as(<br/><br/>
+  select &#39;China&#39; nation ,&#39;Guangzhou&#39; city from dual union all<br/><br/>
+  select &#39;China&#39; nation ,&#39;Shanghai&#39; city from dual union all<br/><br/>
+  select &#39;China&#39; nation ,&#39;Beijing&#39; city from dual union all<br/><br/>
+  select &#39;USA&#39; nation ,&#39;New York&#39; city from dual union all<br/><br/>
+  select &#39;USA&#39; nation ,&#39;Bostom&#39; city from dual union all<br/><br/>
+  select &#39;Japan&#39; nation ,&#39;Tokyo&#39; city from dual<br/><br/>
+)<br/><br/>
+select nation,wmsys.wm_concat(city)<br/>
+from temp<br/><br/>
+group by nation;</p>
+
+<ol>
+<li>列转行pivot，行转列unpivot<br/>
+with dat as (<br/>
+select  1 as id, &#39;苹果&#39; as name, 1000 as  nums from dual union all<br/>
+select  2,&#39;苹果&#39;,2000 from dual union all<br/>
+select  3,&#39;苹果&#39;,4000 from dual union all<br/>
+select  4,&#39;橘子&#39;,5000 from dual union all<br/>
+select 5,&#39;橘子&#39;,3000 from dual union all<br/>
+select  6,&#39;葡萄&#39;,3500 from dual union all<br/>
+select  7,&#39;芒果&#39;,4200 from dual union all<br/>
+select  8,&#39;芒果&#39;,5500 from dual union all<br/>
+)select * from dat</li>
+</ol>
+
+<p>select 5,&#39;一&#39;,3000 from dual<br/>
+37. 列拼接成一行SYS_CONNECT_BY_PATH<br/>
+38. 移动重命名文件</p>
+
+<p>例如，我需要将/u01/app/oracle/oradata/GSP/temp4.dbf这个文件重命名为/u01/app/oracle/oradata/GSP/temp04.dbf</p>
+
+<p>1: 将临时表空间的临时文件脱机</p>
+
+<p>ALTER DATABASE TEMPFILE  &#39;/data3/sqmmt/sqmdb_temp.dbf&#39; OFFLINE;<br/>
+2：移动或重命名相关的临时文件<br/>
+mv /data3/sqmmt/sqmdb_temp.dbf /data2/sqmmt/sqmdb_temp.dbf<br/>
+3: 使用脚本ALTER DATABASE RENAME FILE<br/>
+ALTER DATABASE RENAME FILE   &#39;/data3/sqmmt/sqmdb_temp.dbf&#39; TO &#39;/data2/sqmmt/sqmdb_temp.dbf&#39;;<br/>
+4: 将临时表空间的临时文件联机<br/>
+ALTER DATABASE TEMPFILE &#39;/data2/sqmmt/sqmdb_temp.dbf&#39; ONLINE;<br/>
+39. 关闭dblink<br/>
+  最近出现一个关于db-link session的问题，在A数据库建立了一个DBLINK，其他有三台服务器利用DBLINK连接到A数据库，但是在应用中利用了连接池进行<br/>
+session管理，当使用DBLINK时，在A数据库出现session快速增长，达到了顶峰从而导致进程资源消耗连接出现中断。<br/>
+commit;<br/>
+  execute immediate &#39;alter session close database link test&#39;;--test为dblink名<br/>
+40. MINUS(减去),INTERSECT(交集)和UNION ALL(并集);<br/>
+41. 临时表空间超大处理<br/>
+select sess.SID, segtype, blocks * 8 / 1000 &quot;MB&quot;, sql_text<br/>
+  from v\(sort_usage sort, v\)session sess, v$sql sql<br/>
+ where sort.SESSION_ADDR = sess.SADDR<br/>
+   and sql.ADDRESS = sess.SQL_ADDRESS<br/>
+ order by blocks desc;</p>
+
+<p>SELECT username,default_tablespace,temporary_tablespace FROM DBA_USERS;</p>
+
+<p>SELECT FILE#                        AS FILE_NUMBER<br/>
+    ,NAME                           AS NAME<br/>
+    ,CREATION_TIME                  AS CREATION_TIME<br/>
+    ,BLOCK_SIZE                     AS BLOCK_SIZE<br/>
+    ,BYTES/1024/1024/1024           AS &quot;FILE_SIZE(G)&quot;<br/>
+    ,CREATE_BYTES/1024/1024/1024    AS &quot;INIT_SIZE(G)&quot;<br/>
+    ,STATUS                         AS STATUS<br/>
+    ,ENABLED                        AS ENABLED<br/>
+FROM V$TEMPFILE;</p>
+
+<p>SELECT PROPERTY_NAME, PROPERTY_VALUE<br/>
+ FROM DATABASE_PROPERTIES<br/>
+WHERE PROPERTY_NAME=&#39;DEFAULT_TEMP_TABLESPACE&#39;</p>
+
+<p>create   temporary   tablespace   sqmdb_temp01   TEMPFILE   &#39;/data2/sqmmt/sqmdb_temp01.dbf &#39;   SIZE   8192M<br/><br/>
+REUSE   AUTOEXTEND   ON   NEXT  1024K   MAXSIZE   UNLIMITED;   --创建中转临时表空间 <br/>
+ALTER DATABASE TEMPFILE  &#39;/data2/sqmmt/sqmdb_temp.dbf&#39; OFFLINE;<br/>
+alter   database   default   temporary   tablespace   sqmdb_temp01;    --改变缺省临时表空间<br/>
+drop   tablespace   sqmdb_temp   including   contents   and   datafiles;  --删除原来临时表空间<br/>
+CREATE BIGFILE TEMPORARY TABLESPACE SQMDB_TEMP TEMPFILE <br/>
+  &#39;/opt/oradata01/sqmmt/sqmdb_temp.dbf&#39; SIZE 1G AUTOEXTEND ON NEXT 50M MAXSIZE 5359738344K<br/>
+TABLESPACE GROUP &#39;&#39;<br/>
+EXTENT MANAGEMENT LOCAL UNIFORM SIZE 1M;<br/>
+alter   database   default   temporary   tablespace   sqmdb_temp;  </p>
+
+<ol>
+<li>Function 返回表<br/>
+--声明类型<br/>
+CREATE OR REPLACE TYPE &quot;IMSIMSISDN_TABLE2&quot; as object<br/>
+(<br/>
+imsi   varchar2(50),<br/>
+msisdn varchar2(50),<br/>
+IMEI VARCHAR2(20),<br/>
+MS_BRAND_product VARCHAR2(355),<br/>
+VOLTE_UA  VARCHAR2(256),<br/>
+user_type         varchar2(1)<br/>
+);<br/>
+--声明表类型<br/>
+CREATE OR REPLACE TYPE &quot;T_TABLE2&quot; is table of imsimsisdn_table2;</li>
+</ol>
+
+<p>CREATE OR REPLACE FUNCTION getimsiandmsisdn_volte_exp<br/>
+(<br/>
+    i_instr         varchar2,<br/>
+    i_strtype       integer<br/>
+)<br/>
+RETURN t_table2 pipelined AS<br/>
+    v_imsimsisn_table imsimsisdn_table2;<br/>
+BEGIN<br/>
+v_imsimsisn_table := imsimsisdn_table2(v_imsi,v_msisdn,v_imei,v_ms_brand_product,v_volte_ua,v_user_type3);<br/>
+                    pipe row(v_imsimsisn_table);<br/>
+END;</p>
+
+<p>select * from table(getimsiandmsisdn_volte_exp(&#39;460029511154402,460027574310114&#39;,0));</p>
+
+<p>自己百度<br/>
+--<a href="http://blog.chinaunix.net/uid-17240229-id-311309.html">http://blog.chinaunix.net/uid-17240229-id-311309.html</a><br/>
+朋友的一数据库redo log 日志太小，导致日志切换很频繁。<br/>
+ 1.查看当前日志组成员</p>
+
+<ol>
+<li><p>SQL&gt; select member from v$logfile; </p></li>
+<li></li>
+<li><p>MEMBER</p></li>
+</ol>
+
+<hr/>
+
+<ol>
+<li>/u01/oracle/oradata/orcl/redo03.log</li>
+<li>/u01/oracle/oradata/orcl/redo02.log</li>
+<li>/u01/oracle/oradata/orcl/redo01.log<br/>
+2. 查看当前日志组状态：</li>
+<li><p>SQL&gt; select group#,members,bytes/1024/1024,status from v$log; </p></li>
+<li></li>
+<li><p>    GROUP# MEMBERS BYTES/1024/1024 STATUS</p></li>
+<li><hr/></li>
+<li><p>         1 1 50 ACTIVE</p></li>
+<li><p>         2 1 50 CURRENT</p></li>
+<li><p>         3 1 50 INACTIVE<br/>
+现在有三个日志成员，大小为50M，欲更改为100M<br/>
+增加日志组</p></li>
+<li><p>SQL&gt;alter database add logfile group 4 (&#39;/u01/oracle/oradata/orcl/redo04.log&#39;) size 100M;</p></li>
+<li><p>SQL&gt;alter database add logfile group 5 (&#39;/u01/oracle/oradata/orcl/redo05.log&#39;) size 100M;</p></li>
+<li><p>SQL&gt;alter database add logfile group 6 (&#39;/u01/oracle/oradata/orcl/redo06.log&#39;) size 100M;<br/>
+3.切换到新增的日志组上</p></li>
+<li><p>SQL&gt; alter system switch logfile;</p></li>
+<li></li>
+<li><p>System altered.</p></li>
+<li></li>
+<li><p>SQL&gt; alter system switch logfile;</p></li>
+<li></li>
+<li><p>System altered.</p></li>
+<li><p>SQL&gt; select group#,members,bytes/1024/1024,status from v$log</p></li>
+<li></li>
+<li><p>    GROUP#    MEMBERS BYTES/1024/1024 STATUS</p></li>
+<li><hr/></li>
+<li><p>         1          1              50 INACTIVE</p></li>
+<li><p>         2          1              50 INACTIVE</p></li>
+<li><p>         3          1              50 ACTIVE</p></li>
+<li><p>         4          1             100 CURRENT</p></li>
+<li><p>         5          1             100 UNUSED</p></li>
+<li><p>         6          1             100 UNUSED</p></li>
+<li></li>
+</ol>
+
+<p>a. CURRENT指当前的日志文件，在进行实例恢复时是必须的；<br/>
+b. ACTIVE是指活动的非当前日志，在进行实例恢复时会被用到。Active状态意味着，Checkpoint尚未完成，因此该日志文件不能被覆盖。<br/>
+c. INACTIVE是非活动日志，在实例恢复时不再需要，但在介质恢复时可能需要。<br/>
+d. UNUSED表示该日志从未被写入，可能是刚添加的，或RESETLOGS后被重置。</p>
+
+<p>4.删除旧的日志组</p>
+
+<ol>
+<li><p>SQL&gt; alter database drop logfile group 1; </p></li>
+<li></li>
+<li><p>Database altered.</p></li>
+<li></li>
+<li><p>SQL&gt; alter database drop logfile group 2</p></li>
+<li><p>  2 /</p></li>
+<li></li>
+<li><p>Database altered.</p></li>
+<li></li>
+<li><p>SQL&gt; alter database drop logfile group 3;</p></li>
+<li><p>alter database drop logfile group 3</p></li>
+<li><p>*</p></li>
+<li><p>ERROR at line 1:</p></li>
+<li><p>ORA-01624: log 3 needed for crash recovery of instance dbserver (thread 1)</p></li>
+<li><p>ORA-00312: online log 3 thread 1: &#39;/u01/oracle/oradata/orcl/redo03.log&#39;<br/>
+由于log 3 日志成员还出去active 状态，所以不能drop掉的，再次执行 alter system switch logfile; </p></li>
+<li><p>SQL&gt; select group#,members,bytes/1024/1024,status from v$log;</p></li>
+<li></li>
+<li><p>    GROUP# MEMBERS BYTES/1024/1024 STATUS</p></li>
+<li><hr/></li>
+<li><p>         3 1 50 INACTIVE</p></li>
+<li><p>         4 1 100 ACTIVE</p></li>
+<li><p>         5 1 100 CURRENT</p></li>
+<li><p>         6 1 100 UNUSED</p></li>
+<li><p>SQL&gt; alter database drop logfile group 3;</p></li>
+<li></li>
+<li><p>Database altered.</p></li>
+<li></li>
+<li></li>
+<li><p>SQL&gt; select group#,members,bytes/1024/1024,status from v$log;</p></li>
+<li></li>
+<li><p>    GROUP# MEMBERS BYTES/1024/1024 STATUS</p></li>
+<li><hr/></li>
+<li><p>         4 1 100 ACTIVE</p></li>
+<li><p>         5 1 100 ACTIVE</p></li>
+<li><p>         6 1 100 CURRENT<br/>
+在操作系统下删除掉redolog 日志文件<br/>
+mv  /u01/oracle/oradata/orcl/redo0[1-3].log /tmp</p></li>
+</ol>
+
+<p><a href="http://www.2cto.com/database/201311/254441.html">http://www.2cto.com/database/201311/254441.html</a><br/>
+<a href="http://www.cnblogs.com/chuncn/archive/2009/04/29/1381282.html">http://www.cnblogs.com/chuncn/archive/2009/04/29/1381282.html</a><br/>
+oracle安装教程:<a href="http://www.itpux.com/thread-81-1-1.html">http://www.itpux.com/thread-81-1-1.html</a></p>
+
+<p>1、Oracle 12c RAC安装配置详细记录过程_图文并茂_v1.0.pdf<br/>
+下载地址：<a href="http://www.itpux.com/thread-1834-1-1.html">http://www.itpux.com/thread-1834-1-1.html</a></p>
+
+<p>2、Oracle 11g R2 RAC 安装配置详细记录过程_图文并茂_v2.0.pdf<br/>
+下载地址：<a href="http://www.itpux.com/thread-81-1-1.html">http://www.itpux.com/thread-81-1-1.html</a><br/>
+14.处理月份天数不定的办法      <br/>
+   select to_char(add_months(last_day(sysdate) +1, -2), &#39;yyyymmdd&#39;),last_day(sysdate) from dual    <br/>
+16.找出今年的天数      <br/>
+   select add_months(trunc(sysdate,&#39;year&#39;), 12) - trunc(sysdate,&#39;year&#39;) from dual    <br/>
+   闰年的处理方法      <br/>
+   to_char( last_day( to_date(&#39;02&#39;    | | :year,&#39;mmyyyy&#39;) ), &#39;dd&#39; )      <br/>
+   如果是28就不是闰年    <br/>
+17.yyyy与rrrr的区别      <br/>
+   &#39;YYYY99 TO_C      <br/>
+   ------- ----      <br/>
+   yyyy 99 0099      <br/>
+   rrrr 99 1999      <br/>
+   yyyy 01 0001      <br/>
+   rrrr 01 2001    <br/>
+18.不同时区的处理      <br/>
+   select to_char( NEW_TIME( sysdate, &#39;GMT&#39;,&#39;EST&#39;), &#39;dd/mm/yyyy hh:mi:ss&#39;) ,sysdate      <br/>
+   from dual;    <br/>
+19.5秒钟一个间隔      <br/>
+   Select TO_DATE(FLOOR(TO_CHAR(sysdate,&#39;SSSSS&#39;)/300) * 300,&#39;SSSSS&#39;) ,TO_CHAR(sysdate,&#39;SSSSS&#39;)      <br/>
+   from dual    <br/>
+   2002-11-1 9:55:00 35786      <br/>
+   SSSSS表示5位秒数    <br/>
+20.一年的第几天      <br/>
+   select TO_CHAR(SYSDATE,&#39;DDD&#39;),sysdate from dual<br/>
+        <br/>
+   310 2002-11-6 10:03:51    <br/>
+21.计算小时,分,秒,毫秒      <br/>
+    select      <br/>
+     Days,      <br/>
+     A,      <br/>
+     TRUNC(A<em>24) Hours,      <br/>
+     TRUNC(A</em>24<em>60 - 60</em>TRUNC(A<em>24)) Minutes,      <br/>
+     TRUNC(A</em>24<em>60</em>60 - 60<em>TRUNC(A</em>24<em>60)) Seconds,      <br/>
+     TRUNC(A</em>24<em>60</em>60<em>100 - 100</em>TRUNC(A<em>24</em>60*60)) mSeconds      <br/>
+    from      <br/>
+    (      <br/>
+     select      <br/>
+     trunc(sysdate) Days,      <br/>
+     sysdate - trunc(sysdate) A      <br/>
+     from dual      <br/>
+   )    </p>
+
+<p>   select * from tabname      <br/>
+   order by decode(mode,&#39;FIFO&#39;,1,-1)<em>to_char(rq,&#39;yyyymmddhh24miss&#39;);      <br/>
+   <br/>
+   //      <br/>
+   floor((date2-date1) /365) 作为年      <br/>
+   floor((date2-date1, 365) /30) 作为月      <br/>
+   d(mod(date2-date1, 365), 30)作为日.<br/>
+23.next_day函数      返回下个星期的日期,day为1-7或星期日-星期六,1表示星期日<br/>
+   next_day(sysdate,6)是从当前开始下一个星期五。后面的数字是从星期日开始算起。      <br/>
+   1 2 3 4 5 6 7      <br/>
+   日 一 二 三 四 五 六    <br/>
+   <br/>
+   --------------------------------------------------------------- <br/>
+   <br/>
+   select    (sysdate-to_date(&#39;2003-12-03 12:55:45&#39;,&#39;yyyy-mm-dd hh24:mi:ss&#39;))</em>24<em>60</em>60 from ddual<br/>
+   日期 返回的是天 然后 转换为ss<br/>
+     <br/>
+24,round<a href="day:%E8%88%8D%E5%85%A5%E5%88%B0%E6%9C%80%E6%8E%A5%E8%BF%91%E7%9A%84%E6%98%9F%E6%9C%9F%E6%97%A5">舍入到最接近的日期</a><br/>
+   select sysdate S1,<br/>
+   round(sysdate) S2 ,<br/>
+   round(sysdate,&#39;year&#39;) YEAR,<br/>
+   round(sysdate,&#39;month&#39;) MONTH ,<br/>
+   round(sysdate,&#39;day&#39;) DAY from dual<br/>
+25,trunc[截断到最接近的日期,单位为天] ,返回的是日期类型<br/>
+   select sysdate S1,                     <br/>
+     trunc(sysdate) S2,                 //返回当前日期,无时分秒<br/>
+     trunc(sysdate,&#39;year&#39;) YEAR,        //返回当前年的1月1日,无时分秒<br/>
+     trunc(sysdate,&#39;month&#39;) MONTH ,     //返回当前月的1日,无时分秒<br/>
+     trunc(sysdate,&#39;day&#39;) DAY           //返回当前星期的星期天,无时分秒<br/>
+   from dual<br/>
+26,返回日期列表中最晚日期<br/>
+   select greatest(&#39;01-1月-04&#39;,&#39;04-1月-04&#39;,&#39;10-2月-04&#39;) from dual<br/>
+27.计算时间差<br/>
+     注:oracle时间差是以天数为单位,所以换算成年月,日<br/>
+     <br/>
+      select floor(to_number(sysdate-to_date(&#39;2007-11-02 15:55:03&#39;,&#39;yyyy-mm-dd hh24:mi:ss&#39;))/365) as spanYears from dual        //时间差-年<br/>
+      select ceil(moths_between(sysdate-to_date(&#39;2007-11-02 15:55:03&#39;,&#39;yyyy-mm-dd hh24:mi:ss&#39;))) as spanMonths from dual        //时间差-月<br/>
+      select floor(to_number(sysdate-to_date(&#39;2007-11-02 15:55:03&#39;,&#39;yyyy-mm-dd hh24:mi:ss&#39;))) as spanDays from dual             //时间差-天<br/>
+      select floor(to_number(sysdate-to_date(&#39;2007-11-02 15:55:03&#39;,&#39;yyyy-mm-dd hh24:mi:ss&#39;))<em>24) as spanHours from dual         //时间差-时<br/>
+      select floor(to_number(sysdate-to_date(&#39;2007-11-02 15:55:03&#39;,&#39;yyyy-mm-dd hh24:mi:ss&#39;))</em>24<em>60) as spanMinutes from dual    //时间差-分<br/>
+      select floor(to_number(sysdate-to_date(&#39;2007-11-02 15:55:03&#39;,&#39;yyyy-mm-dd hh24:mi:ss&#39;))</em>24<em>60</em>60) as spanSeconds from dual //时间差-秒<br/>
+28.更新时间<br/>
+     注:oracle时间加减是以天数为单位,设改变量为n,所以换算成年月,日<br/>
+     select to_char(sysdate,&#39;yyyy-mm-dd hh24:mi:ss&#39;),to_char(sysdate+n*365,&#39;yyyy-mm-dd hh24:mi:ss&#39;) as newTime from dual        //改变时间-年<br/>
+     select to_char(sysdate,&#39;yyyy-mm-dd hh24:mi:ss&#39;),add_months(sysdate,n) as newTime from dual                                 //改变时间-月<br/>
+     select to_char(sysdate,&#39;yyyy-mm-dd hh24:mi:ss&#39;),to_char(sysdate+n,&#39;yyyy-mm-dd hh24:mi:ss&#39;) as newTime from dual            //改变时间-日<br/>
+     select to_char(sysdate,&#39;yyyy-mm-dd hh24:mi:ss&#39;),to_char(sysdate+n/24,&#39;yyyy-mm-dd hh24:mi:ss&#39;) as newTime from dual         //改变时间-时<br/>
+     select to_char(sysdate,&#39;yyyy-mm-dd hh24:mi:ss&#39;),to_char(sysdate+n/24/60,&#39;yyyy-mm-dd hh24:mi:ss&#39;) as newTime from dual      //改变时间-分<br/>
+     select to_char(sysdate,&#39;yyyy-mm-dd hh24:mi:ss&#39;),to_char(sysdate+n/24/60/60,&#39;yyyy-mm-dd hh24:mi:ss&#39;) as newTime from dual   //改变时间-秒<br/>
+29.查找月的第一天,最后一天<br/>
+     SELECT Trunc(Trunc(SYSDATE, &#39;MONTH&#39;) - 1, &#39;MONTH&#39;) First_Day_Last_Month,<br/>
+       Trunc(SYSDATE, &#39;MONTH&#39;) - 1 / 86400 Last_Day_Last_Month,<br/>
+       Trunc(SYSDATE, &#39;MONTH&#39;) First_Day_Cur_Month,<br/>
+       LAST_DAY(Trunc(SYSDATE, &#39;MONTH&#39;)) + 1 - 1 / 86400 Last_Day_Cur_Month<br/>
+   FROM dual;</p>
+
+<p>三. 字符函数(可用于字面字符或数据库列)<br/>
+1，字符串截取<br/>
+   select substr(&#39;abcdef&#39;,1,3) from dual<br/>
+2,查找子串位置<br/>
+   select instr(&#39;abcfdgfdhd&#39;,&#39;fd&#39;) from dual<br/>
+3,字符串连接<br/>
+   select &#39;HELLO&#39;||&#39;hello world&#39; from dual;<br/>
+4, 1)去掉字符串中的空格<br/>
+    select ltrim(&#39; abc&#39;) s1,<br/>
+    rtrim(&#39;zhang &#39;) s2,<br/>
+    trim(&#39; zhang &#39;) s3 from dual<br/>
+   2)去掉前导和后缀<br/>
+    select trim(leading 9 from 9998767999) s1,<br/>
+    trim(trailing 9 from 9998767999) s2,<br/>
+    trim(9 from 9998767999) s3 from dual;<br/>
+   <br/>
+5,返回字符串首字母的Ascii值<br/>
+   select ascii(&#39;a&#39;) from dual<br/>
+6,返回ascii值对应的字母<br/>
+   select chr(97) from dual<br/>
+7,计算字符串长度 <br/>
+   select length(&#39;abcdef&#39;) from dual<br/>
+8,initcap（首字母变大写） ,lower(变小写),upper(变大写)<br/>
+   select lower(&#39;ABC&#39;) s1, <br/>
+       upper(&#39;def&#39;) s2, <br/>
+       initcap(&#39;efg&#39;) s3<br/>
+   from dual;<br/>
+9,Replace<br/>
+   select replace(&#39;abc&#39;,&#39;b&#39;,&#39;xy&#39;) from dual;<br/>
+10,translate<br/>
+   select translate(&#39;abc&#39;,&#39;b&#39;,&#39;xx&#39;) from dual; -- x是1位<br/>
+11,lpad [左添充] rpad <a href="%E7%94%A8%E4%BA%8E%E6%8E%A7%E5%88%B6%E8%BE%93%E5%87%BA%E6%A0%BC%E5%BC%8F">右填充</a><br/>
+   select lpad(&#39;func&#39;,15,&#39;=&#39;) s1, rpad(&#39;func&#39;,15,&#39;-&#39;) s2 from dual;<br/>
+   select lpad(dname,14,&#39;=&#39;) from dept;<br/>
+12, decode[实现if ..then 逻辑]   注:第一个是表达式,最后一个是不满足任何一个条件的值<br/>
+   select deptno,decode(deptno,10,&#39;1&#39;,20,&#39;2&#39;,30,&#39;3&#39;,&#39;其他&#39;) from dept;<br/>
+   例:<br/>
+   select seed,account_name,decode(seed,111,1000,200,2000,0) from t_userInfo//如果seed为111,则取1000;为200,取2000;其它取0<br/>
+   select seed,account_name,decode(sign(seed-111),1,&#39;big seed&#39;,-1,&#39;little seed&#39;,&#39;equal seed&#39;) from t_userInfo//如果seed&gt;111,则显示大;为200,则显示小;其它则显<br/>
+示相等<br/>
+13 case[实现switch ..case 逻辑]<br/>
+    SELECT CASE X-FIELD <br/>
+         WHEN X-FIELD &lt; 40 THEN &#39;X-FIELD 小于 40&#39;<br/>
+         WHEN X-FIELD &lt; 50 THEN &#39;X-FIELD 小于 50&#39;<br/>
+         WHEN X-FIELD &lt; 60 THEN &#39;X-FIELD 小于 60&#39;<br/>
+         ELSE &#39;UNBEKNOWN&#39;<br/>
+        END<br/>
+   FROM DUAL <br/>
+   <br/>
+   注:CASE语句在处理类似问题就显得非常灵活。当只是需要匹配少量数值时，用Decode更为简洁。<br/>
+四.数字函数<br/>
+1，取整函数（ceil 向上取整,floor 向下取整）<br/>
+   select ceil(66.6) N1,floor(66.6) N2 from dual;<br/>
+2, 取幂(power) 和 求平方根(sqrt)<br/>
+   select power(3,2) N1,sqrt(9) N2 from dual;<br/>
+3,求余<br/>
+   select mod(9,5) from dual;<br/>
+4,返回固定小数位数 (round:四舍五入，trunc:直接截断)<br/>
+   select round(66.667,2) N1,trunc(66.667,2) N2 from dual;<br/>
+5,返回值的符号(正数返回为1,负数为-1)<br/>
+   select sign(-32),sign(293) from dual;<br/>
+五.转换函数<br/>
+1，to_char()[将日期和数字类型转换成字符类型]<br/>
+   1) select to_char(sysdate) s1,<br/>
+        to_char(sysdate,&#39;yyyy-mm-dd&#39;) s2,<br/>
+        to_char(sysdate,&#39;yyyy&#39;) s3,<br/>
+        to_char(sysdate,&#39;yyyy-mm-dd hh12:mi:ss&#39;) s4,<br/>
+        to_char(sysdate, &#39;hh24:mi:ss&#39;) s5,<br/>
+        to_char(sysdate,&#39;DAY&#39;) s6 <br/>
+    from dual;<br/>
+   2) select sal,to_char(sal,&#39;＄99999&#39;) n1,to_char(sal,&#39;＄99,999&#39;) n2 from emp<br/>
+2, to_date()[将字符类型转换为日期类型] <br/>
+    insert into emp(empno,hiredate) values(8000,to_date(&#39;2004-10-10&#39;,&#39;yyyy-mm-dd&#39;));<br/>
+   <br/>
+3, to_number() 转换为数字类型 <br/>
+    select to_number(to_char(sysdate,&#39;hh12&#39;)) from dual; //以数字显示的小时数<br/>
+   <br/>
+六.其他函数<br/>
+   1.user: <br/>
+    返回登录的用户名称 <br/>
+    select user from dual;<br/>
+    <br/>
+   2.vsize: <br/>
+    返回表达式所需的字节数<br/>
+    select vsize(&#39;HELLO&#39;) from dual;<br/>
+   <br/>
+   3.nvl(ex1,ex2): 　<br/>
+    ex1值为空则返回ex2,否则返回该值本身ex1（常用） <br/>
+    例：如果雇员没有佣金，将显示0，否则显示佣金 <br/>
+    select comm,nvl(comm,0) from emp;<br/>
+   <br/>
+   4.nullif(ex1,ex2): <br/>
+    值相等返空，否则返回第一个值<br/>
+    例：如果工资和佣金相等，则显示空，否则显示工资<br/>
+    select nullif(sal,comm),sal,comm from emp;<br/>
+   <br/>
+   5.coalesce: 　<br/>
+    返回列表中第一个非空表达式<br/>
+    select comm,sal,coalesce(comm,sal,sal<em>10) from emp;<br/>
+   <br/>
+   6.nvl2(ex1,ex2,ex3) :<br/>
+    如果ex1不为空，显示ex2,否则显示ex3<br/>
+    如：查看有佣金的雇员姓名以及他们的佣金 <br/>
+    　　select nvl2(comm,ename,&#39;) as HaveCommName,comm from emp;<br/>
+   <br/>
+   <br/>
+七.分组函数<br/>
+max min avg count sum<br/>
+1，整个结果集是一个组<br/>
+   1) 求部门30 的最高工资，最低工资,平均工资，总人数，有工作的人数，工种数量及工资总和<br/>
+     select max(ename),max(sal), <br/>
+     min(ename),min(sal),<br/>
+     avg(sal),<br/>
+     count(</em>) ,count(job),count(distinct(job)) ,<br/>
+     sum(sal) from emp where deptno=30;<br/>
+2, 带group by 和 having 的分组<br/>
+   1)按部门分组求最高工资，最低工资，总人数，有工作的人数，工种数量及工资总和<br/>
+    select deptno, max(ename),max(sal),<br/>
+    min(ename),min(sal),<br/>
+    avg(sal),<br/>
+    count(<em>) ,count(job),count(distinct(job)) ,<br/>
+    sum(sal) from emp group by deptno;<br/>
+   <br/>
+   2)部门30的最高工资，最低工资，总人数，有工作的人数，工种数量及工资总和 <br/>
+    select deptno, max(ename),max(sal),<br/>
+    min(ename),min(sal),<br/>
+    avg(sal),<br/>
+    count(</em>) ,count(job),count(distinct(job)) ,<br/>
+    sum(sal) from emp group by deptno having deptno=30;<br/>
+   <br/>
+3, stddev 返回一组值的标准偏差<br/>
+    select deptno,stddev(sal) from emp group by deptno;<br/>
+    variance 返回一组值的方差差<br/>
+    select deptno,variance(sal) from emp group by deptno;<br/>
+4, 带有rollup和cube操作符的Group By<br/>
+    rollup 按分组的第一个列进行统计和最后的小计<br/>
+    cube 按分组的所有列的进行统计和最后的小计<br/>
+    select deptno,job ,sum(sal) from emp group by deptno,job;<br/>
+    select deptno,job ,sum(sal) from emp group by rollup(deptno,job); <br/>
+    cube 产生组内所有列的统计和最后的小计<br/>
+    select deptno,job ,sum(sal) from emp group by cube(deptno,job);<br/>
+八、临时表<br/>
+   只在会话期间或在事务处理期间存在的表.<br/>
+   临时表在插入数据时，动态分配空间 <br/>
+   create global temporary table temp_dept<br/>
+   (dno number,<br/>
+   dname varchar2(10))<br/>
+   on commit delete rows;<br/>
+   insert into temp_dept values(10,&#39;ABC&#39;);<br/>
+   commit;<br/>
+   select * from temp_dept; --无数据显示,数据自动清除<br/>
+   on commit preserve rows:在会话期间表一直可以存在（保留数据）<br/>
+   on commit delete rows:事务结束清除数据（在事务结束时自动删除表的数据）</p>
+
+            </div>
+            <div>
+                
+                
+                
+            </div>
+        </article>
+    </div>
+</div>
+
+<script src="asset/jquery-3.3.1.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $('#footer').show()
+    })
+</script>
+  <footer id="footer" class="cuckoo page-footer" style="display: none">
+    <div class="wrapper">
+        <p>Designed and Written by <a href="mailto:forrestchang7@gmail.com">Jiayuan Zhang</a></p>
+    </div>
+</footer>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({TeX: { equationNumbers: { autoNumber: "AMS" } }});</script>
+

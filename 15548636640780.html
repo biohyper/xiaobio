@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>
+         Oracle缩小表空间方法 - xiaobio 
+    </title>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Life it self">
+
+    <link rel="stylesheet" type="text/css" href="asset/cuckoo.css">
+    <link rel="stylesheet" type="text/css" href="asset/main.css">
+    <link rel="stylesheet" type="text/css" href="asset/atom-one-light.css">
+
+    <link rel="alternate" type="application/atom+xml" href="atom.xml" title="xiaobio">
+
+    <script src="asset/highlight.pack.js"></script>
+<!--    <script>hljs.initHighlightingOnLoad();</script>-->
+</head>
+
+<body>
+    <header class="site-header cuckoo">
+        <div class="wrapper">
+            <a class="site-title" href="index.html">xiaobio</a>
+            <nav class="site-nav">
+                <a href="#" class="menu-icon">
+                    <svg viewBox="0 0 18 15">
+                        <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"></path>
+                        <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"></path>
+                        <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"></path>
+                    </svg>
+                </a>
+                <div class="trigger">
+                    
+                        <a class="page-link" href="index.html">Home</a>
+                    
+                        <a class="page-link" href="archives.html">Archives</a>
+                    
+                        <a class="page-link" href="about.html">About</a>
+                    
+                </div>
+            </nav>
+        </div>
+    </header>
+</body>
+
+</html>
+ <div class="page-content cuckoo">
+    <div class="wrapper">
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+            <header class="post-header">
+                <h1 class="post-title" itemprop="name headline">Oracle缩小表空间方法</h1>
+                <div class="post-description">
+                    
+                </div>
+            </header>
+            <div class="post-content" itemprop="articleBody">
+                <h3 id="toc_0">1. 查看所有表空间和对应的存储文件信息</h3>
+
+<p><code>select tablespace_name,file_name,online_status from dba_data_files</code></p>
+
+<h3 id="toc_1">2.  查看表空间总大小及空闲空间大小</h3>
+
+<pre class="line-numbers"><code class="language-sql">SELECT df.tablespace_name,df.sum_df_m 
+as space_m,fs.sum_fs_m free_space,
+to_char(trunc((df.sum_df_m-fs.sum_fs_m)/df.sum_df_m,2)*100) as &quot;used_%&quot;  
+from
+(select tablespace_name,sum(bytes/1024/1024) as sum_df_m 
+from dba_data_files 
+group by tablespace_name) df, 
+(select tablespace_name,sum(bytes/1024/1024) as sum_fs_m 
+from dba_free_space 
+group by tablespace_name) fs 
+where df.tablespace_name=fs.tablespace_name and
+df.tablespace_name=&#39;DAILY&#39;; 
+</code></pre>
+
+<span id="more"></span><!-- more -->
+
+<p>只需要修改最后一句中的DAILY为需要查询的表空间名 通过计算空闲百分比可以得出整理空间后，再resize表空间可以将表空间缩小到多大。 如果空闲很低，可以通过以下语句查询是否回收站有大量数据 </p>
+
+<p><code>select * from user_recyclebin</code> <code>select count(*) from user_recyclebin</code> </p>
+
+<p>使用如下语句清空回收站 <code>purge recyclebin;</code> 如果回收站没有数据可以查询是否有太多的历史表没有删除成功</p>
+
+<pre class="line-numbers"><code class="language-sql">select table_name 
+from user_tables 
+where tablespace_name = &#39;DAILY&#39;  
+and table_name like &#39;%&#39;||20160530||&#39;%&#39;;
+</code></pre>
+
+<p>如果有删除无用的历史表  </p>
+
+<pre class="line-numbers"><code class="language-sql">declare   
+l_sql CLOB;   
+CURSOR P_Cursor is     
+SELECT &#39;DROP TABLE &#39; || table_name || &#39; purge&#39;       
+FROM user_tables where table_name like &#39;%&#39;||20160530||&#39;%&#39;; BEGIN   
+OPEN P_Cursor;   
+LOOP FETCH P_Cursor INTO l_sql;     
+EXIT WHEN P_Cursor%NOTFOUND;     
+IF l_sql IS NOT NULL THEN       
+EXECUTE IMMEDIATE l_sql;     
+END IF;   
+END LOOP;   
+CLOSE P_Cursor; 
+END;
+</code></pre>
+
+<h3 id="toc_2">3.  查看表空间文件编号</h3>
+
+<p><code>select file#,name from v$datafile where name like &#39;%daily.dbf&#39;;</code> </p>
+
+<h3 id="toc_3">4.  查看表空间文件最大存储块号</h3>
+
+<p><code>select max(block_id) from dba_extents where file_id=5;</code> </p>
+
+<h3 id="toc_4">5.  计算文件中最大使用块占用的位置</h3>
+
+<p><code>select 134217728*8/1024 from dual;   ---将block_id乘以8除以1024将得到占用块的位置，用byte为单位</code> <br/>
+<code>select 1048576/1024/1024 from dual;   ---如果在除以两个1024可以得到M单位的数值</code> </p>
+
+<p>通过计算出来的数值可以确定目前resize表空间，可以使用的最小大小 </p>
+
+<h3 id="toc_5">6.  查看每个表存储的起始位置</h3>
+
+<pre class="line-numbers"><code class="language-sql">select min(block_id),segment_name 
+from dba_extents 
+where file_id = 5 group by segment_name 
+order by min(block_id) 
+desc
+</code></pre>
+
+<p>如果表空间有很多剩余，而表存储位置离散，可以紧缩表，将高为表move到低位 </p>
+
+<h3 id="toc_6">7.  移动大于一定block值的表</h3>
+
+<pre class="line-numbers"><code class="language-sql">declare   
+l_sql CLOB;   
+CURSOR P_Cursor is SELECT DISTINCT &#39;alter table &#39; || segment_name || &#39; move tablespace DAILY_BK&#39;
+FROM dba_extents
+WHERE tablespace_name = &#39;DAILY&#39; 
+AND file_id = 5    
+AND block_id &gt; 134217728    
+AND segment_type = &#39;TABLE&#39;; 
+BEGIN   
+OPEN P_Cursor;   
+LOOP     
+FETCH P_Cursor       
+INTO l_sql;     
+EXIT WHEN P_Cursor%NOTFOUND;     
+IF l_sql IS NOT NULL THEN      
+EXECUTE IMMEDIATE l_sql;     
+END IF;   
+END LOOP;   
+CLOSE P_Cursor; 
+END;
+</code></pre>
+
+<p>具体使用的block_id，可以根据空闲百分比和总大小进行计算，不过一次move的数据块总量必须小于总空闲空间大小，计算方法如5中 move会消耗较长的时间。</p>
+
+<h3 id="toc_7">8.  检查是否有不可用的索引</h3>
+
+<pre class="line-numbers"><code class="language-sql">SELECT index_name,index_type, STATUS,partitioned, table_name
+FROM User_Indexes  
+Where status=&#39;UNUSABLE&#39;;
+</code></pre>
+
+<p>移动完成后表的索引会失效，查询是否有失效索引，然后rebuild索引。 </p>
+
+<h3 id="toc_8">9.  再次查看表空间最大block号</h3>
+
+<pre class="line-numbers"><code class="language-sql">SELECT MAX(block_id) 
+FROM dba_extents
+WHERE tablespace_name = &#39;DAILY&#39;;
+</code></pre>
+
+<h3 id="toc_9">10. 缩减表空间</h3>
+
+<p>按照9中的最大block号计算出可缩小的最小空间大小，resize <br/>
+<code>alter database datafile &#39;/data1/daily/daily.dbf&#39; resize 1048576M;</code> </p>
+
+<h3 id="toc_10">11. 建立sqlmove.sh脚本</h3>
+
+<p>move操作和删除大量数据等都会花费很长的时间，为了防止网络断开，可以使用linux脚本执行命令，如下建立脚本sqlmove.sh脚本，调用sqlmove.sql中的语句进行数据库操作。注意给予oracle用户脚本的执行权限。</p>
+
+<pre class="line-numbers"><code class="language-bash">#!/bin/sh 
+sqlplus daily/mdasil@daily 
+&lt;&lt; EOF 
+@/home/oracle/sqlmove.sql 
+exit; EOF
+</code></pre>
+
+<h3 id="toc_11">12. 建立sqlmove.sql脚本</h3>
+
+<pre class="line-numbers"><code class="language-sql">declare
+l_sql CLOB;   
+CURSOR P_Cursor is SELECT DISTINCT 
+&#39;alter table &#39; || segment_name ||&#39; move&#39;FROM dba_extents 
+WHERE tablespace_name = &#39;DAILY&#39;
+AND file_id = 5    
+AND block_id &gt; 114217728    
+AND segment_type = &#39;TABLE&#39;; 
+BEGIN  
+OPEN P_Cursor;   
+LOOP     
+FETCH P_Cursor       
+INTO l_sql;     
+EXIT WHEN P_Cursor%NOTFOUND;     
+IF l_sql IS NOT NULL THEN EXECUTE IMMEDIATE l_sql;     
+END IF;   
+END LOOP;   
+CLOSE P_Cursor; 
+END;    
+/
+</code></pre>
+
+<p>Tips </p>
+
+<blockquote>
+<p>LOBSEGMENT类型数据无法move需要首先查看其属于哪个表 <br/>
+<code>select * from dba_lobs where segment_name like &#39;SYS_LOB0000073562C00003$$&#39;</code> <br/>
+在commid中查看表结构 <code>desc TB_LOG1</code> <br/>
+使用如下语句进行移动 <br/>
+<code>ALTER TABLE TB_LOG1 MOVE TABLESPACE DAILY LOB(PARAMETER,MESSGAE) STORE AS(TABLESPACE DAILY);</code> </p>
+</blockquote>
+
+            </div>
+            <div>
+                
+                
+                
+            </div>
+        </article>
+    </div>
+</div>
+
+<script src="asset/jquery-3.3.1.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $('#footer').show()
+    })
+</script>
+  <footer id="footer" class="cuckoo page-footer" style="display: none">
+    <div class="wrapper">
+        <p>Designed and Written by <a href="mailto:forrestchang7@gmail.com">Jiayuan Zhang</a></p>
+    </div>
+</footer>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({TeX: { equationNumbers: { autoNumber: "AMS" } }});</script>
+

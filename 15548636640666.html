@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>
+         Oracle导入数据相关 - xiaobio 
+    </title>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Life it self">
+
+    <link rel="stylesheet" type="text/css" href="asset/cuckoo.css">
+    <link rel="stylesheet" type="text/css" href="asset/main.css">
+    <link rel="stylesheet" type="text/css" href="asset/atom-one-light.css">
+
+    <link rel="alternate" type="application/atom+xml" href="atom.xml" title="xiaobio">
+
+    <script src="asset/highlight.pack.js"></script>
+<!--    <script>hljs.initHighlightingOnLoad();</script>-->
+</head>
+
+<body>
+    <header class="site-header cuckoo">
+        <div class="wrapper">
+            <a class="site-title" href="index.html">xiaobio</a>
+            <nav class="site-nav">
+                <a href="#" class="menu-icon">
+                    <svg viewBox="0 0 18 15">
+                        <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"></path>
+                        <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"></path>
+                        <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"></path>
+                    </svg>
+                </a>
+                <div class="trigger">
+                    
+                        <a class="page-link" href="index.html">Home</a>
+                    
+                        <a class="page-link" href="archives.html">Archives</a>
+                    
+                        <a class="page-link" href="about.html">About</a>
+                    
+                </div>
+            </nav>
+        </div>
+    </header>
+</body>
+
+</html>
+ <div class="page-content cuckoo">
+    <div class="wrapper">
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+            <header class="post-header">
+                <h1 class="post-title" itemprop="name headline">Oracle导入数据相关</h1>
+                <div class="post-description">
+                    
+                </div>
+            </header>
+            <div class="post-content" itemprop="articleBody">
+                <h2 id="toc_0">sqlldr</h2>
+
+<h2 id="toc_1">概述</h2>
+
+<p>使用SQL Loader工具是将大批量数据导入Oracle效率最高的方法之一，尤其是在将SQL Server/Sybase等数据库升级为Oracle时，使用SQL Loader可以大大的缩短数据迁移的时间。</p>
+
+<h2 id="toc_2">基本步骤</h2>
+
+<p>使用SQL Loader工具迁移数据一般分为三个步骤: </p>
+
+<ol>
+<li>生成文本文件。</li>
+<li>编写控制文件。</li>
+<li>导入的命令。</li>
+</ol>
+
+<span id="more"></span><!-- more -->
+
+<h2 id="toc_3">生成文本文件</h2>
+
+<p>对每一种数据库，都建议使用MSSQL提供的DTS工具来生成文本，尤其是含有时间类型的字段的表。导出时通过查询语句导出，而不是Copy Table 的方式，建议将时间字段转换为&#39;YYYY-MM-DD HH24:MI:SS&#39;的格式。必须注意的是，生成文本文件时，最后一列的值不能为NULL。</p>
+
+<h2 id="toc_4">编写控制文件</h2>
+
+<p>控制文件的格式参考: </p>
+
+<pre class="line-numbers"><code class="language-text">LOAD DATA INFILE &quot;D:\t_card_bill.txt&quot;
+     APPEND INTO TABLE t_Card_bill FIELDS TERMINATED BY &#39;,&#39; OPTIONALLY ENCLOSED BY &#39;&quot;&#39;
+     (uaccountno,billtype, huafei,serviceno,fee_date date &#39;YYYY-MM-DD HH24:MI:SS&#39;, fee_enddate date &#39;YYYY-MM-DD HH24:MI:SS&#39;, caller_number, called_number, duration)
+</code></pre>
+
+<h2 id="toc_5">导入的命令</h2>
+
+<p>导入命令参考：<br/>
+<code>sqlldr username/password@database?control=控制文件所在路径\控制文件名 readsize=5000000 bindsize=5000000 rows=1000</code></p>
+
+<p>其中readsize表示每次读入缓冲区的字节数，bindsize表示每次绑定的字节数，一般情况下这两个值设成一致，rows表示每次提交的数据行。</p>
+
+<blockquote>
+<p>注意事项</p>
+</blockquote>
+
+<ol>
+<li>SQL Loader导入时应该删除表的索引，完成导入后再重建索引。</li>
+<li>Oracle 8.0.5的可执行文件名为sqlldr80，通过 sqlldr80很可能会出现报（在“控制文件”结尾发现部分记录）的错误，这中情况一般是控制文件的后面有空行引起。在控制文件的最后一个非空格的字符处回车，然后删除后面的空行可以解决。</li>
+<li>编写控制文件时，需要注意导入的字段顺序，必须与导出的顺序一致。</li>
+</ol>
+
+<h2 id="toc_6">多线程导入导出dmp</h2>
+
+<pre class="line-numbers"><code class="language-text">expdp sqmdb/mdasill@sqmmt directory=dmpdir tablespaces=sqmdb_rpt dumpfile=sqmdb_rpt_yb%U.dmp filesize=500M parallel=8
+dumpfile=sqmdb_rpt_yb%U.dmp filesize=500M parallel=8
+ 
+impdp sqmdb/mdasil@sqmmt tablespaces=sqmdb_rpt directory=dmpdir dumpfile=sqmdb_rpt_yb%U.dmp parallel=8
+tablespaces=sqmdb_rpt directory=dmpdir dumpfile=sqmdb_rpt_yb%U.dmp parallel=8
+</code></pre>
+
+<h2 id="toc_7">sqlldr导入CSV格式文件入oracle库注意事项</h2>
+
+<h3 id="toc_8">易出现问题：</h3>
+
+<ul>
+<li>需要导入的CSV文件换行有问题。 <code>ORA 01722</code></li>
+</ul>
+
+<p>CSV文件从windows传到oracle服务器默认格式为dos，如果导入过程中发现报错：ORA 01722，请修改CSV文件格式进行尝试：<code>vi *.csv；set ff=unix；</code></p>
+
+<ul>
+<li>CSV文件格式问题</li>
+</ul>
+
+<p>使用sqlldr导CSV文件时CSV文件应该去除字段头。</p>
+
+<ul>
+<li>导入日志中发现报错 <code>ORA-01861</code></li>
+</ul>
+
+<p>处理方法 格式化日期 <br/>
+例如：<br/>
+<code>TRAILING NULLCOLS *************</code>表的字段没有对应的值时允许为空</p>
+
+<ul>
+<li>输入导入命令时出现：<code>SQL*Loader-522</code></li>
+</ul>
+
+<p>这种情况一般为权限不够， Linux下使用sqlldr进行批量操作，此操作会自动生成和删除临时文件。 因此，当前操作的用户必须具备对存放文件的文件夹有增删改的权限。chmod 777 文件夹。</p>
+
+<ul>
+<li>导入日志发现报错 <code>ORA-01843</code></li>
+</ul>
+
+<p>请查看导出CSV文件的数据库<code>NLS_DATE_LANGUAGE、NLS_DATE_FORMAT</code>等是否与目标数据库是否一致，这种情况一般为CSV文件中日期类型中日期中英文与目标数据库不一致。<br/>
+会话级别修改: <code>alter session set NLS_DATE_LANGUAGE=&#39;SIMPLIFIED CHINESE&#39;;</code><br/>
+系统级别修改（重启数据库生效）: <code>alter system set NLS_DATE_LANGUAGE=&#39;AMERICAN&#39; scope = spfile;</code><br/>
+<code>vim ~/.bash_profile : export NLS_LANG=AMERICAN_AMERICA.ZHS16GBK</code></p>
+
+            </div>
+            <div>
+                
+                
+                
+            </div>
+        </article>
+    </div>
+</div>
+
+<script src="asset/jquery-3.3.1.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $('#footer').show()
+    })
+</script>
+  <footer id="footer" class="cuckoo page-footer" style="display: none">
+    <div class="wrapper">
+        <p>Designed and Written by <a href="mailto:forrestchang7@gmail.com">Jiayuan Zhang</a></p>
+    </div>
+</footer>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({TeX: { equationNumbers: { autoNumber: "AMS" } }});</script>
+

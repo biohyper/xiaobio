@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>
+         Oracle 11g 内存(sga和pga)参数设置 - xiaobio 
+    </title>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Life it self">
+
+    <link rel="stylesheet" type="text/css" href="asset/cuckoo.css">
+    <link rel="stylesheet" type="text/css" href="asset/main.css">
+    <link rel="stylesheet" type="text/css" href="asset/atom-one-light.css">
+
+    <link rel="alternate" type="application/atom+xml" href="atom.xml" title="xiaobio">
+
+    <script src="asset/highlight.pack.js"></script>
+<!--    <script>hljs.initHighlightingOnLoad();</script>-->
+</head>
+
+<body>
+    <header class="site-header cuckoo">
+        <div class="wrapper">
+            <a class="site-title" href="index.html">xiaobio</a>
+            <nav class="site-nav">
+                <a href="#" class="menu-icon">
+                    <svg viewBox="0 0 18 15">
+                        <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"></path>
+                        <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"></path>
+                        <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"></path>
+                    </svg>
+                </a>
+                <div class="trigger">
+                    
+                        <a class="page-link" href="index.html">Home</a>
+                    
+                        <a class="page-link" href="archives.html">Archives</a>
+                    
+                        <a class="page-link" href="about.html">About</a>
+                    
+                </div>
+            </nav>
+        </div>
+    </header>
+</body>
+
+</html>
+ <div class="page-content cuckoo">
+    <div class="wrapper">
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+            <header class="post-header">
+                <h1 class="post-title" itemprop="name headline">Oracle 11g 内存(sga和pga)参数设置</h1>
+                <div class="post-description">
+                    
+                </div>
+            </header>
+            <div class="post-content" itemprop="articleBody">
+                <p>安装Oracle 11g时没有修改SGA的话，需要在安装好以后调整<code>sga_target 1G,pga_aggregate_target 200M</code>(这2个参数在11g里面可能默认是0)，然后重启数据库</p>
+
+<p>oracle占用系统总内存大小要根据实际业务量来确定，一般Oracle使用的大小为系统内存的<code>60%</code>或者<code>80%</code>，而SGA和PGA的比例一般为<code>6:4</code><br/>
+即：<br/>
+<code>SGA = system_total_memory * 60%(80%) * 60%</code><br/>
+<code>PGA = system_total_memory * 60%(80%) * 40%</code><br/>
+<figure><img src="https://ws3.sinaimg.cn/large/006tNc79ly1g1xdq9qbjaj31900u0wr2.jpg" alt=""/></figure></p>
+
+<span id="more"></span><!-- more -->
+
+<p>修改前切记备份spfile，<code>create pfile =&#39;/home/oracle/yourname.ora&#39; from spfile;</code></p>
+
+<p>查看内存参数：<br/>
+<code>show parameter memory</code></p>
+
+<p>修改总内存最大值：<br/>
+<code>alter system set memory_max_target =1024M scope=spfile;</code></p>
+
+<p>修改总内存大小：<br/>
+<code>alter system set memory_target = 512M scope=spfile;</code></p>
+
+<p>修改sga大小：<br/>
+<code>alter systemset sga_max_size=1024m scope=spfile;</code></p>
+
+<p>修改pga大小：<br/>
+<code>alter system set pga_aggregate_target=500M scope=spfile;</code></p>
+
+<blockquote>
+<p>所有修改重启数据库后生效</p>
+</blockquote>
+
+<h2 id="toc_0">可能出现报错：</h2>
+
+<p><code>ORA-00844: Parameter not taking MEMORY_TARGET into account, see alert log for more information</code><br/>
+由于设置了Oracle的MEMORY_TARGET参数的值小于了SGA_TARGET和PGA_TARGET的总和，所以报错。</p>
+
+<blockquote>
+<p><code>MEMORY_TARGET</code>就是<code>sga_target + pga_aggregate_target</code></p>
+</blockquote>
+
+<p>这个时候数据库已经无法启动，也就无法修改spfile，可以通过修改pfile达到目的：</p>
+
+<pre class="line-numbers"><code class="language-sql">SQL&gt; create pfile =&#39;/home/oracle/yourname.ora&#39; from spfile;
+SQL&gt; !echo &#39;*.memory_target=2048m&#39; &gt;&gt;&#39;/home/oracle/yourname.ora&#39;; 该命令可以通过vim手动修改/home/oracle/youname.ora替代
+</code></pre>
+
+<p>新建pfile并将pfile里面的memory_target设置成2G，一定要验证：<code>memory_target &gt;= sga_target + pga_aggregate_target</code></p>
+
+<h2 id="toc_1">若是操作系统<code>/dev/shm</code>小于<code>memory_target</code>会报以下错误：</h2>
+
+<p><code>ORA-00845: MEMORY_TARGET not supported on this system</code></p>
+
+<p>解决办法：<br/>
+<code>Oracle</code>在官方文档中有过说明。解决这个问题只有两个方法，一种是修改初始化参数，使得初始化参数中<code>SGA</code>的设置小于<code>/dev/shm</code>的大小，另一种方法就是调整<code>/dev/shm</code>的大小。</p>
+
+<p>以下记录调整<code>/dev/shm</code>大小方法：</p>
+
+<ul>
+<li>修改<code>/etc/fstab</code>达到永久修改：</li>
+</ul>
+
+<pre class="line-numbers"><code class="language-bash">[root@cc ~]# vi /etc/fstab
+LABEL=/ / ext3 defaults 1 1
+LABEL=/boot /boot ext3 defaults 1 2
+LABEL=/data /data ext3 defaults 1 2
+devpts /dev/pts devpts gid=5,mode=620 0 0
+# tmpfs /dev/shm tmpfs defaults 0 0
+tmpfs /dev/shm tmpfs defaults,size=4096M 0 0
+tmpfs /dev/shm tmpfs defaults,size=10240M 0 0
+LABEL=/home /home ext3 defaults 1 2
+LABEL=SWAP-sda8 swap swap defaults 0 0
+</code></pre>
+
+<ul>
+<li>重新挂载<code>/dev/shm</code>，临时修改：</li>
+</ul>
+
+<pre class="line-numbers"><code class="language-bash">[root@cc ~]# umount /dev/shm
+[root@cc ~]# mount -o remount,size=38g /dev/shm
+[root@cc ~]# df -h /dev/shm
+</code></pre>
+
+<h2 id="toc_2">启动后再改回从spfile启动</h2>
+
+<pre class="line-numbers"><code class="language-sql">SQL&gt;create spfile from pfile = &#39;/home/oracle/yourname.ora&#39;;
+
+SQL&gt; startup
+ORACLE instance started.
+Total System Global Area 1068937216 bytes
+Fixed Size                  2151248 bytes
+Variable Size             511708336 bytes
+Database Buffers          549453824 bytes
+Redo Buffers                5623808 bytes
+Database mounted.
+Database opened.
+</code></pre>
+
+<p>启动后也可以通过命令验证sga和pga大小：</p>
+
+<pre class="line-numbers"><code class="language-sql">SQL&gt; show parameter target;
+NAME                                 TYPE        VALUE
+------------------------------------ ----------- ------------------------------
+archive_lag_target                   integer     0
+db_flashback_retention_target        integer     1440
+fast_start_io_target                 integer     0
+fast_start_mttr_target               integer     0
+memory_max_target                    big integer 1300M
+memory_target                        big integer 1224M
+pga_aggregate_target                 big integer 0
+sga_target                           big integer 0
+</code></pre>
+
+            </div>
+            <div>
+                
+                
+                
+            </div>
+        </article>
+    </div>
+</div>
+
+<script src="asset/jquery-3.3.1.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $('#footer').show()
+    })
+</script>
+  <footer id="footer" class="cuckoo page-footer" style="display: none">
+    <div class="wrapper">
+        <p>Designed and Written by <a href="mailto:forrestchang7@gmail.com">Jiayuan Zhang</a></p>
+    </div>
+</footer>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({TeX: { equationNumbers: { autoNumber: "AMS" } }});</script>
+

@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>
+         Mac主机VirtualBox中调整Linux系统磁盘大小 - xiaobio 
+    </title>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Life it self">
+
+    <link rel="stylesheet" type="text/css" href="asset/cuckoo.css">
+    <link rel="stylesheet" type="text/css" href="asset/main.css">
+    <link rel="stylesheet" type="text/css" href="asset/atom-one-light.css">
+
+    <link rel="alternate" type="application/atom+xml" href="atom.xml" title="xiaobio">
+
+    <script src="asset/highlight.pack.js"></script>
+<!--    <script>hljs.initHighlightingOnLoad();</script>-->
+</head>
+
+<body>
+    <header class="site-header cuckoo">
+        <div class="wrapper">
+            <a class="site-title" href="index.html">xiaobio</a>
+            <nav class="site-nav">
+                <a href="#" class="menu-icon">
+                    <svg viewBox="0 0 18 15">
+                        <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"></path>
+                        <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"></path>
+                        <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"></path>
+                    </svg>
+                </a>
+                <div class="trigger">
+                    
+                        <a class="page-link" href="index.html">Home</a>
+                    
+                        <a class="page-link" href="archives.html">Archives</a>
+                    
+                        <a class="page-link" href="about.html">About</a>
+                    
+                </div>
+            </nav>
+        </div>
+    </header>
+</body>
+
+</html>
+ <div class="page-content cuckoo">
+    <div class="wrapper">
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+            <header class="post-header">
+                <h1 class="post-title" itemprop="name headline">Mac主机VirtualBox中调整Linux系统磁盘大小</h1>
+                <div class="post-description">
+                    
+                </div>
+            </header>
+            <div class="post-content" itemprop="articleBody">
+                <p>研究虚拟机搭建Hadoop环境，过程中master主机出现磁盘容量不足问题，查阅资料后解决，作此记录。</p>
+
+<h2 id="toc_0">准备工作</h2>
+
+<p>查看虚拟机中虚拟磁盘的的分区表，确认当前大小以及自己要扩到多大。<br/>
+因安装虚拟机已是很久前，到用时才发现曾经只分配了8G硬盘容量(我当时是有多小气😭)，以下是命令：</p>
+
+<span id="more"></span><!-- more -->
+
+<pre class="line-numbers"><code class="language-bash">[root@c0 opt]# fdisk -l
+
+Disk /dev/sda: 8589 MB, 8589934592 bytes
+255 heads, 63 sectors/track, 1044 cylinders
+Units = cylinders of 16065 * 512 = 8225280 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disk identifier: 0x00017d52
+
+   Device Boot      Start         End      Blocks   Id  System
+/dev/sda1   *           1          64      512000   83  Linux
+Partition 1 does not end on cylinder boundary.
+/dev/sda2              64        1045     7875584   8e  Linux LVM
+
+Disk /dev/mapper/vg_c0-lv_root: 7205 MB, 7205814272 bytes
+255 heads, 63 sectors/track, 876 cylinders
+Units = cylinders of 16065 * 512 = 8225280 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disk identifier: 0x00000000
+
+
+Disk /dev/mapper/vg_c0-lv_swap: 855 MB, 855638016 bytes
+255 heads, 63 sectors/track, 104 cylinders
+Units = cylinders of 16065 * 512 = 8225280 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disk identifier: 0x00000000
+</code></pre>
+
+<h2 id="toc_1">VirtualBox增加磁盘熔炼</h2>
+
+<p>在<code>Mac</code>和<code>Linux</code>中需要使用<code>VirtualBox</code>的命令行调整虚拟机的磁盘分配.</p>
+
+<p><code>VirtualBox</code>的说明文档中明确给出了调整虚拟机磁盘大小的方法：</p>
+
+<pre class="line-numbers"><code class="language-text">VBoxManage modifyhd         &lt;uuid&gt;|&lt;filename&gt;
+                            [--type normal|writethrough|immutable|shareable|
+                                    readonly|multiattach]
+                            [--autoreset on|off]
+                            [--compact]
+                            [--resize &lt;megabytes&gt;|--resizebyte &lt;bytes&gt;]
+</code></pre>
+
+<h3 id="toc_2">查看可以修改的磁盘</h3>
+
+<p><code>VBoxManage list hdds</code>命令是用来查看有哪些虚拟机的磁盘可供修改，包括了磁盘路径和<code>UUID</code>，如下：</p>
+
+<pre class="line-numbers"><code class="language-text">$ VBoxManage list hdds
+UUID:           b81ac2f6-a6a9-434a-9aab-c92858be6d24
+Parent UUID:    base
+State:          created
+Type:           normal (base)
+Location:       /Users/yourname/VirtualBox VMs/c0/c0.vdi
+Storage format: VDI
+Capacity:       30720 MBytes
+Encryption:     disabled
+
+UUID:           c3700bb3-a51d-4bff-ac76-578dfcde63d1
+Parent UUID:    base
+State:          locked write
+Type:           normal (base)
+Location:       /Users/yourname/VirtualBox VMs/c1/c1.vdi
+Storage format: VDI
+Capacity:       20479 MBytes
+Encryption:     disabled
+</code></pre>
+
+<h3 id="toc_3">修改系统磁盘大小</h3>
+
+<p><code>modifyhd</code>指令就是用来调整磁盘大小的。对象可以是虚拟机的<code>uuid</code>，也可以直接指定要调整大小的虚拟机磁盘文件名(全路径)。</p>
+
+<pre class="line-numbers"><code class="language-text">$ VBoxManage modifyhd &quot;/Users/yourname/VirtualBox VMs/c0/c0.vdi&quot; --resize 30720
+0%...10%...20%...30%...40%...50%...60%...70%...80%...90%...100%
+</code></pre>
+
+<p>以上命令是将<code>/Users/yourname/VirtualBox VMs/c0/c0.vdi</code>磁盘重新调整为30G，<code>resize</code>参数默认单位是<code>MB</code>。</p>
+
+<blockquote>
+<p>修改是虚拟机状态必须是<strong>关闭</strong>状态。如果该虚拟机有快照（snapshot），则只有在删除快照后才能在虚拟机客户系统里看到更改后的磁盘容量。</p>
+</blockquote>
+
+<h2 id="toc_4">CentOS 的 LVM 管理</h2>
+
+<p>重新启动该虚拟机，再次查看磁盘情况：</p>
+
+<pre class="line-numbers"><code class="language-bash">[root@c0 ~]# fdisk -l
+
+Disk /dev/sda: 32.2 GB, 32212254720 bytes
+255 heads, 63 sectors/track, 3916 cylinders
+Units = cylinders of 16065 * 512 = 8225280 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disk identifier: 0x00017d52
+
+   Device Boot      Start         End      Blocks   Id  System
+/dev/sda1   *           1          64      512000   83  Linux
+Partition 1 does not end on cylinder boundary.
+/dev/sda2              64        1045     7875584   8e  Linux LVM
+
+Disk /dev/mapper/vg_c0-lv_root: 7205 MB, 7205814272 bytes
+255 heads, 63 sectors/track, 876 cylinders
+Units = cylinders of 16065 * 512 = 8225280 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disk identifier: 0x00000000
+
+
+Disk /dev/mapper/vg_c0-lv_swap: 855 MB, 855638016 bytes
+255 heads, 63 sectors/track, 104 cylinders
+Units = cylinders of 16065 * 512 = 8225280 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disk identifier: 0x00000000
+</code></pre>
+
+<p>此时，磁盘容量已经为30G，磁盘占用情况却没有发生变化：</p>
+
+<pre class="line-numbers"><code class="language-bash">[root@c0 ~]# df -h
+Filesystem            Size  Used Avail Use% Mounted on
+/dev/mapper/vg_c0-lv_root
+                      6.5G  5.5G  663M  90% /
+tmpfs                 499M     0  499M   0% /dev/shm
+/dev/sda1             477M   65M  387M  15% /boot
+</code></pre>
+
+<p>试试看用 dd 命令创建一个大小为 1GB 的块文件：</p>
+
+<pre class="line-numbers"><code class="language-bash"># dd if=/dev/zero of=1.0G.img bs=1M count=1000
+dd: writing `1.0G.img&#39;: No space left on device
+1+0 records in
+0+0 records out
+8192 bytes (8.2 kB) copied, 0.00300509 s, 2.7 MB/s
+</code></pre>
+
+<p>提示说磁盘空间不足（No space left on device）。虽然我们给了虚拟机足够的空间，但是虚拟机里的系统（这里是 CentOS）并没有将这一部分空间利用上。可以看到，虚拟机里的磁盘空间只有 1.7G，原始分配的 3G 没有用完。这同时也说明，即使创建虚拟机的时候使用动态分配磁盘大小，虚拟机里的系统也并不会自动修改自己的磁盘。如果是正常使用，即使虚拟机的虚拟磁盘足够大，还是可能会在虚拟机中遇到磁盘空间不足的警告。</p>
+
+<p>下面调整虚拟机中操作系统的文件系统，使之将所有空间利用上。</p>
+
+<h3 id="toc_5">将空余磁盘创建为<code>sda3</code></h3>
+
+<p>重新启动虚拟机，登入 CentOS，使用 fdisk 将虚拟磁盘的空闲空间创建为一个新的分区。注意要使用代表 Linux LVM 的分区号 8e 来作为 ID。</p>
+
+<pre class="line-numbers"><code class="language-bash">[root@c0 ~]# fdisk /dev/sda
+
+WARNING: DOS-compatible mode is deprecated. It&#39;s strongly recommended to
+         switch off the mode (command &#39;c&#39;) and change display units to
+         sectors (command &#39;u&#39;).
+Command (m for help): p
+
+Disk /dev/sda: 32.2 GB, 32212254720 bytes
+255 heads, 63 sectors/track, 3916 cylinders
+Units = cylinders of 16065 * 512 = 8225280 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disk identifier: 0x00017d52
+
+   Device Boot      Start         End      Blocks   Id  System
+/dev/sda1   *           1          64      512000   83  Linux
+Partition 1 does not end on cylinder boundary.
+/dev/sda2              64        1045     7875584   8e  Linux LVM
+
+Command (m for help): n
+Command action
+   e   extended
+   p   primary partition (1-4)
+p
+Partition number (1-4): 3
+First cylinder (1045-3916, default 1045): t
+First cylinder (1045-3916, default 1045):
+Using default value 1045
+Last cylinder, +cylinders or +size{K,M,G} (1045-3916, default 3916):
+Using default value 3916
+
+Command (m for help): t
+Partition number (1-4): 3
+
+Hex code (type L to list codes): L
+
+ 0  Empty           24  NEC DOS         81  Minix / old Lin bf  Solaris
+ 1  FAT12           39  Plan 9          82  Linux swap / So c1  DRDOS/sec (FAT-
+ 2  XENIX root      3c  PartitionMagic  83  Linux           c4  DRDOS/sec (FAT-
+ 3  XENIX usr       40  Venix 80286     84  OS/2 hidden C:  c6  DRDOS/sec (FAT-
+ 4  FAT16 &lt;32M      41  PPC PReP Boot   85  Linux extended  c7  Syrinx
+ 5  Extended        42  SFS             86  NTFS volume set da  Non-FS data
+ 6  FAT16           4d  QNX4.x          87  NTFS volume set db  CP/M / CTOS / .
+ 7  HPFS/NTFS       4e  QNX4.x 2nd part 88  Linux plaintext de  Dell Utility
+ 8  AIX             4f  QNX4.x 3rd part 8e  Linux LVM       df  BootIt
+ 9  AIX bootable    50  OnTrack DM      93  Amoeba          e1  DOS access
+ a  OS/2 Boot Manag 51  OnTrack DM6 Aux 94  Amoeba BBT      e3  DOS R/O
+ b  W95 FAT32       52  CP/M            9f  BSD/OS          e4  SpeedStor
+ c  W95 FAT32 (LBA) 53  OnTrack DM6 Aux a0  IBM Thinkpad hi eb  BeOS fs
+ e  W95 FAT16 (LBA) 54  OnTrackDM6      a5  FreeBSD         ee  GPT
+ f  W95 Ext&#39;d (LBA) 55  EZ-Drive        a6  OpenBSD         ef  EFI (FAT-12/16/
+10  OPUS            56  Golden Bow      a7  NeXTSTEP        f0  Linux/PA-RISC b
+11  Hidden FAT12    5c  Priam Edisk     a8  Darwin UFS      f1  SpeedStor
+12  Compaq diagnost 61  SpeedStor       a9  NetBSD          f4  SpeedStor
+14  Hidden FAT16 &lt;3 63  GNU HURD or Sys ab  Darwin boot     f2  DOS secondary
+16  Hidden FAT16    64  Novell Netware  af  HFS / HFS+      fb  VMware VMFS
+17  Hidden HPFS/NTF 65  Novell Netware  b7  BSDI fs         fc  VMware VMKCORE
+18  AST SmartSleep  70  DiskSecure Mult b8  BSDI swap       fd  Linux raid auto
+1b  Hidden W95 FAT3 75  PC/IX           bb  Boot Wizard hid fe  LANstep
+1c  Hidden W95 FAT3 80  Old Minix       be  Solaris boot    ff  BBT
+1e  Hidden W95 FAT1
+Hex code (type L to list codes): 8e
+Changed system type of partition 3 to 8e (Linux LVM)
+
+Command (m for help): w
+The partition table has been altered!
+
+Calling ioctl() to re-read partition table.
+
+WARNING: Re-reading the partition table failed with error 16: Device or resource busy.
+The kernel still uses the old table. The new table will be used at
+the next reboot or after you run partprobe(8) or kpartx(8)
+Syncing disks.
+</code></pre>
+
+<p>简化后操作如下：</p>
+
+<pre class="line-numbers"><code class="language-text"># fdisk /dev/sda
+  n {new partition}
+  p {primary partition}
+  3 {partition number}
+# 此处回车
+  t {change partition id}
+  3 {partition number}
+  8e {Linux LVM partition}
+  w
+</code></pre>
+
+<p>再次查看分区表，发现sda3已经成功创建</p>
+
+<pre class="line-numbers"><code class="language-bash">[root@c0 ~]# fdisk -l
+
+Disk /dev/sda: 32.2 GB, 32212254720 bytes
+255 heads, 63 sectors/track, 3916 cylinders
+Units = cylinders of 16065 * 512 = 8225280 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disk identifier: 0x00017d52
+
+   Device Boot      Start         End      Blocks   Id  System
+/dev/sda1   *           1          64      512000   83  Linux
+Partition 1 does not end on cylinder boundary.
+/dev/sda2              64        1045     7875584   8e  Linux LVM
+/dev/sda3            1045        3916    23066662   8e  Linux LVM
+
+Disk /dev/mapper/vg_c0-lv_root: 7205 MB, 7205814272 bytes
+255 heads, 63 sectors/track, 876 cylinders
+Units = cylinders of 16065 * 512 = 8225280 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disk identifier: 0x00000000
+
+
+Disk /dev/mapper/vg_c0-lv_swap: 855 MB, 855638016 bytes
+255 heads, 63 sectors/track, 104 cylinders
+Units = cylinders of 16065 * 512 = 8225280 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disk identifier: 0x00000000
+</code></pre>
+
+<p>调整后重启下，保证稳妥，不确定不重启是否会正常。</p>
+
+<h3 id="toc_6">调整 LVM 大小</h3>
+
+<p>先看看当前 Volume Group：</p>
+
+<pre class="line-numbers"><code class="language-bash">[root@c0 ~]# vgdisplay
+  --- Volume group ---
+  VG Name               vg_c0
+  System ID
+  Format                lvm2
+  Metadata Areas        1
+  Metadata Sequence No  3
+  VG Access             read/write
+  VG Status             resizable
+  MAX LV                0
+  Cur LV                2
+  Open LV               2
+  Max PV                0
+  Cur PV                1
+  Act PV                1
+  VG Size               7.51 GiB
+  PE Size               4.00 MiB
+  Total PE              1922
+  Alloc PE / Size       1922 / 7.51 GiB
+  Free  PE / Size       0 / 0
+  VG UUID               YdmWnX-Tle4-ovBs-FtPa-0r0R-OWel-h6NXW7
+</code></pre>
+
+<p>名称为<code>vg_c0</code>，可调整大小（resizable），当前大小为<code>7.51GB</code>。<br/>
+活动的 LVM 卷通过以下命令查看：</p>
+
+<pre class="line-numbers"><code class="language-bash">[root@c0 ~]# lvscan
+  ACTIVE            &#39;/dev/vg_c0/lv_root&#39; [6.71 GiB] inherit
+  ACTIVE            &#39;/dev/vg_c0/lv_swap&#39; [816.00 MiB] inherit
+</code></pre>
+
+<p>先将分配过来的新磁盘空间创建为一个新的物理卷，</p>
+
+<pre class="line-numbers"><code class="language-text">[root@c0 ~]# pvcreate /dev/sda3
+  Physical volume &quot;/dev/sda3&quot; successfully created
+</code></pre>
+
+<p>然后使用新的物理卷来扩展<code>LVM</code>的<code>Volume Group</code>此处为<code>cg_c0</code></p>
+
+<pre class="line-numbers"><code class="language-text">[root@c0 ~]# vgextend vg_c0 /dev/sda3
+  Volume group &quot;vg_c0&quot; successfully extended
+
+</code></pre>
+
+<p>然后扩展 LVM 的逻辑卷 VolGroup-lv_root，</p>
+
+<pre class="line-numbers"><code class="language-text">[root@c0 ~]# lvextend /dev/vg_c0/lv_root  /dev/sda3
+  Size of logical volume vg_c0/lv_root changed from 6.71 GiB (1718 extents) to 28.71 GiB (7349 extents).
+  Logical volume lv_root successfully resized.
+</code></pre>
+
+<p>最后，调整逻辑卷文件系统的大小，</p>
+
+<pre class="line-numbers"><code class="language-text">[root@c0 ~]# resize2fs /dev/vg_c0/lv_root
+resize2fs 1.41.12 (17-May-2010)
+Filesystem at /dev/vg_c0/lv_root is mounted on /; on-line resizing required
+old desc_blocks = 1, new_desc_blocks = 2
+Performing an on-line resize of /dev/vg_c0/lv_root to 7525376 (4k) blocks.
+The filesystem on /dev/vg_c0/lv_root is now 7525376 blocks long.
+</code></pre>
+
+<p>完成。看看效果：</p>
+
+<pre class="line-numbers"><code class="language-text">[root@c0 ~]# lvscan
+  ACTIVE            &#39;/dev/vg_c0/lv_root&#39; [28.71 GiB] inherit
+  ACTIVE            &#39;/dev/vg_c0/lv_swap&#39; [816.00 MiB] inherit
+</code></pre>
+
+<pre class="line-numbers"><code class="language-text">  [root@c0 ~]# df -h
+Filesystem            Size  Used Avail Use% Mounted on
+/dev/mapper/vg_c0-lv_root
+                       29G  5.6G   22G  21% /
+tmpfs                 499M     0  499M   0% /dev/shm
+/dev/sda1             477M   65M  387M  15% /boot
+</code></pre>
+
+<blockquote>
+<p>另外，几个有用的 LVM 指令（lvm2）：<br/>
+lvmdiskscan<br/>
+vgdisplay<br/>
+pvdisplay<br/>
+lvdispay<br/>
+vgcreate<br/>
+pvcreate<br/>
+lvscan<br/>
+pvscan<br/>
+vgscan</p>
+</blockquote>
+
+<p>部分结果如下：</p>
+
+<pre class="line-numbers"><code class="language-text">[root@c0 opt]# lvmdiskscan
+  /dev/ram0          [      16.00 MiB]
+  /dev/root          [      28.71 GiB]
+  /dev/ram1          [      16.00 MiB]
+  /dev/sda1          [     500.00 MiB]
+  /dev/vg_c0/lv_swap [     816.00 MiB]
+  /dev/ram2          [      16.00 MiB]
+  /dev/sda2          [       7.51 GiB] LVM physical volume
+  /dev/ram3          [      16.00 MiB]
+  /dev/sda3          [      22.00 GiB] LVM physical volume
+  /dev/ram4          [      16.00 MiB]
+  /dev/ram5          [      16.00 MiB]
+  /dev/ram6          [      16.00 MiB]
+  /dev/ram7          [      16.00 MiB]
+  /dev/ram8          [      16.00 MiB]
+  /dev/ram9          [      16.00 MiB]
+  /dev/ram10         [      16.00 MiB]
+  /dev/ram11         [      16.00 MiB]
+  /dev/ram12         [      16.00 MiB]
+  /dev/ram13         [      16.00 MiB]
+  /dev/ram14         [      16.00 MiB]
+  /dev/ram15         [      16.00 MiB]
+  2 disks
+  17 partitions
+  0 LVM physical volume whole disks
+  2 LVM physical volumes
+</code></pre>
+
+<pre class="line-numbers"><code class="language-[root@c0">  --- Physical volume ---
+  PV Name               /dev/sda2
+  VG Name               vg_c0
+  PV Size               7.51 GiB / not usable 3.00 MiB
+  Allocatable           yes (but full)
+  PE Size               4.00 MiB
+  Total PE              1922
+  Free PE               0
+  Allocated PE          1922
+  PV UUID               p8JU8y-uZfb-Ytjl-zjSa-ueLz-SGhs-a8qqC8
+
+  --- Physical volume ---
+  PV Name               /dev/sda3
+  VG Name               vg_c0
+  PV Size               22.00 GiB / not usable 2.04 MiB
+  Allocatable           yes (but full)
+  PE Size               4.00 MiB
+  Total PE              5631
+  Free PE               0
+  Allocated PE          5631
+  PV UUID               84lY2p-POLa-5g2L-m8pZ-NVWO-UyLg-zWLIWS
+</code></pre>
+
+<p>该文章参考<a href="https://cnzhx.net/blog/resizing-lvm-centos-virtualbox-guest/">水景一页</a>，感谢作者!</p>
+
+            </div>
+            <div>
+                
+                
+                
+            </div>
+        </article>
+    </div>
+</div>
+
+<script src="asset/jquery-3.3.1.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $('#footer').show()
+    })
+</script>
+  <footer id="footer" class="cuckoo page-footer" style="display: none">
+    <div class="wrapper">
+        <p>Designed and Written by <a href="mailto:forrestchang7@gmail.com">Jiayuan Zhang</a></p>
+    </div>
+</footer>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({TeX: { equationNumbers: { autoNumber: "AMS" } }});</script>
+

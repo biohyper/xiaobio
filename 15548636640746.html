@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>
+         Oracle查看和修改session数 - xiaobio 
+    </title>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Life it self">
+
+    <link rel="stylesheet" type="text/css" href="asset/cuckoo.css">
+    <link rel="stylesheet" type="text/css" href="asset/main.css">
+    <link rel="stylesheet" type="text/css" href="asset/atom-one-light.css">
+
+    <link rel="alternate" type="application/atom+xml" href="atom.xml" title="xiaobio">
+
+    <script src="asset/highlight.pack.js"></script>
+<!--    <script>hljs.initHighlightingOnLoad();</script>-->
+</head>
+
+<body>
+    <header class="site-header cuckoo">
+        <div class="wrapper">
+            <a class="site-title" href="index.html">xiaobio</a>
+            <nav class="site-nav">
+                <a href="#" class="menu-icon">
+                    <svg viewBox="0 0 18 15">
+                        <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"></path>
+                        <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"></path>
+                        <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"></path>
+                    </svg>
+                </a>
+                <div class="trigger">
+                    
+                        <a class="page-link" href="index.html">Home</a>
+                    
+                        <a class="page-link" href="archives.html">Archives</a>
+                    
+                        <a class="page-link" href="about.html">About</a>
+                    
+                </div>
+            </nav>
+        </div>
+    </header>
+</body>
+
+</html>
+ <div class="page-content cuckoo">
+    <div class="wrapper">
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+            <header class="post-header">
+                <h1 class="post-title" itemprop="name headline">Oracle查看和修改session数</h1>
+                <div class="post-description">
+                    
+                </div>
+            </header>
+            <div class="post-content" itemprop="articleBody">
+                <h2 id="toc_0">切换oracle用户</h2>
+
+<pre class="line-numbers"><code class="language-bash">[root@tbxoracle oracle]# su - oracle
+[oracle@tbxoracle ~]$ echo $ORACLE_SID
+daily
+</code></pre>
+
+<p>确认实例正常，接下来连接sqlplus</p>
+
+<pre class="line-numbers"><code class="language-sql">[oracle@tbxoracle ~]$ sqlplus / as sysdba
+
+SQL*Plus: Release 11.2.0.4.0 Production on Thu Apr 13 15:10:19 2017
+
+Copyright (c) 1982, 2013, Oracle.  All rights reserved.
+
+
+Connected to:
+Oracle Database 11g Enterprise Edition Release 11.2.0.4.0 - 64bit Production
+With the Partitioning, OLAP, Data Mining and Real Application Testing options
+
+</code></pre>
+
+<span id="more"></span><!-- more -->
+
+<h2 id="toc_1">查看processes和sessions参数</h2>
+
+<pre class="line-numbers"><code class="language-sql">
+SQL&gt; show parameter process
+
+NAME                                 TYPE        VALUE
+------------------------------------ ----------- ------------------------------
+aq_tm_processes                      integer     1
+cell_offload_processing              boolean     TRUE
+db_writer_processes                  integer     6
+gcs_server_processes                 integer     0
+global_txn_processes                 integer     1
+job_queue_processes                  integer     1000
+log_archive_max_processes            integer     4
+processes                            integer     1500
+processor_group_name                 string
+</code></pre>
+
+<pre class="line-numbers"><code class="language-sql">SQL&gt; show parameter sessions
+
+NAME                                 TYPE        VALUE
+------------------------------------ ----------- ------------------------------
+java_max_sessionspace_size           integer     0
+java_soft_sessionspace_limit         integer     0
+license_max_sessions                 integer     0
+license_sessions_warning             integer     0
+sessions                             integer     2304
+shared_server_sessions               integer
+SQL&gt; 
+</code></pre>
+
+<p>可以看到<code>processes</code>数为1500，<code>sessions</code>数为2304</p>
+
+<h2 id="toc_2">修改processes和sessions值</h2>
+
+<pre class="line-numbers"><code class="language-sql">SQL&gt; alter system set processes=1600 scope=spfile;
+
+System altered.
+
+SQL&gt; alter system set sessions=2400 scope=spfile;
+
+System altered.
+</code></pre>
+
+<blockquote>
+<p>修改processes和sessions必须重启Oracle才能生效</p>
+</blockquote>
+
+<h2 id="toc_3">ORACLE中连接<code>connection</code>，会话<code>sessions</code>和进程数<code>process</code>的关系</h2>
+
+<p>每个sqllogin称为一个连接（connection),而每个连接，可以产生一个或多个会话，如果数据库运行在专用服务器方式，一个会话对应一个服务器进程（process),如果数据库运行在共享服务器方式，一个服务器进程可以为多个会话服务。 </p>
+
+<h2 id="toc_4">oracle中<strong>系统</strong>process和session的关系</h2>
+
+<p>在SharedServer中的Process 和Oracle 中的Session不是一一对应的，Shared Server中的Process 一个对应着Oracle 中的一个或者一个以上的Session。<br/>
+数据库的session和操作系统process是对应的 <br/>
+即表示一个session对应一个process，但是一个process未必对应一个session</p>
+
+<ul>
+<li>查询数据库当前进程的连接数：</li>
+</ul>
+
+<pre class="line-numbers"><code class="language-sql">SQL&gt; select count(*) from v$process;
+
+  COUNT(*)
+----------
+        41
+</code></pre>
+
+<ul>
+<li>查看数据库当前会话的连接数：</li>
+</ul>
+
+<pre class="line-numbers"><code class="language-sql">SQL&gt; select count(*) from v$session;
+
+  COUNT(*)
+----------
+        38
+</code></pre>
+
+<ul>
+<li>查看数据库的并发连接数：</li>
+</ul>
+
+<pre class="line-numbers"><code class="language-sql">SQL&gt; select count(*) from v$session where status=&#39;ACTIVE&#39;;
+
+  COUNT(*)
+----------
+        31
+</code></pre>
+
+<ul>
+<li>查看当前数据库建立的会话情况：</li>
+</ul>
+
+<pre class="line-numbers"><code class="language-sql">
+SQL&gt; select sid,serial#,username,program,machine,status from v$session;
+       
+       SID    SERIAL# USERNAME
+---------- ---------- ------------------------------
+PROGRAM
+------------------------------------------------
+MACHINE                                                          STATUS
+---------------------------------------------------------------- --------
+
+      1777      35669 DAILY
+Toad.exe
+WORKGROUP\LIANXI-PC                                              INACTIVE
+
+
+38 rows selected.
+</code></pre>
+
+            </div>
+            <div>
+                
+                
+                
+            </div>
+        </article>
+    </div>
+</div>
+
+<script src="asset/jquery-3.3.1.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $('#footer').show()
+    })
+</script>
+  <footer id="footer" class="cuckoo page-footer" style="display: none">
+    <div class="wrapper">
+        <p>Designed and Written by <a href="mailto:forrestchang7@gmail.com">Jiayuan Zhang</a></p>
+    </div>
+</footer>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({TeX: { equationNumbers: { autoNumber: "AMS" } }});</script>
+

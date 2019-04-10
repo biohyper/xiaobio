@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>
+         Oracle表及表空间操作记录 - xiaobio 
+    </title>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Life it self">
+
+    <link rel="stylesheet" type="text/css" href="asset/cuckoo.css">
+    <link rel="stylesheet" type="text/css" href="asset/main.css">
+    <link rel="stylesheet" type="text/css" href="asset/atom-one-light.css">
+
+    <link rel="alternate" type="application/atom+xml" href="atom.xml" title="xiaobio">
+
+    <script src="asset/highlight.pack.js"></script>
+<!--    <script>hljs.initHighlightingOnLoad();</script>-->
+</head>
+
+<body>
+    <header class="site-header cuckoo">
+        <div class="wrapper">
+            <a class="site-title" href="index.html">xiaobio</a>
+            <nav class="site-nav">
+                <a href="#" class="menu-icon">
+                    <svg viewBox="0 0 18 15">
+                        <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"></path>
+                        <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"></path>
+                        <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"></path>
+                    </svg>
+                </a>
+                <div class="trigger">
+                    
+                        <a class="page-link" href="index.html">Home</a>
+                    
+                        <a class="page-link" href="archives.html">Archives</a>
+                    
+                        <a class="page-link" href="about.html">About</a>
+                    
+                </div>
+            </nav>
+        </div>
+    </header>
+</body>
+
+</html>
+ <div class="page-content cuckoo">
+    <div class="wrapper">
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+            <header class="post-header">
+                <h1 class="post-title" itemprop="name headline">Oracle表及表空间操作记录</h1>
+                <div class="post-description">
+                    
+                </div>
+            </header>
+            <div class="post-content" itemprop="articleBody">
+                <h1 id="toc_0">关于表的操作</h1>
+
+<h2 id="toc_1">表空间</h2>
+
+<ol>
+<li>查看表空间和大小</li>
+</ol>
+
+<pre class="line-numbers"><code class="language-sql">SELECT UPPER(F.TABLESPACE_NAME) &quot;表空间名&quot;, D.TOT_GROOTTE_MB
+&quot;表空间大小(M)&quot;, D.TOT_GROOTTE_MB - F.TOTAL_BYTES &quot;已使用空间(M)&quot;,    
+TO_CHAR(ROUND((D.TOT_GROOTTE_MB - F.TOTAL_BYTES) / 
+D.TOT_GROOTTE_MB * 100,2), &#39;990.99&#39;) &quot;使用比&quot;,    F.TOTAL_BYTES 
+&quot;空闲空间(M)&quot;, F.MAX_BYTES &quot;最大块(M)&quot; 
+FROM ( SELECT TABLESPACE_NAME, ROUND(SUM(BYTES) / (1024 * 1024), 2) TOTAL_BYTES, 
+ROUND(MAX(BYTES) / (1024 * 1024), 2) MAX_BYTES    
+FROM SYS.DBA_FREE_SPACE 
+GROUP BY TABLESPACE_NAME) F,    
+(SELECT DD.TABLESPACE_NAME, ROUND(SUM(DD.BYTES) / (1024 * 
+1024), 2) TOT_GROOTTE_MB 
+FROM SYS.DBA_DATA_FILES DD 
+GROUP BY DD.TABLESPACE_NAME) D 
+WHERE D.TABLESPACE_NAME = F.TABLESPACE_NAME ORDER BY 4 DESC;
+</code></pre>
+
+<span id="more"></span><!-- more -->
+
+<ol>
+<li>查询表空间有那些表</li>
+</ol>
+
+<pre class="line-numbers"><code class="language-sql">select table_name from all_tables where tablespace_name = &#39;TEMP&#39;; 
+</code></pre>
+
+<ol>
+<li> 查询所有用户表使用大小的前三十名</li>
+</ol>
+
+<pre class="line-numbers"><code class="language-sql">select * from (select segment_name,bytes from dba_segments
+where owner = USER order by bytes desc ) where rownum &lt;= 30
+――看占用空间最大的表 
+select segment_name,round(bytes/1024/1024/1024) as bytes_G 
+from dba_segments where owner =&#39;SQMDB&#39; order by bytes desc
+</code></pre>
+
+<ol>
+<li> 建立表空间</li>
+</ol>
+
+<pre class="line-numbers"><code class="language-sql">CREATE BIGFILE TABLESPACE SQM_TRAFFIC DATAFILE
+&#39;/data3/sqmmt2db/sqm_traffic.dbf&#39; SIZE 5G AUTOEXTEND ON NEXT 1G MAXSIZE 34359738344K 
+NOLOGGING
+ONLINE
+EXTENT 
+MANAGEMENT 
+LOCAL 
+UNIFORM 
+SIZE 256K BLOCKSIZE 8K 
+SEGMENT SPACE MANAGEMENT AUTO FLASHBACK ON;
+</code></pre>
+
+<ol>
+<li> 表空间迁移</li>
+</ol>
+
+<pre class="line-numbers"><code class="language-sql">--查看表空间 
+select * from dba_data_files where tablespace_name=&#39;SQMDB&#39;
+--停掉表空间 alter tablespace SQMDB offline normal; 
+--在liunx里把表空间的文件移到新地址 
+--将表空间改到新地址 
+alter tablespace SQMDB rename datafile &#39;/data2/sqmmt/sqmdb.dbf&#39; to &#39;/data3/sqmmt/sqmdb.dbf&#39;; 
+--挂上表空间 alter tablespace SQMDB online;
+</code></pre>
+
+<h2 id="toc_2">锁</h2>
+
+<ol>
+<li> 查看数据库引起锁表的SQL语句</li>
+</ol>
+
+<pre class="line-numbers"><code class="language-sql">SELECT a.username, a.machine, a.program, a.sid, a.serial#, a.status, c.piece, c.sql_text 
+FROM v session a,v sqltext c 
+WHERE a.sid in ( select distinct t2.sid from v locked_object t1,v session t2 where t1.session_id=t2.sid  ) 
+and a.sql_address=c.address(+) ORDER BY c.piece
+</code></pre>
+
+<ol>
+<li> 查看数据库锁的情况</li>
+</ol>
+
+<pre class="line-numbers"><code class="language-sql">---查看数据库锁的情况必须要有DBA权限  
+select object_id,session_id,locked_mode from v locked_object;  
+select t2.username,t2.sid,t2.serial#,t2.logon_time  
+from v locked_object t1,v session t2  
+where t1.session_id=t2.sid order by t2.logon_time;
+</code></pre>
+
+<ol>
+<li> 查看被锁的表</li>
+</ol>
+
+<pre class="line-numbers"><code class="language-sql">select p.spid,a.serial#,c.object_name,b.session_id,
+b.oracle_username,b.os_user_name 
+from v process p,v session a, v locked_object b,all_objects  c 
+where p.addr=a.paddr and a.process=b.process and c.object_id=b.object_id;
+</code></pre>
+
+<ol>
+<li> 杀掉进程 </li>
+</ol>
+
+<pre class="line-numbers"><code class="language-sql">alter system kill session &#39;sid,serial#&#39;; 
+alter system kill session &#39;3964,51752&#39; immediate;
+</code></pre>
+
+<blockquote>
+<p>注意，上例中SID为到(USERNAME列为空)的会话，是Oracle的后台进程，不要对这些会话进行任何操作。</p>
+</blockquote>
+
+<h2 id="toc_3">查看连接</h2>
+
+<ol>
+<li> 查看连接数
+<code>select count(*) from v session;</code></li>
+<li> 查看并发连接数
+<code>Select count(*) from v session where status=&#39;ACTIVE&#39;;</code></li>
+<li>查看连接的进程
+<code>SELECT sid, serial#, username, osuser FROM v session;</code> </li>
+<li> 查看数据库使用的裸设备</li>
+</ol>
+
+<pre class="line-numbers"><code class="language-sql">select * from dba_data_files order by file_name; 
+select * from dba_temp_files  order by file_name; 
+select * from v controlfile; select * from v logfile;
+</code></pre>
+
+<blockquote>
+<p>具体的方法是查询<code>dba_data_files</code>，<code>dba_temp_files</code>，<code>v controlfile</code>和<code>v logfile</code>看这四类文件具体占用的裸设备</p>
+</blockquote>
+
+<h2 id="toc_4">查看表占空间</h2>
+
+<ol>
+<li>查看表所占空间</li>
+</ol>
+
+<pre class="line-numbers"><code class="language-sql">SELECT TABLESPACE_NAME, TO_CHAR(SUM(BYTES)/(1024*1024),&#39;999G999D999&#39;) CNT_MB 
+FROM DBA_EXTENTS WHERE OWNER=&#39;&amp;OWNER&#39; AND 
+SEGMENT_NAME=&#39;&amp;TABLE_NAME&#39; AND SEGMENT_TYPE LIKE &#39;TABLE%&#39;
+GROUP BY TABLESPACE_NAME;
+</code></pre>
+
+<ol>
+<li>几种情况</li>
+</ol>
+
+<p>有两种含义的表大小。一种是分配给一个表的物理空间数量，而不管空间是否被使用。可以这样查询获得字节数：</p>
+
+<pre class="line-numbers"><code class="language-sql">select segment_name, bytes from user_segments 
+where segment_type = &#39;TABLE&#39;; 
+</code></pre>
+
+<pre class="line-numbers"><code class="language-sql">Select Segment_Name,Sum(bytes)/1024/1024 From User_Extents
+Group By Segment_Name
+</code></pre>
+
+<p>另一种表实际使用的空间。这样查询：</p>
+
+<pre class="line-numbers"><code class="language-sql">analyze table emp compute statistics;  select num_rows * 
+avg_row_len  from user_tables  where table_name = &#39;EMP&#39;;
+</code></pre>
+
+<p>查看每个表空间的大小</p>
+
+<pre class="line-numbers"><code class="language-text">Select Tablespace_Name,Sum(bytes)/1024/1024 From Dba_Segments 
+Group By Tablespace_Name
+</code></pre>
+
+            </div>
+            <div>
+                
+                
+                
+            </div>
+        </article>
+    </div>
+</div>
+
+<script src="asset/jquery-3.3.1.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $('#footer').show()
+    })
+</script>
+  <footer id="footer" class="cuckoo page-footer" style="display: none">
+    <div class="wrapper">
+        <p>Designed and Written by <a href="mailto:forrestchang7@gmail.com">Jiayuan Zhang</a></p>
+    </div>
+</footer>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({TeX: { equationNumbers: { autoNumber: "AMS" } }});</script>
+

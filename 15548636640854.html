@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>
+         Vagrant单机虚拟集群 - xiaobio 
+    </title>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Life it self">
+
+    <link rel="stylesheet" type="text/css" href="asset/cuckoo.css">
+    <link rel="stylesheet" type="text/css" href="asset/main.css">
+    <link rel="stylesheet" type="text/css" href="asset/atom-one-light.css">
+
+    <link rel="alternate" type="application/atom+xml" href="atom.xml" title="xiaobio">
+
+    <script src="asset/highlight.pack.js"></script>
+<!--    <script>hljs.initHighlightingOnLoad();</script>-->
+</head>
+
+<body>
+    <header class="site-header cuckoo">
+        <div class="wrapper">
+            <a class="site-title" href="index.html">xiaobio</a>
+            <nav class="site-nav">
+                <a href="#" class="menu-icon">
+                    <svg viewBox="0 0 18 15">
+                        <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"></path>
+                        <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"></path>
+                        <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"></path>
+                    </svg>
+                </a>
+                <div class="trigger">
+                    
+                        <a class="page-link" href="index.html">Home</a>
+                    
+                        <a class="page-link" href="archives.html">Archives</a>
+                    
+                        <a class="page-link" href="about.html">About</a>
+                    
+                </div>
+            </nav>
+        </div>
+    </header>
+</body>
+
+</html>
+ <div class="page-content cuckoo">
+    <div class="wrapper">
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+            <header class="post-header">
+                <h1 class="post-title" itemprop="name headline">Vagrant单机虚拟集群</h1>
+                <div class="post-description">
+                    
+                </div>
+            </header>
+            <div class="post-content" itemprop="articleBody">
+                <h2 id="toc_0">Vagrant初步使用</h2>
+
+<p>Vagrant本为方便移植开发环境出现，正是因为该目的，可以部署好一台虚拟机从而copy出多个生成集群，例如虚拟Spark环境，只需要部署好一台，即可通过修改Vagrantfile生成多台，达到虚拟集群部署。再加上Ansible工具，可以大大节省部署时间。</p>
+
+<h3 id="toc_1">基础环境需求：</h3>
+
+<ul>
+<li>VirtualBox虚拟机，Mac，Linux，Windows系统全部支持，<a href="https://www.virtualbox.org/wiki/Downloads">官网</a>下载一步步安装即可。</li>
+<li>Vagrant，全平台支持，同样<a href="https://www.vagrantup.com/downloads.html">官网</a>下载一步步安装即可。</li>
+</ul>
+
+<p>通过Vagrant管理虚拟机，可以直接从<a href="http://www.vagrantbox.es">官方镜像地址</a>Down别人制作好的box，一般也就几百MB，也可以自己制作box来使用。</p>
+
+<span id="more"></span><!-- more -->
+
+<h3 id="toc_2">Vagrant环境介绍</h3>
+
+<p>Vagrant主要有两个工作环境：</p>
+
+<ul>
+<li>默认下载box等路径<code>/User/username/.vagrant.d/</code></li>
+<li>自建存放<code>Vagrantfile</code>文件以及启动虚拟机等路径，如：/home/username/vagrant/`</li>
+</ul>
+
+<p>默认路径主要存放私钥，下载box，box下载失败临时文件等路径，<strong>自己制作的box</strong>导入也会在该路径产生相应文件。</p>
+
+<p>自建路径主要用于平时操作虚拟机，例如<code>vagrant ssh</code>等操作。</p>
+
+<h3 id="toc_3">基本命令</h3>
+
+<p>安装好软件以后，可以通过<code>vagrant -h</code>查看帮助手册，对每个命令会有详细的解释，各命令详细解释也可查看，如<code>vagrant box -h</code>查看对box操作的方法。<code>vagrant -v</code>查看版本。</p>
+
+<p>一般安装好之后主要使用如下命令：</p>
+
+<ul>
+<li>初始化工作环境：<code>vagrant init</code></li>
+<li>启动虚拟机：<code>vagrant up</code></li>
+<li>ssh连接虚拟机：<code>vagrant ssh</code></li>
+<li>关闭虚拟机：<code>vagrant halt</code></li>
+</ul>
+
+<p>以下是<code>vagrant -h</code>之后结果：</p>
+
+<pre class="line-numbers"><code class="language-text">Usage: vagrant [options] &lt;command&gt; [&lt;args&gt;]
+
+    -v, --version                    Print the version and exit.
+    -h, --help                       Print this help.
+
+Common commands:
+     box             manages boxes: installation, removal, etc.
+     connect         connect to a remotely shared Vagrant environment
+     destroy         stops and deletes all traces of the vagrant machine
+     global-status   outputs status Vagrant environments for this user
+     halt            stops the vagrant machine
+     help            shows the help for a subcommand
+     init            initializes a new Vagrant environment by creating a Vagrantfile
+     login           log in to HashiCorp&#39;s Atlas
+     package         packages a running vagrant environment into a box
+     plugin          manages plugins: install, uninstall, update, etc.
+     port            displays information about guest port mappings
+     powershell      connects to machine via powershell remoting
+     provision       provisions the vagrant machine
+     push            deploys code in this environment to a configured destination
+     rdp             connects to machine via RDP
+     reload          restarts vagrant machine, loads new Vagrantfile configuration
+     resume          resume a suspended vagrant machine
+     share           share your Vagrant environment with anyone in the world
+     snapshot        manages snapshots: saving, restoring, etc.
+     ssh             connects to machine via SSH
+     ssh-config      outputs OpenSSH valid configuration to connect to the machine
+     status          outputs status of the vagrant machine
+     suspend         suspends the machine
+     up              starts and provisions the vagrant environment
+     validate        validates the Vagrantfile
+     version         prints current and latest Vagrant version
+
+For help on any individual command run `vagrant COMMAND -h`
+
+Additional subcommands are available, but are either more advanced
+or not commonly used. To see all subcommands, run the command
+`vagrant list-commands`.
+</code></pre>
+
+<h2 id="toc_4">自制Vagrant box</h2>
+
+<h3 id="toc_5">初次使用自制box</h3>
+
+<p>建议通过Vagrant默认的<code>vagran</code>用户管理，熟悉后可自定义各种需求。需要在操作系统中做如下操作后打包：</p>
+
+<ul>
+<li>新建<code>vagrant</code>用户和用户目录，密码为<code>vagrant</code></li>
+<li>添加<code>vagrant</code>用户公钥文件，路径为<code>/home/vagrant/.ssh/authorized_keys</code></li>
+</ul>
+
+<h3 id="toc_6">自制root用户box</h3>
+
+<p>现实中很多操作通过<code>vagrant</code>用户会有很多不便利，更喜欢通过<code>root</code>用户操作，此时必须修改<code>Vagrantfile</code>文件，指定登录用户为<code>root</code>用户。具体需要做如下操作：</p>
+
+<ul>
+<li>在真机生成<code>root</code>用户的密钥对，将公钥添加到虚拟机中，可参考该<a href="https://biohyper.github.io/2017/03/31/%E5%AF%86%E9%92%A5--%E5%85%8D%E5%AF%86SSH%E4%BA%92%E4%BF%A1/">文章</a></li>
+<li>将真机私钥移动到Vagrant默认存放私钥路径，可通过<code>vagrant ssh-config</code>命令查看存放路径。Linux为：<code>/root/.vagrant.d/insecure_private_key</code>，如果已经存在该文件，直接覆盖即可</li>
+<li>在真机中打包虚拟操作系统，步骤如下：<br/>
+进入目录：<code>cd /User/username/VirtualBox VMs/centos(实际虚拟机名hceng)/</code><br/>
+执行打包命令：<code>vagrant package --base centos(实际虚拟机名称) --output (自定义名称).box</code></li>
+<li>将打包好的box文件移动到vagrant环境路径，添加box：<code>vagrant box add name(自定义) package.box</code></li>
+</ul>
+
+<p>此时自己需求的Vagrant box就已经制作好了，可以发布给其他同事使用。</p>
+
+<blockquote>
+<p>不论使用哪个用户登录，建议保留<code>vagrant</code>用户，且第一次登录使用默认的<code>vagrant</code>用户，因为每台机器的私钥都是不同的，但是<code>vagrant</code>私钥是固定的，它使用了同一的公钥文件。这样方便其他人自定义。</p>
+</blockquote>
+
+<h2 id="toc_7">Vagrantfile文件 -- Vagrant的关键</h2>
+
+<p>各种自定义话配置都在<code>Vagrantfile</code>文件中，Vagrant为<code>ruby</code>语言编写，所以配置文件遵循<code>ruby</code>语法。以下为虚拟集群示例：</p>
+
+<pre class="line-numbers"><code class="language-ruby"># -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure(&quot;2&quot;) do |config|
+  config.vm.box = &quot;spark_master&quot;
+  
+  config.vm.define :master do |master|
+          master.vm.hostname = &quot;master&quot;
+          master.vm.network &quot;private_network&quot;, ip: &quot;192.168.56.50&quot;
+          master.ssh.username = &quot;root&quot;  # 指定root用户登录，注释则默认vagrant用户登录
+          # master.ssh.password = &quot;password&quot;   # 登录用户密码
+          # master.ssh.insert_key = false      # 关闭密钥认证方式
+          master.vm.provider &quot;virtualbox&quot; do |v|
+                  v.name = &quot;master-50&quot;
+                  v.memory = &quot;18432&quot;
+                  v.cpus = &quot;12&quot;
+          end
+  end
+  config.vm.define :slaver1 do |slaver1|
+          slaver1.vm.hostname = &quot;slaver1&quot;
+          slaver1.vm.network &quot;private_network&quot;, ip: &quot;192.168.56.51&quot;
+          slaver1.ssh.username = &quot;root&quot;
+          # slaver1.ssh.password = &quot;password&quot;
+          # slaver1.ssh.insert_key = false
+          slaver1.vm.provider &quot;virtualbox&quot; do |v|
+                  v.name = &quot;slaver1-51&quot;
+                  v.memory = &quot;12288&quot;
+                  v.cpus = &quot;6&quot;
+          end
+  end
+  config.vm.define :slaver2 do |slaver2|
+          slaver2.vm.hostname = &quot;slaver2&quot;
+          slaver2.vm.network &quot;private_network&quot;, ip: &quot;192.168.56.52&quot;
+          slaver2.ssh.username = &quot;root&quot;
+          # slaver2.ssh.password = &quot;password&quot;
+          # slaver2.ssh.insert_key = false
+          slaver2.vm.provider &quot;virtualbox&quot; do |v|
+                  v.name = &quot;slaver2-52&quot;
+                  v.memory = &quot;12288&quot;
+                  v.cpus = &quot;6&quot;
+          end
+  end
+  config.vm.define :slaver3 do |slaver3|
+          slaver3.vm.hostname = &quot;slaver3&quot;
+          slaver3.vm.network &quot;private_network&quot;, ip: &quot;192.168.56.53&quot;
+          slaver3.ssh.username = &quot;root&quot;
+          # slaver3.ssh.password = &quot;password&quot;
+          # slaver3.ssh.insert_key = false
+          slaver3.vm.provider &quot;virtualbox&quot; do |v|
+                  v.name = &quot;slaver3-53&quot;
+                  v.memory = &quot;12288&quot;
+                  v.cpus = &quot;6&quot;
+          end
+  end
+end
+</code></pre>
+
+<p>配置好以后就可以执行<code>vagrant up</code>启动虚拟机，当虚拟机为集群状态，该命令则会启动所有虚拟机，单独启动需要指定虚拟机名称，例如<code>vagrant up master</code></p>
+
+<h2 id="toc_8">备忘&amp;&amp;技巧</h2>
+
+<ul>
+<li><p>每次敲<code>vagrant</code>命令繁琐可以通过编辑<code>.bashrc</code>文件，增加<code>alias vg=“vagrant”</code>使得之后用<code>vg</code>代替<code>vagrant</code>命令。</p></li>
+<li><p>配置文件可以通过循环配置，节约时间，节省代码：</p></li>
+</ul>
+
+<pre class="line-numbers"><code class="language-ruby">  
+  (1..4).each do |i|
+
+    config.vm.define &quot;node#{i}&quot; do |node|
+
+       node.vm.box = &quot;laravel/homestead&quot;    # 设置虚拟机的Box
+        
+        node.vm.hostname=&quot;node#{i}&quot;    # 设置虚拟机的主机名
+
+        node.vm.network &quot;private_network&quot;, ip: &quot;192.168.10.1#{i}&quot;    # 设置虚拟机hostonly模式的IP
+
+        node.vm.synced_folder &quot;F:/workSpace/quickstart1&quot;, &quot;/home/vagrant/share&quot;    # 设置虚拟机的IP # 设置主机与虚拟机的共享目录
+ 
+        node.vm.provider &quot;virtualbox&quot; do |v|    # VirtaulBox相关配置
+
+            v.name = &quot;node#{i}&quot;    # 设置虚拟机的名称
+
+            v.memory = 2048    # 设置虚拟机的内存大小
+
+            v.cpus = 1    # 设置虚拟机的CPU个数
+        end
+    end
+</code></pre>
+
+<ul>
+<li>多个虚拟机将会占用很多磁盘空间，可以提前修改Virtualbox的虚拟机存放路径
+<code>VBoxManage setproperty machinefolder /data/VirtualBoxVms</code></li>
+</ul>
+
+<h2 id="toc_9">错误记录</h2>
+
+<p>在迁移到其他机器出现认证失败的错误，即长时间无法通过ssh登录：</p>
+
+<pre class="line-numbers"><code class="language-text">localvm2: Warning: Remote connection disconnect. Retrying...
+localvm2: Warning: Authentication failure. Retrying...
+</code></pre>
+
+<p>这种情况大多为本机密钥和虚拟机公钥不匹配，可以通过修改<code>Vagrantfile</code>使用用户名密码登录，也可重新匹配私钥和公钥。参考该<a href="https://biohyper.github.io/2017/03/31/%E5%AF%86%E9%92%A5--%E5%85%8D%E5%AF%86SSH%E4%BA%92%E4%BF%A1/">文章</a></p>
+
+            </div>
+            <div>
+                
+                
+                
+            </div>
+        </article>
+    </div>
+</div>
+
+<script src="asset/jquery-3.3.1.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $('#footer').show()
+    })
+</script>
+  <footer id="footer" class="cuckoo page-footer" style="display: none">
+    <div class="wrapper">
+        <p>Designed and Written by <a href="mailto:forrestchang7@gmail.com">Jiayuan Zhang</a></p>
+    </div>
+</footer>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({TeX: { equationNumbers: { autoNumber: "AMS" } }});</script>
+

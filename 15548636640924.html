@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>
+         单用户模式修改系统文件 - xiaobio 
+    </title>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Life it self">
+
+    <link rel="stylesheet" type="text/css" href="asset/cuckoo.css">
+    <link rel="stylesheet" type="text/css" href="asset/main.css">
+    <link rel="stylesheet" type="text/css" href="asset/atom-one-light.css">
+
+    <link rel="alternate" type="application/atom+xml" href="atom.xml" title="xiaobio">
+
+    <script src="asset/highlight.pack.js"></script>
+<!--    <script>hljs.initHighlightingOnLoad();</script>-->
+</head>
+
+<body>
+    <header class="site-header cuckoo">
+        <div class="wrapper">
+            <a class="site-title" href="index.html">xiaobio</a>
+            <nav class="site-nav">
+                <a href="#" class="menu-icon">
+                    <svg viewBox="0 0 18 15">
+                        <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"></path>
+                        <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"></path>
+                        <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"></path>
+                    </svg>
+                </a>
+                <div class="trigger">
+                    
+                        <a class="page-link" href="index.html">Home</a>
+                    
+                        <a class="page-link" href="archives.html">Archives</a>
+                    
+                        <a class="page-link" href="about.html">About</a>
+                    
+                </div>
+            </nav>
+        </div>
+    </header>
+</body>
+
+</html>
+ <div class="page-content cuckoo">
+    <div class="wrapper">
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+            <header class="post-header">
+                <h1 class="post-title" itemprop="name headline">单用户模式修改系统文件</h1>
+                <div class="post-description">
+                    
+                </div>
+            </header>
+            <div class="post-content" itemprop="articleBody">
+                <h2 id="toc_0">场景：</h2>
+
+<ol>
+<li>因为在<code>/etc/fstab</code>写错<code>UUID</code>，导致系统无法正常启动，自动进入单用户模式；</li>
+<li>当出现系统无法正常启动时，也可手动进入Linux单用户模式，从而修改一些系统文件（如<code>/etc/fstab</code>等），然后重启系统</li>
+<li>系统默认只挂载<code>/</code>文件系统，因此如果<code>/usr</code>, <code>/var</code>等是单独的文件系统的话，需要分别挂载它们，否则一些命令用不了，如<code>vim</code>，会提示没有该命令。可以使用<code>mount -a</code>选项一次挂载<code>fstab</code>中的所有文件系统（noauto除外)。</li>
+<li>如果没有正常关机可能还要用<code>fsck</code>检查文件系统</li>
+</ol>
+
+<span id="more"></span><!-- more -->
+
+<h3 id="toc_1">手动进入单用户模式：</h3>
+
+<ul>
+<li>当重启Linux系统，出现系统选择页面时，按<code>e</code></li>
+<li>找到<code>kernal</code>行，按<code>e</code></li>
+<li>在行后输入：<strong>空格</strong> <code>single</code>，然后回车</li>
+<li>然后按<code>b</code>，开始重新引导系统</li>
+</ul>
+
+<h3 id="toc_2">修改相关系统文件：</h3>
+
+<p>进入单用户模式后，通常<code>/</code>分区（根分区）会以只读模式<code>mount</code>，故系统文件都是只读的，无法修改。<br/>
+故需将根分区重新mount为可读写状态：</p>
+
+<p><code>mount / -o rw,remount</code></p>
+
+<p>然后修改系统文件（如/etc/fstab等），重启系统即可</p>
+
+<h3 id="toc_3">fuser使用：</h3>
+
+<p>当需要修改文件系统的挂载点时，如将<code>/dev/sda3</code>由<code>/mnt</code>更改至<code>/data2</code>挂载点时，会出现报错：<code>device is busy</code>，因为此时<code>/mnt</code>被其他进程占用，故无法卸载；</p>
+
+<ul>
+<li>查看挂载点被占用的进程：<code>fuser -vm /mnt</code>；</li>
+<li>杀掉查出的进程连接：<code>fuser -km /mnt</code>；</li>
+<li>然后重新<code>umount /mnt</code>即可</li>
+</ul>
+
+<h3 id="toc_4">fsck修复文件系统</h3>
+
+<p>当出现文件系统错误时，可通过<code>fsck</code>命令修复：<br/>
+一种常见报错为挂载时<code>mount -t ext4 /dev/sdd1 /data2</code>提示<code>can&#39;t find ext4 filesystem</code><br/>
+此处报错提示可能错误，但意思应当不错，此时可通过<code>fsck -y /dev/sdd1</code>来修复该文件系统，<code>-y</code>参数是忽略过程中的确认信息需要输入的<code>yes</code></p>
+
+            </div>
+            <div>
+                
+                
+                
+            </div>
+        </article>
+    </div>
+</div>
+
+<script src="asset/jquery-3.3.1.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $('#footer').show()
+    })
+</script>
+  <footer id="footer" class="cuckoo page-footer" style="display: none">
+    <div class="wrapper">
+        <p>Designed and Written by <a href="mailto:forrestchang7@gmail.com">Jiayuan Zhang</a></p>
+    </div>
+</footer>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({TeX: { equationNumbers: { autoNumber: "AMS" } }});</script>
+

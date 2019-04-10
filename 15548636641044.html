@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>
+         构建Oracle数据库安全体系 - xiaobio 
+    </title>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Life it self">
+
+    <link rel="stylesheet" type="text/css" href="asset/cuckoo.css">
+    <link rel="stylesheet" type="text/css" href="asset/main.css">
+    <link rel="stylesheet" type="text/css" href="asset/atom-one-light.css">
+
+    <link rel="alternate" type="application/atom+xml" href="atom.xml" title="xiaobio">
+
+    <script src="asset/highlight.pack.js"></script>
+<!--    <script>hljs.initHighlightingOnLoad();</script>-->
+</head>
+
+<body>
+    <header class="site-header cuckoo">
+        <div class="wrapper">
+            <a class="site-title" href="index.html">xiaobio</a>
+            <nav class="site-nav">
+                <a href="#" class="menu-icon">
+                    <svg viewBox="0 0 18 15">
+                        <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"></path>
+                        <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"></path>
+                        <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"></path>
+                    </svg>
+                </a>
+                <div class="trigger">
+                    
+                        <a class="page-link" href="index.html">Home</a>
+                    
+                        <a class="page-link" href="archives.html">Archives</a>
+                    
+                        <a class="page-link" href="about.html">About</a>
+                    
+                </div>
+            </nav>
+        </div>
+    </header>
+</body>
+
+</html>
+ <div class="page-content cuckoo">
+    <div class="wrapper">
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+            <header class="post-header">
+                <h1 class="post-title" itemprop="name headline">构建Oracle数据库安全体系</h1>
+                <div class="post-description">
+                    
+                </div>
+            </header>
+            <div class="post-content" itemprop="articleBody">
+                <h2 id="toc_0">一、安全补丁更新</h2>
+
+<p>及时更新数据库的安全补丁，减少数据库系统可能受到的攻击。<br/>
+查看<a href="https://support.oracle.com%EF%BC%8C%E4%B8%8B%E8%BD%BD%E5%B9%B6%E5%AE%89%E8%A3%85%E7%9B%B8%E5%85%B3%E7%9A%84%E5%AE%89%E5%85%A8%E8%A1%A5%E4%B8%81%E3%80%82">https://support.oracle.com，下载并安装相关的安全补丁。</a><br/>
+参考Oracle厂商建议，仅对已发现的特定漏洞或缺陷安装相应补丁。</p>
+
+<h2 id="toc_1">二、oracle组管理</h2>
+
+<p>查看 dba组下的成员是否有Oracle用户：<br/>
+<code>cat /etc/group |grep dba</code><br/>
+若Oracle用户不在dba组，则将其加入：<br/>
+<code>usermod -G dba 用户名</code></p>
+
+<span id="more"></span><!-- more -->
+
+<h2 id="toc_2">三、账号管理</h2>
+
+<h4 id="toc_3">规范数据库账号，删除多余自建账号</h4>
+
+<p>是否存在默认的范例数据库账号scott等，可以考虑删除scott账号<br/>
+删除多余自建账号<code>drop user user_name cascade;</code></p>
+
+<h4 id="toc_4">Dba权限账号检查，锁定禁用无用账号</h4>
+
+<p><code>select username,profile from dba_users where account_status=&#39;OPEN&#39;;</code><br/>
+整改：<br/>
+锁定用户：<code>alter user &lt;用户名&gt; lock;</code><br/>
+删除用户：<code>drop user &lt;用户名&gt; cascade;</code></p>
+
+<h4 id="toc_5">禁止sysdba用户远程登录</h4>
+
+<p>sysdba用户远程登录限制（查看Oracle登录认证方式）<br/>
+检查：<br/>
+<code>show parameter remote_login_passwordfile</code><br/>
+整改：<br/>
+<code>alter system set remote_login_passwordfile = NONE scope=spfile;</code><br/>
+注：需要重启库生效。</p>
+
+<h2 id="toc_6">四、密码管理</h2>
+
+<h4 id="toc_7">登录失败的帐号锁定策略</h4>
+
+<p><code>select * from dba_profiles order by 1;</code><br/>
+关注FAILED_LOGIN_ATTEMPTS的设定值</p>
+
+<h4 id="toc_8">数据库密码安全性校验函数</h4>
+
+<p><code>select limit from dba_profiles where profile=&#39;DEFAULT&#39; and resource_name=&#39;PASSWORD_VERIFY_FUNCTION&#39;;</code></p>
+
+<h2 id="toc_9">五、权限管理</h2>
+
+<h4 id="toc_10">确保对$ORACLE_HOME/bin目录的访问权限尽可能少</h4>
+
+<p>运行命令：<br/>
+<code>chown -R oracle:dba $ORACLE_HOME/bin</code> （此命令在root用户下操作）<br/>
+验证：<code>ls -l $ORACLE_HOME/bin</code> 确保该目录下的文件属主为oracle用户，且其他用户没有写权限。</p>
+
+<h4 id="toc_11">应该只提供最小权限给用户（包括SYSTEM和OBJECT权限）</h4>
+
+<p>在sqlplus中查看所有账户及其状态：<code>select username,account_status from dba_users;</code><br/>
+修改默认账户的口令：<br/>
+<code>ALTER USER user_name IDENTIFIED BY password;</code><br/>
+锁定不需要的用户，使用SQL语句：<code>ALTER USER user PASSWORD EXPIRE;</code><br/>
+注意锁定MGMT_VIEW、DBSNMP、SYSMAN帐号或修改密码。(如果要使用DBConsole ，MGMT_VIEW,DBSNMP 、SYSMAN不能锁定，请修改密码)<br/>
+DIP、EXFSYS、OUTLN、TSMSYS、WMSYS默认已锁定，请验证。</p>
+
+<h2 id="toc_12">六、监听管理</h2>
+
+<h4 id="toc_13">修改默认监听端口</h4>
+
+<p>修改（需重启监听）</p>
+
+<pre class="line-numbers"><code class="language-text">$ORACLE_HOME/network/admin/listener.ora:
+(ADDRESS = (PROTOCOL = TCP)(HOST = 127.0.0.1)(PORT = 1521))
+修改PORT的值为新的监听端口-&gt;
+(ADDRESS = (PROTOCOL = TCP)(HOST = 127.0.0.1)(PORT = 3521))
+</code></pre>
+
+<p>确认：<br/>
+<code>lsnrctl status</code></p>
+
+<h4 id="toc_14">监听listener作ip访问限制</h4>
+
+<p>修改（需重启监听）</p>
+
+<pre class="line-numbers"><code class="language-$oracle_home/network/admin/sqlnet.ora">tcp.validnode_checking=yes
+tcp.invited_nodes=(localhost, 本机ip, 应用服务器ip，管理机ip等)
+</code></pre>
+
+<p>重启监听：<code>lsnrctl stop；lsnrctl start</code></p>
+
+<h4 id="toc_15">监听程序管理</h4>
+
+<p>通过设置listener.ora文件中的参数<code>ADMIN_RESTRICTIONS_listener_name</code>来防止远程对监听程序的非授授权管理，在<code>$ORACLE_HOME/network/admin/listener.ora</code>文件中，设置<code>ADMIN_RESTRICTIONS_(listener_name)=ON</code></p>
+
+<h4 id="toc_16">设置空闲连接时间</h4>
+
+<pre class="line-numbers"><code class="language-text">$ vi $ORACLE_HOME/network/admin/sqlnet.ora
+SQLNET.EXPIRE_TIME = 60
+</code></pre>
+
+<p>说明：客户端连接后在设置的时间内没有任何操作，客户端会自动断开。</p>
+
+<h2 id="toc_17">七、审计管理</h2>
+
+<p>ORACLE数据库具有对其内部所有发生的活动的审计能力，审计日志一般放在sys.aud$表中，也可以写入操作系统的审计跟踪文件中。可审计的活动有三种类型：登录尝试、数据库活动和对象存取，缺省情况下，数据库不启动审计，要求管理员配置数据库后才能启动审计。<br/>
+使用文本方式，打开数据库配置文件<code>init&lt;sid&gt;.ora</code>,更改以下参数配置<code>AUDIT_TRAIL＝True</code>。<br/>
+<code>init&lt;sid&gt;.ora</code>所在路径：</p>
+
+<pre class="line-numbers"><code class="language-text">$ORACLE_HOME/database/            (windows)
+$ORACLE_HOME/dbs/               (Linux)
+</code></pre>
+
+<p>接下来在sqlplus中执行以下两条命令：</p>
+
+<pre class="line-numbers"><code class="language-text">alter system set audit_trail=&#39;OS&#39; scope=spfile;
+alter system set Audit_sys_operations=true scope=spfile;
+</code></pre>
+
+<p>默认为false，当设置为true时，所有sys用户（包括以sysdba,sysoper身份登录的用户）的操作都会被记录。</p>
+
+<h2 id="toc_18">八、日志管理</h2>
+
+<p>日志目录管理、建议开启数据库的归档日志、保障数据安全</p>
+
+<pre class="line-numbers"><code class="language-text">SQL&gt; show parameter dump
+NAME                   TYPE        VALUE
+---------------------- ----------- ------------------------------
+background_core_dump   string      partial
+background_dump_dest   string      /opt/oracle/admin/portaldb/bdump
+core_dump_dest         string      /opt/oracle/admin/portaldb/cdump
+max_dump_file_size     string      UNLIMITED
+shadow_core_dump       string      partial
+user_dump_dest         string      /opt/oracle/admin/portaldb/udump
+SQL&gt; show parameter audit
+NAME                   TYPE        VALUE
+---------------------- ----------- ------------------------------
+audit_file_dest        string      /opt/oracle/admin/portaldb/adump
+</code></pre>
+
+<h2 id="toc_19">九、数据字典保护</h2>
+
+<p>只有sysdba才能访问数据字典基础表，普通用户不能查看X$开头的表。</p>
+
+<pre class="line-numbers"><code class="language-text">SQL&gt; show parameter O7_DICTIONARY_ACCESSIBILITY
+NAME TYPE VALUE
+------------------------------------ ----------- ------------------------------
+O7_DICTIONARY_ACCESSIBILITY booleanFALSE
+SQL&gt; alter system set O7_DICTIONARY_ACCESSIBILITY= TRUE scope = spfile;
+SQL&gt; shutdown immediate;
+SQL&gt; startup;
+</code></pre>
+
+<h2 id="toc_20">十、资源限制管理</h2>
+
+<p>Profile 分两部分(资源参数和密码参数)，<code>resource_limit</code>为 <code>TRUE</code> 限定资源参数<code>resource parameters</code>设置有效；不管 <code>resource_limit</code> 的值为 <code>TRUE</code> 或 FALSE密码参数<code>password parameters</code>设置始终有效。<br/>
+<code>alter system set resource_limit=true scope=both;</code><br/>
+常用资源参数（除非应用程序有明确的资源规划，一般不需修改）：<code>CPU_PER_SESSION、CPU_PER_CALL、LOGICAL_READS_PER_SESSION、LOGICAL_READS_PER_CALL、IDLE_TIME、CONNECT_TIME、PRIVATE_SGA</code></p>
+
+<h2 id="toc_21">十一、漏洞管理</h2>
+
+<h4 id="toc_22">SYS.DBMS_DEFER_SYS.DELETE_TRAN 存在 SQL 注入漏洞</h4>
+
+<p><code>DELETE_TRAN</code> 对 <code>DESTINATION</code> 参数的处理存在问题，可能导致 SQL 注入攻击。攻击者利用该漏洞可以提升权限，还可以以系统管理员权限执行 SQL 命令。<br/>
+查看哪些用户有执行权限：</p>
+
+<pre class="line-numbers"><code class="language-text">col pp format a35
+SELECT s.privilege||&#39; ON &#39;||s.owner||&#39;.&#39;||NVL(l.longname, s.table_name) pp, s.grantable, s.grantee FROM
+sys.dba_tab_privs s, javasnm l WHERE s.table_name = l.short(+)
+and s.privilege = &#39;EXECUTE&#39; and s.table_name like &#39;DBMS_DEFER_SYS%&#39;;
+</code></pre>
+
+<p>回收权限：</p>
+
+<pre class="line-numbers"><code class="language-text">REVOKE EXECUTE ON SYS. DBMS_DEFER_SYS FROM DBA;
+REVOKE EXECUTE ON SYS. DBMS_DEFER_SYS FROM WMSYS;
+</code></pre>
+
+<h4 id="toc_23">DBMS_AQELM 缓冲区溢出漏洞</h4>
+
+<p>由于没有对其传入参数进行缓冲区边界检查，当传入超长字符串时，就会引起缓冲区溢出。攻击者利用此漏洞可以在服务器上执行任意代码。默认情况下，属于 <code>AQ_ADMINISTRATOR_ROLE</code> 角色的用户才有 <code>DBMS_AQELM</code> 包的执行权限。</p>
+
+<pre class="line-numbers"><code class="language-sql">SELECT s.privilege||&#39; ON &#39;||s.owner||&#39;.&#39;||NVL(l.longname, s.table_name) pp, s.grantable, s.grantee FROM
+sys.dba_tab_privs s, javasnm l WHERE s.table_name = l.short(+)
+and s.privilege = &#39;EXECUTE&#39; and s.table_name like &#39;DBMS_AQELM%&#39;;
+</code></pre>
+
+<p>回收权限：</p>
+
+<pre class="line-numbers"><code class="language-text">REVOKE EXECUTE ON SYS. DBMS_AQELM FROM AQ_ADMINISTRATOR_ROLE;
+REVOKE EXECUTE ON SYS. DBMS_AQELM FROM EXECUTE_CATALOG_ROLE;
+REVOKE EXECUTE ON SYS. DBMS_AQELM FROM SYSTEM;
+</code></pre>
+
+            </div>
+            <div>
+                
+                
+                
+            </div>
+        </article>
+    </div>
+</div>
+
+<script src="asset/jquery-3.3.1.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $('#footer').show()
+    })
+</script>
+  <footer id="footer" class="cuckoo page-footer" style="display: none">
+    <div class="wrapper">
+        <p>Designed and Written by <a href="mailto:forrestchang7@gmail.com">Jiayuan Zhang</a></p>
+    </div>
+</footer>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({TeX: { equationNumbers: { autoNumber: "AMS" } }});</script>
+
