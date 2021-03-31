@@ -1,63 +1,89 @@
+
 <!DOCTYPE html>
-<html>
-
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js"><!--<![endif]-->
 <head>
-    <title>
-         Oracle表及表空间操作记录 - xiaobio 
-    </title>
+  <meta charset="utf-8">
+  <title>
+    
+  Oracle表及表空间操作记录 - xiaobio
+  
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Life it self">
+  </title>
+  <meta name="author" content="">
+  <meta name="description" content="Life it self">
 
-    <link rel="stylesheet" type="text/css" href="asset/cuckoo.css">
-    <link rel="stylesheet" type="text/css" href="asset/main.css">
-    <link rel="stylesheet" type="text/css" href="asset/atom-one-light.css">
-
-    <link rel="alternate" type="application/atom+xml" href="atom.xml" title="xiaobio">
-
-    <script src="asset/highlight.pack.js"></script>
-<!--    <script>hljs.initHighlightingOnLoad();</script>-->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <link href="asset/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="atom.xml" rel="alternate" title="xiaobio" type="application/atom+xml">
+  <script src="asset/js/modernizr-2.0.js"></script>
+  <script src="asset/js/jquery.min.js"></script>
+  <style type="text/css">
+  .cat-children-p{ padding: 6px 0px;}
+  .hljs{background: none;}
+  </style>
+  <script type="text/javascript">
+  var isAddSildbar = true;
+  </script>
+  <script src="asset/js/octopress.js" type="text/javascript"></script>
 </head>
+<script type="text/javascript">
+//链接新开窗口
+function addBlankTargetForLinks () {
+  $('a[href^="http"]').each(function(){
+      $(this).attr('target', '_blank');
+  });
+}
+$(document).ready(function(event) {
+  addBlankTargetForLinks();
+});
+</script>
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="index.html">xiaobio</a></h1>
+  
+    <h2>Life it self</h2>
+  
+</hgroup>
 
-<body>
-    <header class="site-header cuckoo">
-        <div class="wrapper">
-            <a class="site-title" href="index.html">xiaobio</a>
-            <nav class="site-nav">
-                <a href="#" class="menu-icon">
-                    <svg viewBox="0 0 18 15">
-                        <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"></path>
-                        <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"></path>
-                        <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"></path>
-                    </svg>
-                </a>
-                <div class="trigger">
-                    
-                        <a class="page-link" href="index.html">Home</a>
-                    
-                        <a class="page-link" href="archives.html">Archives</a>
-                    
-                        <a class="page-link" href="about.html">About</a>
-                    
-                </div>
-            </nav>
-        </div>
-    </header>
-</body>
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:biohyper.github.io/xiaobio" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
 
-</html>
- <div class="page-content cuckoo">
-    <div class="wrapper">
-        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
-            <header class="post-header">
-                <h1 class="post-title" itemprop="name headline">Oracle表及表空间操作记录</h1>
-                <div class="post-description">
-                    
-                </div>
-            </header>
-            <div class="post-content" itemprop="articleBody">
-                <h1 id="toc_0">关于表的操作</h1>
+  <li id=""><a target="_self" href="index.html">Home</a></li>
+
+  <li id=""><a target="_self" href="archives.html">Archives</a></li>
+
+  <li id=""><a target="_self" href="about.html">About</a></li>
+
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content"> 
+<div>
+	<article class="hentry" role="article">
+	<header>
+			  	<h1 class="entry-title">Oracle表及表空间操作记录</h1>
+				<p class="meta"><time datetime="2019-04-10T10:34:24+08:00" pubdate data-updated="true">2019/04/10</time></p>
+			 </header>
+		  	<div class="entry-content">
+			  	<h1 id="toc_0">关于表的操作</h1>
 
 <h2 id="toc_1">表空间</h2>
 
@@ -65,7 +91,7 @@
 <li>查看表空间和大小</li>
 </ol>
 
-<pre class="line-numbers"><code class="language-sql">SELECT UPPER(F.TABLESPACE_NAME) &quot;表空间名&quot;, D.TOT_GROOTTE_MB
+<pre><code class="language-sql">SELECT UPPER(F.TABLESPACE_NAME) &quot;表空间名&quot;, D.TOT_GROOTTE_MB
 &quot;表空间大小(M)&quot;, D.TOT_GROOTTE_MB - F.TOTAL_BYTES &quot;已使用空间(M)&quot;,    
 TO_CHAR(ROUND((D.TOT_GROOTTE_MB - F.TOTAL_BYTES) / 
 D.TOT_GROOTTE_MB * 100,2), &#39;990.99&#39;) &quot;使用比&quot;,    F.TOTAL_BYTES 
@@ -87,14 +113,14 @@ WHERE D.TABLESPACE_NAME = F.TABLESPACE_NAME ORDER BY 4 DESC;
 <li>查询表空间有那些表</li>
 </ol>
 
-<pre class="line-numbers"><code class="language-sql">select table_name from all_tables where tablespace_name = &#39;TEMP&#39;; 
+<pre><code class="language-sql">select table_name from all_tables where tablespace_name = &#39;TEMP&#39;; 
 </code></pre>
 
 <ol>
 <li> 查询所有用户表使用大小的前三十名</li>
 </ol>
 
-<pre class="line-numbers"><code class="language-sql">select * from (select segment_name,bytes from dba_segments
+<pre><code class="language-sql">select * from (select segment_name,bytes from dba_segments
 where owner = USER order by bytes desc ) where rownum &lt;= 30
 ――看占用空间最大的表 
 select segment_name,round(bytes/1024/1024/1024) as bytes_G 
@@ -105,7 +131,7 @@ from dba_segments where owner =&#39;SQMDB&#39; order by bytes desc
 <li> 建立表空间</li>
 </ol>
 
-<pre class="line-numbers"><code class="language-sql">CREATE BIGFILE TABLESPACE SQM_TRAFFIC DATAFILE
+<pre><code class="language-sql">CREATE BIGFILE TABLESPACE SQM_TRAFFIC DATAFILE
 &#39;/data3/sqmmt2db/sqm_traffic.dbf&#39; SIZE 5G AUTOEXTEND ON NEXT 1G MAXSIZE 34359738344K 
 NOLOGGING
 ONLINE
@@ -121,7 +147,7 @@ SEGMENT SPACE MANAGEMENT AUTO FLASHBACK ON;
 <li> 表空间迁移</li>
 </ol>
 
-<pre class="line-numbers"><code class="language-sql">--查看表空间 
+<pre><code class="language-sql">--查看表空间 
 select * from dba_data_files where tablespace_name=&#39;SQMDB&#39;
 --停掉表空间 alter tablespace SQMDB offline normal; 
 --在liunx里把表空间的文件移到新地址 
@@ -136,7 +162,7 @@ alter tablespace SQMDB rename datafile &#39;/data2/sqmmt/sqmdb.dbf&#39; to &#39;
 <li> 查看数据库引起锁表的SQL语句</li>
 </ol>
 
-<pre class="line-numbers"><code class="language-sql">SELECT a.username, a.machine, a.program, a.sid, a.serial#, a.status, c.piece, c.sql_text 
+<pre><code class="language-sql">SELECT a.username, a.machine, a.program, a.sid, a.serial#, a.status, c.piece, c.sql_text 
 FROM v session a,v sqltext c 
 WHERE a.sid in ( select distinct t2.sid from v locked_object t1,v session t2 where t1.session_id=t2.sid  ) 
 and a.sql_address=c.address(+) ORDER BY c.piece
@@ -146,7 +172,7 @@ and a.sql_address=c.address(+) ORDER BY c.piece
 <li> 查看数据库锁的情况</li>
 </ol>
 
-<pre class="line-numbers"><code class="language-sql">---查看数据库锁的情况必须要有DBA权限  
+<pre><code class="language-sql">---查看数据库锁的情况必须要有DBA权限  
 select object_id,session_id,locked_mode from v locked_object;  
 select t2.username,t2.sid,t2.serial#,t2.logon_time  
 from v locked_object t1,v session t2  
@@ -157,7 +183,7 @@ where t1.session_id=t2.sid order by t2.logon_time;
 <li> 查看被锁的表</li>
 </ol>
 
-<pre class="line-numbers"><code class="language-sql">select p.spid,a.serial#,c.object_name,b.session_id,
+<pre><code class="language-sql">select p.spid,a.serial#,c.object_name,b.session_id,
 b.oracle_username,b.os_user_name 
 from v process p,v session a, v locked_object b,all_objects  c 
 where p.addr=a.paddr and a.process=b.process and c.object_id=b.object_id;
@@ -167,7 +193,7 @@ where p.addr=a.paddr and a.process=b.process and c.object_id=b.object_id;
 <li> 杀掉进程 </li>
 </ol>
 
-<pre class="line-numbers"><code class="language-sql">alter system kill session &#39;sid,serial#&#39;; 
+<pre><code class="language-sql">alter system kill session &#39;sid,serial#&#39;; 
 alter system kill session &#39;3964,51752&#39; immediate;
 </code></pre>
 
@@ -187,7 +213,7 @@ alter system kill session &#39;3964,51752&#39; immediate;
 <li> 查看数据库使用的裸设备</li>
 </ol>
 
-<pre class="line-numbers"><code class="language-sql">select * from dba_data_files order by file_name; 
+<pre><code class="language-sql">select * from dba_data_files order by file_name; 
 select * from dba_temp_files  order by file_name; 
 select * from v controlfile; select * from v logfile;
 </code></pre>
@@ -202,7 +228,7 @@ select * from v controlfile; select * from v logfile;
 <li>查看表所占空间</li>
 </ol>
 
-<pre class="line-numbers"><code class="language-sql">SELECT TABLESPACE_NAME, TO_CHAR(SUM(BYTES)/(1024*1024),&#39;999G999D999&#39;) CNT_MB 
+<pre><code class="language-sql">SELECT TABLESPACE_NAME, TO_CHAR(SUM(BYTES)/(1024*1024),&#39;999G999D999&#39;) CNT_MB 
 FROM DBA_EXTENTS WHERE OWNER=&#39;&amp;OWNER&#39; AND 
 SEGMENT_NAME=&#39;&amp;TABLE_NAME&#39; AND SEGMENT_TYPE LIKE &#39;TABLE%&#39;
 GROUP BY TABLESPACE_NAME;
@@ -214,47 +240,374 @@ GROUP BY TABLESPACE_NAME;
 
 <p>有两种含义的表大小。一种是分配给一个表的物理空间数量，而不管空间是否被使用。可以这样查询获得字节数：</p>
 
-<pre class="line-numbers"><code class="language-sql">select segment_name, bytes from user_segments 
+<pre><code class="language-sql">select segment_name, bytes from user_segments 
 where segment_type = &#39;TABLE&#39;; 
 </code></pre>
 
-<pre class="line-numbers"><code class="language-sql">Select Segment_Name,Sum(bytes)/1024/1024 From User_Extents
+<pre><code class="language-sql">Select Segment_Name,Sum(bytes)/1024/1024 From User_Extents
 Group By Segment_Name
 </code></pre>
 
 <p>另一种表实际使用的空间。这样查询：</p>
 
-<pre class="line-numbers"><code class="language-sql">analyze table emp compute statistics;  select num_rows * 
+<pre><code class="language-sql">analyze table emp compute statistics;  select num_rows * 
 avg_row_len  from user_tables  where table_name = &#39;EMP&#39;;
 </code></pre>
 
 <p>查看每个表空间的大小</p>
 
-<pre class="line-numbers"><code class="language-text">Select Tablespace_Name,Sum(bytes)/1024/1024 From Dba_Segments 
+<pre><code class="language-text">Select Tablespace_Name,Sum(bytes)/1024/1024 From Dba_Segments 
 Group By Tablespace_Name
 </code></pre>
 
-            </div>
-            <div>
-                
-                
-                
-            </div>
-        </article>
-    </div>
+			</div>
+
+		
+	  
+		<footer>
+		 <p class="meta">
+
+			<strong>Categories:</strong>&nbsp; 
+			<span class="categories">
+			
+			    <a class='category' href='blog.html'>blog</a>&nbsp;
+			 
+			</span>
+		    </p>
+		    <p class="meta">
+		      
+		 </p>
+	    
+		<div class="sharing">
+		  
+          
+
+          
+
+		</div>
+
+	    <p class="meta">
+	    
+	        <a class="basic-alignment left" href="15548636640780.html" 
+	        title="Previous Post: Oracle缩小表空间方法">&laquo; Oracle缩小表空间方法</a>
+	    
+	    
+	        <a class="basic-alignment right" href="15548636640854.html" 
+	        title="Next Post: Vagrant单机虚拟集群">Vagrant单机虚拟集群 &raquo;</a>
+	    
+	    </p>
+	  </footer>
+	</article>
 </div>
+ <aside class="sidebar"> 
 
-<script src="asset/jquery-3.3.1.min.js"></script>
+	<section>
+	  <h1>Categories</h1>
+	  <ul id="recent_posts">
+	  
+	      <li class="post">
+	        <a href="blog.html"><strong>blog&nbsp;(15)</strong></a>
+	        
+	        
+	        
+	      </li>
+	  
+	      <li class="post">
+	        <a href="Mac.html"><strong>Mac&nbsp;(1)</strong></a>
+	        
+	        
+	        
+	      </li>
+	   
+	  </ul>
+	</section>
+	<section>
+	  <h1>Recent Posts</h1>
+	  <ul id="recent_posts">
+	  
+	      
+		      <li class="post">
+		        <a href="15548636640483.html">Google Home</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="15548636640521.html">Linux Oracle常规操作及脚本</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="15548636640557.html">Linux下Oracle彻底删除实例</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="15548636640597.html">Oracle 11g 内存(sga和pga)参数设置</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="15548636640631.html">Oracle 12C PDC基础</a>
+		      </li>
+	     
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	   
+	  </ul>
+	</section>
+	
+</aside> </div></div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 -  -
+  <span class="credit">Powered by <a target="_blank" href="http://www.mweb.im">MWeb</a> &nbsp;&nbsp; Theme by <a href="http://octopress.org">Octopress</a></span>
+</p>
 
-<script>
-    $(document).ready(function() {
-        $('#footer').show()
-    })
-</script>
-  <footer id="footer" class="cuckoo page-footer" style="display: none">
-    <div class="wrapper">
-        <p>Designed and Written by <a href="mailto:forrestchang7@gmail.com">Jiayuan Zhang</a></p>
-    </div>
 </footer>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({TeX: { equationNumbers: { autoNumber: "AMS" } }});</script>
 
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="asset/prism.js"></script>
+
+
+<style type="text/css">
+  
+/* PrismJS 1.14.0
+https://prismjs.com/download.html#themes=prism-solarizedlight&languages=markup+css+clike+javascript */
+/*
+ Solarized Color Schemes originally by Ethan Schoonover
+ http://ethanschoonover.com/solarized
+
+ Ported for PrismJS by Hector Matos
+ Website: https://krakendev.io
+ Twitter Handle: https://twitter.com/allonsykraken)
+*/
+
+/*
+SOLARIZED HEX
+--------- -------
+base03    #002b36
+base02    #073642
+base01    #586e75
+base00    #657b83
+base0     #839496
+base1     #93a1a1
+base2     #eee8d5
+base3     #fdf6e3
+yellow    #b58900
+orange    #cb4b16
+red       #dc322f
+magenta   #d33682
+violet    #6c71c4
+blue      #268bd2
+cyan      #2aa198
+green     #859900
+*/
+
+code[class*="language-"],
+pre[class*="language-"] {
+  color: #657b83; /* base00 */
+  font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+  text-align: left;
+  white-space: pre;
+  word-spacing: normal;
+  word-break: normal;
+  word-wrap: normal;
+
+  line-height: 1.5;
+
+  -moz-tab-size: 4;
+  -o-tab-size: 4;
+  tab-size: 4;
+
+  -webkit-hyphens: none;
+  -moz-hyphens: none;
+  -ms-hyphens: none;
+  hyphens: none;
+}
+
+pre[class*="language-"]::-moz-selection, pre[class*="language-"] ::-moz-selection,
+code[class*="language-"]::-moz-selection, code[class*="language-"] ::-moz-selection {
+  background: #073642; /* base02 */
+}
+
+pre[class*="language-"]::selection, pre[class*="language-"] ::selection,
+code[class*="language-"]::selection, code[class*="language-"] ::selection {
+  background: #073642; /* base02 */
+}
+
+/* Code blocks */
+pre[class*="language-"] {
+  padding: 1em;
+  margin: .5em 0;
+  overflow: auto;
+  border-radius: 0.3em;
+}
+
+:not(pre) > code[class*="language-"],
+pre[class*="language-"] {
+  background-color: #fdf6e3; /* base3 */
+}
+
+/* Inline code */
+:not(pre) > code[class*="language-"] {
+  padding: .1em;
+  border-radius: .3em;
+}
+
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+  color: #93a1a1; /* base1 */
+}
+
+.token.punctuation {
+  color: #586e75; /* base01 */
+}
+
+.namespace {
+  opacity: .7;
+}
+
+.token.property,
+.token.tag,
+.token.boolean,
+.token.number,
+.token.constant,
+.token.symbol,
+.token.deleted {
+  color: #268bd2; /* blue */
+}
+
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin,
+.token.url,
+.token.inserted {
+  color: #2aa198; /* cyan */
+}
+
+.token.entity {
+  color: #657b83; /* base00 */
+  background: #eee8d5; /* base2 */
+}
+
+.token.atrule,
+.token.attr-value,
+.token.keyword {
+  color: #859900; /* green */
+}
+
+.token.function,
+.token.class-name {
+  color: #b58900; /* yellow */
+}
+
+.token.regex,
+.token.important,
+.token.variable {
+  color: #cb4b16; /* orange */
+}
+
+.token.important,
+.token.bold {
+  font-weight: bold;
+}
+.token.italic {
+  font-style: italic;
+}
+
+.token.entity {
+  cursor: help;
+}
+
+
+pre[class*="language-"].line-numbers {
+    position: relative;
+    padding-left: 3.8em;
+    counter-reset: linenumber;
+}
+
+pre[class*="language-"].line-numbers > code {
+    position: relative;
+    white-space: inherit;
+}
+
+.line-numbers .line-numbers-rows {
+    position: absolute;
+    pointer-events: none;
+    top: 0;
+    font-size: 100%;
+    left: -3.8em;
+    width: 3em; /* works for line-numbers below 1000 lines */
+    letter-spacing: -1px;
+    border-right: 1px solid #999;
+
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+
+}
+
+    .line-numbers-rows > span {
+        pointer-events: none;
+        display: block;
+        counter-increment: linenumber;
+    }
+
+        .line-numbers-rows > span:before {
+            content: counter(linenumber);
+            color: #999;
+            display: block;
+            padding-right: 0.8em;
+            text-align: right;
+        }
+
+</style>
+  
+    
+
+
+</body>
+</html>

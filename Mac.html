@@ -1,99 +1,431 @@
+
 <!DOCTYPE html>
-<html>
-
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js"><!--<![endif]-->
 <head>
-    <title>
-         Mac - xiaobio 
-    </title>
+  <meta charset="utf-8">
+  <title>
+    
+  Mac - xiaobio
+  
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Life it self">
+  </title>
+  <meta name="author" content="">
+  <meta name="description" content="Life it self">
 
-    <link rel="stylesheet" type="text/css" href="asset/cuckoo.css">
-    <link rel="stylesheet" type="text/css" href="asset/main.css">
-    <link rel="stylesheet" type="text/css" href="asset/atom-one-light.css">
-
-    <link rel="alternate" type="application/atom+xml" href="atom.xml" title="xiaobio">
-
-    <script src="asset/highlight.pack.js"></script>
-<!--    <script>hljs.initHighlightingOnLoad();</script>-->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <link href="asset/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="atom.xml" rel="alternate" title="xiaobio" type="application/atom+xml">
+  <script src="asset/js/modernizr-2.0.js"></script>
+  <script src="asset/js/jquery.min.js"></script>
+  <style type="text/css">
+  .cat-children-p{ padding: 6px 0px;}
+  .hljs{background: none;}
+  </style>
+  <script type="text/javascript">
+  var isAddSildbar = true;
+  </script>
+  <script src="asset/js/octopress.js" type="text/javascript"></script>
 </head>
-
-<body>
-    <header class="site-header cuckoo">
-        <div class="wrapper">
-            <a class="site-title" href="index.html">xiaobio</a>
-            <nav class="site-nav">
-                <a href="#" class="menu-icon">
-                    <svg viewBox="0 0 18 15">
-                        <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"></path>
-                        <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"></path>
-                        <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"></path>
-                    </svg>
-                </a>
-                <div class="trigger">
-                    
-                        <a class="page-link" href="index.html">Home</a>
-                    
-                        <a class="page-link" href="archives.html">Archives</a>
-                    
-                        <a class="page-link" href="about.html">About</a>
-                    
-                </div>
-            </nav>
-        </div>
-    </header>
-</body>
-
-</html>
- <div id="loading"></div>
-<div class="page-content cuckoo" id="body" style="display: none">
-    <div class="wrapper">
-        <div class="home">
-            <div class="divider">
-                <p></p>
-            </div>
-            <ul class="entry-list">
-                
-                <li class="entry-item" itemscope="" itemtype="http://schema.org/Article">
-                    <div class="entry-detail">
-                        <h2 itemprop="name" class="entry-title"><a itemprop="url" href="15548636641006.html">鼠须管教</a></h2>
-                        <div class="entry-meta">
-                            <time class="entry-updated-time" datetime="2019/4/10">2019-04-10T10:34:24+08:00</time>
-                        </div>
-                        <div itemprop="description" class="entry-description">
-                            
-                        </div>
-                    </div>
-                </li>
-                
-            </ul>
-            <p class="paging">
-                 
-            </p>
-        </div>
-    </div>
-</div>
-
-<script src="asset/jquery-3.3.1.min.js"></script>
-<script src="asset/utils.js"></script>
-
-<script>
-    $(document).ready(function() {
-        $('.entry-updated-time').each(function() {
-            let parsedTime = parseTime($(this).text()).slice(0, 10)
-            $(this).text(parsedTime)
-        })
-        $('#loading').hide()
-        $('#body').show()
-        $('#footer').show()
-    })
+<script type="text/javascript">
+//链接新开窗口
+function addBlankTargetForLinks () {
+  $('a[href^="http"]').each(function(){
+      $(this).attr('target', '_blank');
+  });
+}
+$(document).ready(function(event) {
+  addBlankTargetForLinks();
+});
 </script>
-  <footer id="footer" class="cuckoo page-footer" style="display: none">
-    <div class="wrapper">
-        <p>Designed and Written by <a href="mailto:forrestchang7@gmail.com">Jiayuan Zhang</a></p>
-    </div>
-</footer>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({TeX: { equationNumbers: { autoNumber: "AMS" } }});</script>
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="index.html">xiaobio</a></h1>
+  
+    <h2>Life it self</h2>
+  
+</hgroup>
 
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:biohyper.github.io/xiaobio" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+
+  <li id=""><a target="_self" href="index.html">Home</a></li>
+
+  <li id=""><a target="_self" href="archives.html">Archives</a></li>
+
+  <li id=""><a target="_self" href="about.html">About</a></li>
+
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content"> 
+<div class="blog-index">
+
+	<article>
+		 <header>
+		  	<h1 class="entry-title"><a href="15548636641006.html">鼠须管教</a></h1>
+			<p class="meta"><time datetime="2019-04-10T10:34:24+08:00" 
+			pubdate data-updated="true">2019/04/10</time></p>
+		 </header>
+	  	<div class="entry-content">
+		  	
+		  	<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=298 height=52 src="//music.163.com/outchain/player?type=2&id=31445772&auto=0&height=32"></iframe>
+
+<h2 id="toc_0">综述</h2>
+
+<p><strong>Rime</strong>输入法在<a href="http://rime.im">官网</a>已经介绍很清楚，这里轻微搬运。Rime输入法全平台支持，只不过称呼不同而已，对应名称如下：</p>
+
+<ul>
+<li>Mac：「鼠须管」 <code>Squirrel</code></li>
+<li>Linux：「中州韻」 <code>ibus-rime</code></li>
+<li>Windows：「小狼毫」 <code>Weasel</code></li>
+</ul>
+
+<p>Rime输入法的特点在于<strong><em>完全自定义</em></strong>，不用担心广告，不用担心泄漏用户数据，自己决定要如何输入，且可以针对不用应用开启不同输入方案；当你决定要使用Rime输入法的时候，就证明你对输入法的要求与众不同咯 😂😂下面就正式开始作死！！</p>
+
+
+
+		</div>
+
+		 
+		 <footer>
+      	<a rel="full-article" href="15548636641006.html#more">read more &rarr;</a>
+    	</footer>
+    	
+
+	</article>
+  
+	<div class="pagination">
+	
+<a href="archives.html">Blog Archives</a>
+	 
+	    
+	</div>
+</div>
+ <aside class="sidebar"> 
+
+	<section>
+	  <h1>Categories</h1>
+	  <ul id="recent_posts">
+	  
+	      <li class="post">
+	        <a href="blog.html"><strong>blog&nbsp;(15)</strong></a>
+	        
+	        
+	        
+	      </li>
+	  
+	      <li class="post">
+	        <a href="Mac.html"><strong>Mac&nbsp;(1)</strong></a>
+	        
+	        
+	        
+	      </li>
+	   
+	  </ul>
+	</section>
+	<section>
+	  <h1>Recent Posts</h1>
+	  <ul id="recent_posts">
+	  
+	      
+		      <li class="post">
+		        <a href="15548636640483.html">Google Home</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="15548636640521.html">Linux Oracle常规操作及脚本</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="15548636640557.html">Linux下Oracle彻底删除实例</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="15548636640597.html">Oracle 11g 内存(sga和pga)参数设置</a>
+		      </li>
+	     
+	  
+	      
+		      <li class="post">
+		        <a href="15548636640631.html">Oracle 12C PDC基础</a>
+		      </li>
+	     
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	   
+	  </ul>
+	</section>
+	
+</aside> </div></div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 -  -
+  <span class="credit">Powered by <a target="_blank" href="http://www.mweb.im">MWeb</a> &nbsp;&nbsp; Theme by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+  
+/* PrismJS 1.14.0
+https://prismjs.com/download.html#themes=prism-solarizedlight&languages=markup+css+clike+javascript */
+/*
+ Solarized Color Schemes originally by Ethan Schoonover
+ http://ethanschoonover.com/solarized
+
+ Ported for PrismJS by Hector Matos
+ Website: https://krakendev.io
+ Twitter Handle: https://twitter.com/allonsykraken)
+*/
+
+/*
+SOLARIZED HEX
+--------- -------
+base03    #002b36
+base02    #073642
+base01    #586e75
+base00    #657b83
+base0     #839496
+base1     #93a1a1
+base2     #eee8d5
+base3     #fdf6e3
+yellow    #b58900
+orange    #cb4b16
+red       #dc322f
+magenta   #d33682
+violet    #6c71c4
+blue      #268bd2
+cyan      #2aa198
+green     #859900
+*/
+
+code[class*="language-"],
+pre[class*="language-"] {
+  color: #657b83; /* base00 */
+  font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+  text-align: left;
+  white-space: pre;
+  word-spacing: normal;
+  word-break: normal;
+  word-wrap: normal;
+
+  line-height: 1.5;
+
+  -moz-tab-size: 4;
+  -o-tab-size: 4;
+  tab-size: 4;
+
+  -webkit-hyphens: none;
+  -moz-hyphens: none;
+  -ms-hyphens: none;
+  hyphens: none;
+}
+
+pre[class*="language-"]::-moz-selection, pre[class*="language-"] ::-moz-selection,
+code[class*="language-"]::-moz-selection, code[class*="language-"] ::-moz-selection {
+  background: #073642; /* base02 */
+}
+
+pre[class*="language-"]::selection, pre[class*="language-"] ::selection,
+code[class*="language-"]::selection, code[class*="language-"] ::selection {
+  background: #073642; /* base02 */
+}
+
+/* Code blocks */
+pre[class*="language-"] {
+  padding: 1em;
+  margin: .5em 0;
+  overflow: auto;
+  border-radius: 0.3em;
+}
+
+:not(pre) > code[class*="language-"],
+pre[class*="language-"] {
+  background-color: #fdf6e3; /* base3 */
+}
+
+/* Inline code */
+:not(pre) > code[class*="language-"] {
+  padding: .1em;
+  border-radius: .3em;
+}
+
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+  color: #93a1a1; /* base1 */
+}
+
+.token.punctuation {
+  color: #586e75; /* base01 */
+}
+
+.namespace {
+  opacity: .7;
+}
+
+.token.property,
+.token.tag,
+.token.boolean,
+.token.number,
+.token.constant,
+.token.symbol,
+.token.deleted {
+  color: #268bd2; /* blue */
+}
+
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin,
+.token.url,
+.token.inserted {
+  color: #2aa198; /* cyan */
+}
+
+.token.entity {
+  color: #657b83; /* base00 */
+  background: #eee8d5; /* base2 */
+}
+
+.token.atrule,
+.token.attr-value,
+.token.keyword {
+  color: #859900; /* green */
+}
+
+.token.function,
+.token.class-name {
+  color: #b58900; /* yellow */
+}
+
+.token.regex,
+.token.important,
+.token.variable {
+  color: #cb4b16; /* orange */
+}
+
+.token.important,
+.token.bold {
+  font-weight: bold;
+}
+.token.italic {
+  font-style: italic;
+}
+
+.token.entity {
+  cursor: help;
+}
+
+
+pre[class*="language-"].line-numbers {
+    position: relative;
+    padding-left: 3.8em;
+    counter-reset: linenumber;
+}
+
+pre[class*="language-"].line-numbers > code {
+    position: relative;
+    white-space: inherit;
+}
+
+.line-numbers .line-numbers-rows {
+    position: absolute;
+    pointer-events: none;
+    top: 0;
+    font-size: 100%;
+    left: -3.8em;
+    width: 3em; /* works for line-numbers below 1000 lines */
+    letter-spacing: -1px;
+    border-right: 1px solid #999;
+
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+
+}
+
+    .line-numbers-rows > span {
+        pointer-events: none;
+        display: block;
+        counter-increment: linenumber;
+    }
+
+        .line-numbers-rows > span:before {
+            content: counter(linenumber);
+            color: #999;
+            display: block;
+            padding-right: 0.8em;
+            text-align: right;
+        }
+
+</style>
+  
+    
+
+
+</body>
+</html>

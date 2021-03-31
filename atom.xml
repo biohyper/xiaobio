@@ -1,22 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
+
   <title><![CDATA[xiaobio]]></title>
   <link href="https://biohyper.github.io/xiaobio/atom.xml" rel="self"/>
   <link href="https://biohyper.github.io/xiaobio/"/>
-  <updated>2019-04-10T15:50:20+08:00</updated>
+  <updated>2021-03-31T19:48:18+08:00</updated>
   <id>https://biohyper.github.io/xiaobio/</id>
   <author>
     <name><![CDATA[]]></name>
+    
   </author>
   <generator uri="http://www.coderforart.com/">CoderForArt</generator>
+
   
   <entry>
     <title type="html"><![CDATA[Google Home]]></title>
     <link href="https://biohyper.github.io/xiaobio/15548636640483.html"/>
     <updated>2019-04-10T10:34:24+08:00</updated>
     <id>https://biohyper.github.io/xiaobio/15548636640483.html</id>
-    <content type="html">
-<![CDATA[<h1 id="toc_0">Google 语令</h1>
+    <content type="html"><![CDATA[
+<h1 id="toc_0">Google 语令</h1>
 
 <ul>
 <li>turn on/off the power</li>
@@ -30,8 +33,8 @@
 <li>turn on/off the air cleaner</li>
 <li>turn on/off the air condition</li>
 </ul>
-]]>
-    </content>
+
+]]></content>
   </entry>
   
   <entry>
@@ -39,10 +42,10 @@
     <link href="https://biohyper.github.io/xiaobio/15548636640521.html"/>
     <updated>2019-04-10T10:34:24+08:00</updated>
     <id>https://biohyper.github.io/xiaobio/15548636640521.html</id>
-    <content type="html">
-<![CDATA[<h2 id="toc_0">启动数据库</h2>
+    <content type="html"><![CDATA[
+<h2 id="toc_0">启动数据库</h2>
 
-<pre class="line-numbers"><code class="language-text">su - oracle
+<pre><code class="language-text">su - oracle
 sqlplus /nolog
 conn /as sysdba
 startup  
@@ -50,7 +53,7 @@ startup
 
 <h2 id="toc_1">启动监听</h2>
 
-<pre class="line-numbers"><code class="language-text">lsnrctl start
+<pre><code class="language-text">lsnrctl start
 lsnrctl status
 </code></pre>
 
@@ -70,7 +73,7 @@ lsnrctl status
 
 <h2 id="toc_5">关闭oracle</h2>
 
-<pre class="line-numbers"><code class="language-text">su - oracle   
+<pre><code class="language-text">su - oracle   
 sqlplus /nolog   
 conn /as sysdba   
 shutdown immediate   
@@ -87,7 +90,7 @@ exit
 
 <p><code>alter table ningbo_rela_new modify (TERMINAL_BRAND varchar2(100))</code></p>
 
-<pre class="line-numbers"><code class="language-text">create table ningbo_rela_new
+<pre><code class="language-text">create table ningbo_rela_new
 (
   RI_QI varchar2(50),
   USER_MAC varchar2(50) ,
@@ -107,7 +110,7 @@ exit
 
 <p><code>alter table TABLE_NAME rename column FIELD_NAME to NEW_FIELD_NAME;</code></p>
 
-<pre class="line-numbers"><code class="language-text">create table student (
+<pre><code class="language-text">create table student (
 studentid int primary key not null,
 studentname varchar(8),
 age int);
@@ -137,7 +140,7 @@ EOF</code></p>
 
 <h2 id="toc_11">查看连接用户session</h2>
 
-<pre class="line-numbers"><code class="language-sql">SELECT b.spid, a.SID, b.osuser, a.machine, a.username, a.event,a.sql_text
+<pre><code class="language-sql">SELECT b.spid, a.SID, b.osuser, a.machine, a.username, a.event,a.sql_text
   FROM (SELECT b.username, b.machine, a.event, a.SID, b.serial#, c.sql_text
           FROM v$session_wait a, v$session b, v$sql c
          WHERE a.SID = b.SID AND b.sql_id = c.sql_id) a,
@@ -166,7 +169,7 @@ EXTENT MANAGEMENT LOCAL UNIFORM SIZE 1M;
 
 <h2 id="toc_13">查看imei不为空或者不是0在所有imei中占的比例----日常数据库</h2>
 
-<pre class="line-numbers"><code class="language-sql">select 
+<pre><code class="language-sql">select 
 sum(case when ms_imei is null then 0 else 1 end) No_imei,
 sum(case when ms_imei=0 then 0 when ms_imei is null then 0 else 1 end) No_add0_imei,
 count(*) No_user,
@@ -178,7 +181,7 @@ from gb t where imsi&gt;0
 
 <h2 id="toc_14">查看imei不为空或者不是0在所有imei中占的比例----应用数据库</h2>
 
-<pre class="line-numbers"><code class="language-sql">select 
+<pre><code class="language-sql">select 
 sum(case when imei is null then 0 else 1 end) &quot;2G_IMEI_No&quot;,
 sum(case when imei_td is null then 0 else 1 end) &quot;3G_IMEI_td_No&quot;,
 sum(case when imei is null then 0 when imei=0 then 0 else 1 end) &quot;2G_add0_IMEI_No&quot;,
@@ -193,7 +196,7 @@ from CFG_CUSTOMER
 
 <h2 id="toc_15">查看imei不为空在所有imei中占的比例----应用数据库库</h2>
 
-<pre class="line-numbers"><code class="language-sql">select 
+<pre><code class="language-sql">select 
 sum(case when imei is null then 0 else 1 end) &quot;2G_IMEI_No&quot;,
 sum(case when imei_td is null then 0 else 1 end) &quot;3G_IMEI_td_No&quot;,
 count(*) ALL_No,
@@ -215,7 +218,7 @@ from CFG_CUSTOMER
 
 <h2 id="toc_19">创建大文件表空间</h2>
 
-<pre class="line-numbers"><code class="language-sql">CREATE BIGFILE TABLESPACE DAT_DAILY_OTHER DATAFILE 
+<pre><code class="language-sql">CREATE BIGFILE TABLESPACE DAT_DAILY_OTHER DATAFILE 
   &#39;/data2/dailydb/DAT_DAILY_OTHER.1.DBF&#39; SIZE 5120M AUTOEXTEND ON NEXT 10240M MAXSIZE 34359738344K
 NOLOGGING
 DEFAULT 
@@ -226,8 +229,8 @@ BLOCKSIZE 8K
 SEGMENT SPACE MANAGEMENT AUTO
 FLASHBACK ON;
 </code></pre>
-]]>
-    </content>
+
+]]></content>
   </entry>
   
   <entry>
@@ -235,12 +238,14 @@ FLASHBACK ON;
     <link href="https://biohyper.github.io/xiaobio/15548636640557.html"/>
     <updated>2019-04-10T10:34:24+08:00</updated>
     <id>https://biohyper.github.io/xiaobio/15548636640557.html</id>
-    <content type="html">
-<![CDATA[<h2 id="toc_0">主要有两种方法，一般情况第一种方法可以实现</h2>
+    <content type="html"><![CDATA[
+<h2 id="toc_0">主要有两种方法，一般情况第一种方法可以实现</h2>
 
 <h2 id="toc_1">方法一：用安装oracle的用户进行dbca</h2>
 
 <p>图形界面执行<code>dbca</code>，从界面选择要删除的实例，按提示一步步执行即可，较简单！</p>
+
+<span id="more"></span><!-- more -->
 
 <h2 id="toc_2">方法二： dbca没有完全清除，需要其他操作来实现</h2>
 
@@ -250,7 +255,7 @@ FLASHBACK ON;
 <li>执行步骤如下：</li>
 </ul>
 
-<pre class="line-numbers"><code class="language-sql">SQL&gt;shutdown abort;      ##关闭数据库
+<pre><code class="language-sql">SQL&gt;shutdown abort;      ##关闭数据库
 Database altered.
 SQL&gt;startup mount;       #开启数据库到mount状态
 SQL&gt; select status from v$instance;      #check数据库在mount状态
@@ -270,11 +275,9 @@ SQL&gt; drop database;
 Database dropped.
 </code></pre>
 
-<span id="more"></span><!-- more -->
-
 <p>此时alert.log记录信息：</p>
 
-<pre class="line-numbers"><code class="language-text">Create Relation ADR_CONTROL
+<pre><code class="language-text">Create Relation ADR_CONTROL
 Create Relation ADR_INVALIDATION
 Create Relation INC_METER_IMPT_DEF
 Create Relation INC_METER_PK_IMPTS
@@ -301,8 +304,8 @@ Instance shutdown complete
 </ol>
 
 <p>删除结束后，再用安装oracle的用户进行<code>dbca</code>创建同名的数据库即可！</p>
-]]>
-    </content>
+
+]]></content>
   </entry>
   
   <entry>
@@ -310,14 +313,14 @@ Instance shutdown complete
     <link href="https://biohyper.github.io/xiaobio/15548636640597.html"/>
     <updated>2019-04-10T10:34:24+08:00</updated>
     <id>https://biohyper.github.io/xiaobio/15548636640597.html</id>
-    <content type="html">
-<![CDATA[<p>安装Oracle 11g时没有修改SGA的话，需要在安装好以后调整<code>sga_target 1G,pga_aggregate_target 200M</code>(这2个参数在11g里面可能默认是0)，然后重启数据库</p>
+    <content type="html"><![CDATA[
+<p>安装Oracle 11g时没有修改SGA的话，需要在安装好以后调整<code>sga_target 1G,pga_aggregate_target 200M</code>(这2个参数在11g里面可能默认是0)，然后重启数据库</p>
 
 <p>oracle占用系统总内存大小要根据实际业务量来确定，一般Oracle使用的大小为系统内存的<code>60%</code>或者<code>80%</code>，而SGA和PGA的比例一般为<code>6:4</code><br/>
 即：<br/>
 <code>SGA = system_total_memory * 60%(80%) * 60%</code><br/>
 <code>PGA = system_total_memory * 60%(80%) * 40%</code><br/>
-<figure><img src="https://ws3.sinaimg.cn/large/006tNc79ly1g1xdq9qbjaj31900u0wr2.jpg" alt=""/></figure></p>
+<img src="https://ws3.sinaimg.cn/large/006tNc79ly1g1xdq9qbjaj31900u0wr2.jpg" alt=""/></p>
 
 <span id="more"></span><!-- more -->
 
@@ -353,7 +356,7 @@ Instance shutdown complete
 
 <p>这个时候数据库已经无法启动，也就无法修改spfile，可以通过修改pfile达到目的：</p>
 
-<pre class="line-numbers"><code class="language-sql">SQL&gt; create pfile =&#39;/home/oracle/yourname.ora&#39; from spfile;
+<pre><code class="language-sql">SQL&gt; create pfile =&#39;/home/oracle/yourname.ora&#39; from spfile;
 SQL&gt; !echo &#39;*.memory_target=2048m&#39; &gt;&gt;&#39;/home/oracle/yourname.ora&#39;; 该命令可以通过vim手动修改/home/oracle/youname.ora替代
 </code></pre>
 
@@ -372,7 +375,7 @@ SQL&gt; !echo &#39;*.memory_target=2048m&#39; &gt;&gt;&#39;/home/oracle/yourname
 <li>修改<code>/etc/fstab</code>达到永久修改：</li>
 </ul>
 
-<pre class="line-numbers"><code class="language-bash">[root@cc ~]# vi /etc/fstab
+<pre><code class="language-bash">[root@cc ~]# vi /etc/fstab
 LABEL=/ / ext3 defaults 1 1
 LABEL=/boot /boot ext3 defaults 1 2
 LABEL=/data /data ext3 defaults 1 2
@@ -388,14 +391,14 @@ LABEL=SWAP-sda8 swap swap defaults 0 0
 <li>重新挂载<code>/dev/shm</code>，临时修改：</li>
 </ul>
 
-<pre class="line-numbers"><code class="language-bash">[root@cc ~]# umount /dev/shm
+<pre><code class="language-bash">[root@cc ~]# umount /dev/shm
 [root@cc ~]# mount -o remount,size=38g /dev/shm
 [root@cc ~]# df -h /dev/shm
 </code></pre>
 
 <h2 id="toc_2">启动后再改回从spfile启动</h2>
 
-<pre class="line-numbers"><code class="language-sql">SQL&gt;create spfile from pfile = &#39;/home/oracle/yourname.ora&#39;;
+<pre><code class="language-sql">SQL&gt;create spfile from pfile = &#39;/home/oracle/yourname.ora&#39;;
 
 SQL&gt; startup
 ORACLE instance started.
@@ -410,7 +413,7 @@ Database opened.
 
 <p>启动后也可以通过命令验证sga和pga大小：</p>
 
-<pre class="line-numbers"><code class="language-sql">SQL&gt; show parameter target;
+<pre><code class="language-sql">SQL&gt; show parameter target;
 NAME                                 TYPE        VALUE
 ------------------------------------ ----------- ------------------------------
 archive_lag_target                   integer     0
@@ -422,8 +425,8 @@ memory_target                        big integer 1224M
 pga_aggregate_target                 big integer 0
 sga_target                           big integer 0
 </code></pre>
-]]>
-    </content>
+
+]]></content>
   </entry>
   
   <entry>
@@ -431,8 +434,8 @@ sga_target                           big integer 0
     <link href="https://biohyper.github.io/xiaobio/15548636640631.html"/>
     <updated>2019-04-10T10:34:24+08:00</updated>
     <id>https://biohyper.github.io/xiaobio/15548636640631.html</id>
-    <content type="html">
-<![CDATA[<h2 id="toc_0">查看pdb开启状态</h2>
+    <content type="html"><![CDATA[
+<h2 id="toc_0">查看pdb开启状态</h2>
 
 <p><code>select con_id, dbid, guid, name , open_mode from v$pdbs;</code></p>
 
@@ -440,7 +443,7 @@ sga_target                           big integer 0
 
 <h3 id="toc_2">进入cdb</h3>
 
-<pre class="line-numbers"><code class="language-text">sqlplus /nolog
+<pre><code class="language-text">sqlplus /nolog
 conn sys/sys as dba
 sqlplus sys/sys@localhost:1521/orcl as sysdba
 </code></pre>
@@ -462,7 +465,7 @@ sqlplus sys/sys@localhost:1521/orcl as sysdba
 
 <h2 id="toc_6">新建pdb</h2>
 
-<pre class="line-numbers"><code class="language-text">CREATE PLUGGABLE DATABASE xff_db ADMIN USER xff IDENTIFIED BY xifenfei
+<pre><code class="language-text">CREATE PLUGGABLE DATABASE xff_db ADMIN USER xff IDENTIFIED BY xifenfei
 STORAGE (MAXSIZE 2G MAX_SHARED_TEMP_SIZE 100M)
 DEFAULT TABLESPACE xifenfei
 DATAFILE &#39;/u01/app/oracle/oradata/xifenfei/xff/xifenfei01.dbf&#39; SIZE 25M AUTOEXTEND ON  5  PATH_PREFIX = &#39;/u01/app/oracle/oradata/xifenfei/xff/&#39;
@@ -479,7 +482,7 @@ DROP PLUGGABLE DATABASE xff_db INCLUDING DATAFILES;
 
 <h2 id="toc_8">Plug Unplugging PDB</h2>
 
-<pre class="line-numbers"><code class="language-text">create pluggable database ff using &#39;/tmp/ff.xml&#39; copy file_name_convert=(&#39;/u01/app/oracle/oradata/xifenfei/FF/&#39;,&#39;/u01/app/oracle/oradata/xff_l/xff&#39;);
+<pre><code class="language-text">create pluggable database ff using &#39;/tmp/ff.xml&#39; copy file_name_convert=(&#39;/u01/app/oracle/oradata/xifenfei/FF/&#39;,&#39;/u01/app/oracle/oradata/xff_l/xff&#39;);
 exec DBMS_PDB.SYNC_PDB();
 </code></pre>
 
@@ -505,14 +508,14 @@ exec DBMS_PDB.SYNC_PDB();
 
 <h3 id="toc_13">进入pdb</h3>
 
-<pre class="line-numbers"><code class="language-text">alter session set container=pdborcl;
+<pre><code class="language-text">alter session set container=pdborcl;
 --//
 conn sys/sys@localhost:1521/pdborcl as sysdba;
 </code></pre>
 
 <h3 id="toc_14">进入cdb</h3>
 
-<pre class="line-numbers"><code class="language-text">alter session set container=cdb$root;
+<pre><code class="language-text">alter session set container=cdb$root;
 --//
 conn / as sysdba;
 </code></pre>
@@ -540,7 +543,7 @@ conn / as sysdba;
 <li>用户授权默认情况下是只会给当前container,在cdb中也可以指定container=all,对所有open的pdb且存在该用户都进行授权</li>
 </ul>
 
-<pre class="line-numbers"><code class="language-text">grant connect to c##xff;
+<pre><code class="language-text">grant connect to c##xff;
 grant resource to c##xff container=all
 </code></pre>
 
@@ -550,7 +553,7 @@ grant resource to c##xff container=all
 <li>在cdb中修改,pdb会继承进去;如果在pdb中修改会覆盖pdb从cdb中继承的参数含义</li>
 </ul>
 
-<pre class="line-numbers"><code class="language-text">alter system set open_cursors=500 container=all;
+<pre><code class="language-text">alter system set open_cursors=500 container=all;
 show parameter open_cursors;
 alter session set container=pdborcl;
 show parameter open_cursors;
@@ -563,7 +566,7 @@ show parameter open_cursors;
 
 <h2 id="toc_20">使用触发器实现PDB自动启动</h2>
 
-<pre class="line-numbers"><code class="language-text">--先连接  
+<pre><code class="language-text">--先连接  
 conn / as sysdba  
   
 --创建触发器  
@@ -574,8 +577,8 @@ EXECUTE IMMEDIATE &#39;ALTER PLUGGABLE DATABASE ALL OPEN&#39;;
 END open_pdbs;
 \   --sqlplus中结束脚本编写
 </code></pre>
-]]>
-    </content>
+
+]]></content>
   </entry>
   
   <entry>
@@ -583,8 +586,8 @@ END open_pdbs;
     <link href="https://biohyper.github.io/xiaobio/15548636640666.html"/>
     <updated>2019-04-10T10:34:24+08:00</updated>
     <id>https://biohyper.github.io/xiaobio/15548636640666.html</id>
-    <content type="html">
-<![CDATA[<h2 id="toc_0">sqlldr</h2>
+    <content type="html"><![CDATA[
+<h2 id="toc_0">sqlldr</h2>
 
 <h2 id="toc_1">概述</h2>
 
@@ -610,7 +613,7 @@ END open_pdbs;
 
 <p>控制文件的格式参考: </p>
 
-<pre class="line-numbers"><code class="language-text">LOAD DATA INFILE &quot;D:\t_card_bill.txt&quot;
+<pre><code class="language-text">LOAD DATA INFILE &quot;D:\t_card_bill.txt&quot;
      APPEND INTO TABLE t_Card_bill FIELDS TERMINATED BY &#39;,&#39; OPTIONALLY ENCLOSED BY &#39;&quot;&#39;
      (uaccountno,billtype, huafei,serviceno,fee_date date &#39;YYYY-MM-DD HH24:MI:SS&#39;, fee_enddate date &#39;YYYY-MM-DD HH24:MI:SS&#39;, caller_number, called_number, duration)
 </code></pre>
@@ -634,7 +637,7 @@ END open_pdbs;
 
 <h2 id="toc_6">多线程导入导出dmp</h2>
 
-<pre class="line-numbers"><code class="language-text">expdp sqmdb/mdasill@sqmmt directory=dmpdir tablespaces=sqmdb_rpt dumpfile=sqmdb_rpt_yb%U.dmp filesize=500M parallel=8
+<pre><code class="language-text">expdp sqmdb/mdasill@sqmmt directory=dmpdir tablespaces=sqmdb_rpt dumpfile=sqmdb_rpt_yb%U.dmp filesize=500M parallel=8
 dumpfile=sqmdb_rpt_yb%U.dmp filesize=500M parallel=8
  
 impdp sqmdb/mdasil@sqmmt tablespaces=sqmdb_rpt directory=dmpdir dumpfile=sqmdb_rpt_yb%U.dmp parallel=8
@@ -679,8 +682,8 @@ tablespaces=sqmdb_rpt directory=dmpdir dumpfile=sqmdb_rpt_yb%U.dmp parallel=8
 会话级别修改: <code>alter session set NLS_DATE_LANGUAGE=&#39;SIMPLIFIED CHINESE&#39;;</code><br/>
 系统级别修改（重启数据库生效）: <code>alter system set NLS_DATE_LANGUAGE=&#39;AMERICAN&#39; scope = spfile;</code><br/>
 <code>vim ~/.bash_profile : export NLS_LANG=AMERICAN_AMERICA.ZHS16GBK</code></p>
-]]>
-    </content>
+
+]]></content>
   </entry>
   
   <entry>
@@ -688,8 +691,8 @@ tablespaces=sqmdb_rpt directory=dmpdir dumpfile=sqmdb_rpt_yb%U.dmp parallel=8
     <link href="https://biohyper.github.io/xiaobio/15548636640706.html"/>
     <updated>2019-04-10T10:34:24+08:00</updated>
     <id>https://biohyper.github.io/xiaobio/15548636640706.html</id>
-    <content type="html">
-<![CDATA[<h2 id="toc_0">数值型常用函数</h2>
+    <content type="html"><![CDATA[
+<h2 id="toc_0">数值型常用函数</h2>
 
 <ol>
 <li><p>ceil(n)</p>
@@ -706,7 +709,7 @@ tablespaces=sqmdb_rpt directory=dmpdir dumpfile=sqmdb_rpt_yb%U.dmp parallel=8
 <code>select power(3,2) from dual; 9</code></p></li>
 <li><p>round(n,m)</p>
 <p>将n四舍五入,保留小数点后m位,省掉m就是到整数，m是负数就是小数点 前几位</p>
-<pre class="line-numbers"><code class="language-sql">SELECT round(23.75123) FROM dual;　 --返回23
+<pre><code class="language-sql">SELECT round(23.75123) FROM dual;　 --返回23
 select round(1234.5678,2) from dual; 1234.57<br/>
 SELECT round(23.75123, -1) FROM dual; --返回20
 </code></pre></li>
@@ -1838,8 +1841,8 @@ max min avg count sum<br/>
    select * from temp_dept; --无数据显示,数据自动清除<br/>
    on commit preserve rows:在会话期间表一直可以存在（保留数据）<br/>
    on commit delete rows:事务结束清除数据（在事务结束时自动删除表的数据）</p>
-]]>
-    </content>
+
+]]></content>
   </entry>
   
   <entry>
@@ -1847,17 +1850,17 @@ max min avg count sum<br/>
     <link href="https://biohyper.github.io/xiaobio/15548636640746.html"/>
     <updated>2019-04-10T10:34:24+08:00</updated>
     <id>https://biohyper.github.io/xiaobio/15548636640746.html</id>
-    <content type="html">
-<![CDATA[<h2 id="toc_0">切换oracle用户</h2>
+    <content type="html"><![CDATA[
+<h2 id="toc_0">切换oracle用户</h2>
 
-<pre class="line-numbers"><code class="language-bash">[root@tbxoracle oracle]# su - oracle
+<pre><code class="language-bash">[root@tbxoracle oracle]# su - oracle
 [oracle@tbxoracle ~]$ echo $ORACLE_SID
 daily
 </code></pre>
 
 <p>确认实例正常，接下来连接sqlplus</p>
 
-<pre class="line-numbers"><code class="language-sql">[oracle@tbxoracle ~]$ sqlplus / as sysdba
+<pre><code class="language-sql">[oracle@tbxoracle ~]$ sqlplus / as sysdba
 
 SQL*Plus: Release 11.2.0.4.0 Production on Thu Apr 13 15:10:19 2017
 
@@ -1874,7 +1877,7 @@ With the Partitioning, OLAP, Data Mining and Real Application Testing options
 
 <h2 id="toc_1">查看processes和sessions参数</h2>
 
-<pre class="line-numbers"><code class="language-sql">
+<pre><code class="language-sql">
 SQL&gt; show parameter process
 
 NAME                                 TYPE        VALUE
@@ -1890,7 +1893,7 @@ processes                            integer     1500
 processor_group_name                 string
 </code></pre>
 
-<pre class="line-numbers"><code class="language-sql">SQL&gt; show parameter sessions
+<pre><code class="language-sql">SQL&gt; show parameter sessions
 
 NAME                                 TYPE        VALUE
 ------------------------------------ ----------- ------------------------------
@@ -1907,7 +1910,7 @@ SQL&gt;
 
 <h2 id="toc_2">修改processes和sessions值</h2>
 
-<pre class="line-numbers"><code class="language-sql">SQL&gt; alter system set processes=1600 scope=spfile;
+<pre><code class="language-sql">SQL&gt; alter system set processes=1600 scope=spfile;
 
 System altered.
 
@@ -1934,7 +1937,7 @@ System altered.
 <li>查询数据库当前进程的连接数：</li>
 </ul>
 
-<pre class="line-numbers"><code class="language-sql">SQL&gt; select count(*) from v$process;
+<pre><code class="language-sql">SQL&gt; select count(*) from v$process;
 
   COUNT(*)
 ----------
@@ -1945,7 +1948,7 @@ System altered.
 <li>查看数据库当前会话的连接数：</li>
 </ul>
 
-<pre class="line-numbers"><code class="language-sql">SQL&gt; select count(*) from v$session;
+<pre><code class="language-sql">SQL&gt; select count(*) from v$session;
 
   COUNT(*)
 ----------
@@ -1956,7 +1959,7 @@ System altered.
 <li>查看数据库的并发连接数：</li>
 </ul>
 
-<pre class="line-numbers"><code class="language-sql">SQL&gt; select count(*) from v$session where status=&#39;ACTIVE&#39;;
+<pre><code class="language-sql">SQL&gt; select count(*) from v$session where status=&#39;ACTIVE&#39;;
 
   COUNT(*)
 ----------
@@ -1967,7 +1970,7 @@ System altered.
 <li>查看当前数据库建立的会话情况：</li>
 </ul>
 
-<pre class="line-numbers"><code class="language-sql">
+<pre><code class="language-sql">
 SQL&gt; select sid,serial#,username,program,machine,status from v$session;
        
        SID    SERIAL# USERNAME
@@ -1984,8 +1987,8 @@ WORKGROUP\LIANXI-PC                                              INACTIVE
 
 38 rows selected.
 </code></pre>
-]]>
-    </content>
+
+]]></content>
   </entry>
   
   <entry>
@@ -1993,14 +1996,14 @@ WORKGROUP\LIANXI-PC                                              INACTIVE
     <link href="https://biohyper.github.io/xiaobio/15548636640780.html"/>
     <updated>2019-04-10T10:34:24+08:00</updated>
     <id>https://biohyper.github.io/xiaobio/15548636640780.html</id>
-    <content type="html">
-<![CDATA[<h3 id="toc_0">1. 查看所有表空间和对应的存储文件信息</h3>
+    <content type="html"><![CDATA[
+<h3 id="toc_0">1. 查看所有表空间和对应的存储文件信息</h3>
 
 <p><code>select tablespace_name,file_name,online_status from dba_data_files</code></p>
 
 <h3 id="toc_1">2.  查看表空间总大小及空闲空间大小</h3>
 
-<pre class="line-numbers"><code class="language-sql">SELECT df.tablespace_name,df.sum_df_m 
+<pre><code class="language-sql">SELECT df.tablespace_name,df.sum_df_m 
 as space_m,fs.sum_fs_m free_space,
 to_char(trunc((df.sum_df_m-fs.sum_fs_m)/df.sum_df_m,2)*100) as &quot;used_%&quot;  
 from
@@ -2022,7 +2025,7 @@ df.tablespace_name=&#39;DAILY&#39;;
 
 <p>使用如下语句清空回收站 <code>purge recyclebin;</code> 如果回收站没有数据可以查询是否有太多的历史表没有删除成功</p>
 
-<pre class="line-numbers"><code class="language-sql">select table_name 
+<pre><code class="language-sql">select table_name 
 from user_tables 
 where tablespace_name = &#39;DAILY&#39;  
 and table_name like &#39;%&#39;||20160530||&#39;%&#39;;
@@ -2030,7 +2033,7 @@ and table_name like &#39;%&#39;||20160530||&#39;%&#39;;
 
 <p>如果有删除无用的历史表  </p>
 
-<pre class="line-numbers"><code class="language-sql">declare   
+<pre><code class="language-sql">declare   
 l_sql CLOB;   
 CURSOR P_Cursor is     
 SELECT &#39;DROP TABLE &#39; || table_name || &#39; purge&#39;       
@@ -2063,7 +2066,7 @@ END;
 
 <h3 id="toc_5">6.  查看每个表存储的起始位置</h3>
 
-<pre class="line-numbers"><code class="language-sql">select min(block_id),segment_name 
+<pre><code class="language-sql">select min(block_id),segment_name 
 from dba_extents 
 where file_id = 5 group by segment_name 
 order by min(block_id) 
@@ -2074,7 +2077,7 @@ desc
 
 <h3 id="toc_6">7.  移动大于一定block值的表</h3>
 
-<pre class="line-numbers"><code class="language-sql">declare   
+<pre><code class="language-sql">declare   
 l_sql CLOB;   
 CURSOR P_Cursor is SELECT DISTINCT &#39;alter table &#39; || segment_name || &#39; move tablespace DAILY_BK&#39;
 FROM dba_extents
@@ -2100,7 +2103,7 @@ END;
 
 <h3 id="toc_7">8.  检查是否有不可用的索引</h3>
 
-<pre class="line-numbers"><code class="language-sql">SELECT index_name,index_type, STATUS,partitioned, table_name
+<pre><code class="language-sql">SELECT index_name,index_type, STATUS,partitioned, table_name
 FROM User_Indexes  
 Where status=&#39;UNUSABLE&#39;;
 </code></pre>
@@ -2109,7 +2112,7 @@ Where status=&#39;UNUSABLE&#39;;
 
 <h3 id="toc_8">9.  再次查看表空间最大block号</h3>
 
-<pre class="line-numbers"><code class="language-sql">SELECT MAX(block_id) 
+<pre><code class="language-sql">SELECT MAX(block_id) 
 FROM dba_extents
 WHERE tablespace_name = &#39;DAILY&#39;;
 </code></pre>
@@ -2123,7 +2126,7 @@ WHERE tablespace_name = &#39;DAILY&#39;;
 
 <p>move操作和删除大量数据等都会花费很长的时间，为了防止网络断开，可以使用linux脚本执行命令，如下建立脚本sqlmove.sh脚本，调用sqlmove.sql中的语句进行数据库操作。注意给予oracle用户脚本的执行权限。</p>
 
-<pre class="line-numbers"><code class="language-bash">#!/bin/sh 
+<pre><code class="language-bash">#!/bin/sh 
 sqlplus daily/mdasil@daily 
 &lt;&lt; EOF 
 @/home/oracle/sqlmove.sql 
@@ -2132,7 +2135,7 @@ exit; EOF
 
 <h3 id="toc_11">12. 建立sqlmove.sql脚本</h3>
 
-<pre class="line-numbers"><code class="language-sql">declare
+<pre><code class="language-sql">declare
 l_sql CLOB;   
 CURSOR P_Cursor is SELECT DISTINCT 
 &#39;alter table &#39; || segment_name ||&#39; move&#39;FROM dba_extents 
@@ -2163,8 +2166,8 @@ END;
 使用如下语句进行移动 <br/>
 <code>ALTER TABLE TB_LOG1 MOVE TABLESPACE DAILY LOB(PARAMETER,MESSGAE) STORE AS(TABLESPACE DAILY);</code> </p>
 </blockquote>
-]]>
-    </content>
+
+]]></content>
   </entry>
   
   <entry>
@@ -2172,8 +2175,8 @@ END;
     <link href="https://biohyper.github.io/xiaobio/15548636640817.html"/>
     <updated>2019-04-10T10:34:24+08:00</updated>
     <id>https://biohyper.github.io/xiaobio/15548636640817.html</id>
-    <content type="html">
-<![CDATA[<h1 id="toc_0">关于表的操作</h1>
+    <content type="html"><![CDATA[
+<h1 id="toc_0">关于表的操作</h1>
 
 <h2 id="toc_1">表空间</h2>
 
@@ -2181,7 +2184,7 @@ END;
 <li>查看表空间和大小</li>
 </ol>
 
-<pre class="line-numbers"><code class="language-sql">SELECT UPPER(F.TABLESPACE_NAME) &quot;表空间名&quot;, D.TOT_GROOTTE_MB
+<pre><code class="language-sql">SELECT UPPER(F.TABLESPACE_NAME) &quot;表空间名&quot;, D.TOT_GROOTTE_MB
 &quot;表空间大小(M)&quot;, D.TOT_GROOTTE_MB - F.TOTAL_BYTES &quot;已使用空间(M)&quot;,    
 TO_CHAR(ROUND((D.TOT_GROOTTE_MB - F.TOTAL_BYTES) / 
 D.TOT_GROOTTE_MB * 100,2), &#39;990.99&#39;) &quot;使用比&quot;,    F.TOTAL_BYTES 
@@ -2203,14 +2206,14 @@ WHERE D.TABLESPACE_NAME = F.TABLESPACE_NAME ORDER BY 4 DESC;
 <li>查询表空间有那些表</li>
 </ol>
 
-<pre class="line-numbers"><code class="language-sql">select table_name from all_tables where tablespace_name = &#39;TEMP&#39;; 
+<pre><code class="language-sql">select table_name from all_tables where tablespace_name = &#39;TEMP&#39;; 
 </code></pre>
 
 <ol>
 <li> 查询所有用户表使用大小的前三十名</li>
 </ol>
 
-<pre class="line-numbers"><code class="language-sql">select * from (select segment_name,bytes from dba_segments
+<pre><code class="language-sql">select * from (select segment_name,bytes from dba_segments
 where owner = USER order by bytes desc ) where rownum &lt;= 30
 ――看占用空间最大的表 
 select segment_name,round(bytes/1024/1024/1024) as bytes_G 
@@ -2221,7 +2224,7 @@ from dba_segments where owner =&#39;SQMDB&#39; order by bytes desc
 <li> 建立表空间</li>
 </ol>
 
-<pre class="line-numbers"><code class="language-sql">CREATE BIGFILE TABLESPACE SQM_TRAFFIC DATAFILE
+<pre><code class="language-sql">CREATE BIGFILE TABLESPACE SQM_TRAFFIC DATAFILE
 &#39;/data3/sqmmt2db/sqm_traffic.dbf&#39; SIZE 5G AUTOEXTEND ON NEXT 1G MAXSIZE 34359738344K 
 NOLOGGING
 ONLINE
@@ -2237,7 +2240,7 @@ SEGMENT SPACE MANAGEMENT AUTO FLASHBACK ON;
 <li> 表空间迁移</li>
 </ol>
 
-<pre class="line-numbers"><code class="language-sql">--查看表空间 
+<pre><code class="language-sql">--查看表空间 
 select * from dba_data_files where tablespace_name=&#39;SQMDB&#39;
 --停掉表空间 alter tablespace SQMDB offline normal; 
 --在liunx里把表空间的文件移到新地址 
@@ -2252,7 +2255,7 @@ alter tablespace SQMDB rename datafile &#39;/data2/sqmmt/sqmdb.dbf&#39; to &#39;
 <li> 查看数据库引起锁表的SQL语句</li>
 </ol>
 
-<pre class="line-numbers"><code class="language-sql">SELECT a.username, a.machine, a.program, a.sid, a.serial#, a.status, c.piece, c.sql_text 
+<pre><code class="language-sql">SELECT a.username, a.machine, a.program, a.sid, a.serial#, a.status, c.piece, c.sql_text 
 FROM v session a,v sqltext c 
 WHERE a.sid in ( select distinct t2.sid from v locked_object t1,v session t2 where t1.session_id=t2.sid  ) 
 and a.sql_address=c.address(+) ORDER BY c.piece
@@ -2262,7 +2265,7 @@ and a.sql_address=c.address(+) ORDER BY c.piece
 <li> 查看数据库锁的情况</li>
 </ol>
 
-<pre class="line-numbers"><code class="language-sql">---查看数据库锁的情况必须要有DBA权限  
+<pre><code class="language-sql">---查看数据库锁的情况必须要有DBA权限  
 select object_id,session_id,locked_mode from v locked_object;  
 select t2.username,t2.sid,t2.serial#,t2.logon_time  
 from v locked_object t1,v session t2  
@@ -2273,7 +2276,7 @@ where t1.session_id=t2.sid order by t2.logon_time;
 <li> 查看被锁的表</li>
 </ol>
 
-<pre class="line-numbers"><code class="language-sql">select p.spid,a.serial#,c.object_name,b.session_id,
+<pre><code class="language-sql">select p.spid,a.serial#,c.object_name,b.session_id,
 b.oracle_username,b.os_user_name 
 from v process p,v session a, v locked_object b,all_objects  c 
 where p.addr=a.paddr and a.process=b.process and c.object_id=b.object_id;
@@ -2283,7 +2286,7 @@ where p.addr=a.paddr and a.process=b.process and c.object_id=b.object_id;
 <li> 杀掉进程 </li>
 </ol>
 
-<pre class="line-numbers"><code class="language-sql">alter system kill session &#39;sid,serial#&#39;; 
+<pre><code class="language-sql">alter system kill session &#39;sid,serial#&#39;; 
 alter system kill session &#39;3964,51752&#39; immediate;
 </code></pre>
 
@@ -2303,7 +2306,7 @@ alter system kill session &#39;3964,51752&#39; immediate;
 <li> 查看数据库使用的裸设备</li>
 </ol>
 
-<pre class="line-numbers"><code class="language-sql">select * from dba_data_files order by file_name; 
+<pre><code class="language-sql">select * from dba_data_files order by file_name; 
 select * from dba_temp_files  order by file_name; 
 select * from v controlfile; select * from v logfile;
 </code></pre>
@@ -2318,7 +2321,7 @@ select * from v controlfile; select * from v logfile;
 <li>查看表所占空间</li>
 </ol>
 
-<pre class="line-numbers"><code class="language-sql">SELECT TABLESPACE_NAME, TO_CHAR(SUM(BYTES)/(1024*1024),&#39;999G999D999&#39;) CNT_MB 
+<pre><code class="language-sql">SELECT TABLESPACE_NAME, TO_CHAR(SUM(BYTES)/(1024*1024),&#39;999G999D999&#39;) CNT_MB 
 FROM DBA_EXTENTS WHERE OWNER=&#39;&amp;OWNER&#39; AND 
 SEGMENT_NAME=&#39;&amp;TABLE_NAME&#39; AND SEGMENT_TYPE LIKE &#39;TABLE%&#39;
 GROUP BY TABLESPACE_NAME;
@@ -2330,27 +2333,27 @@ GROUP BY TABLESPACE_NAME;
 
 <p>有两种含义的表大小。一种是分配给一个表的物理空间数量，而不管空间是否被使用。可以这样查询获得字节数：</p>
 
-<pre class="line-numbers"><code class="language-sql">select segment_name, bytes from user_segments 
+<pre><code class="language-sql">select segment_name, bytes from user_segments 
 where segment_type = &#39;TABLE&#39;; 
 </code></pre>
 
-<pre class="line-numbers"><code class="language-sql">Select Segment_Name,Sum(bytes)/1024/1024 From User_Extents
+<pre><code class="language-sql">Select Segment_Name,Sum(bytes)/1024/1024 From User_Extents
 Group By Segment_Name
 </code></pre>
 
 <p>另一种表实际使用的空间。这样查询：</p>
 
-<pre class="line-numbers"><code class="language-sql">analyze table emp compute statistics;  select num_rows * 
+<pre><code class="language-sql">analyze table emp compute statistics;  select num_rows * 
 avg_row_len  from user_tables  where table_name = &#39;EMP&#39;;
 </code></pre>
 
 <p>查看每个表空间的大小</p>
 
-<pre class="line-numbers"><code class="language-text">Select Tablespace_Name,Sum(bytes)/1024/1024 From Dba_Segments 
+<pre><code class="language-text">Select Tablespace_Name,Sum(bytes)/1024/1024 From Dba_Segments 
 Group By Tablespace_Name
 </code></pre>
-]]>
-    </content>
+
+]]></content>
   </entry>
   
   <entry>
@@ -2358,8 +2361,8 @@ Group By Tablespace_Name
     <link href="https://biohyper.github.io/xiaobio/15548636640854.html"/>
     <updated>2019-04-10T10:34:24+08:00</updated>
     <id>https://biohyper.github.io/xiaobio/15548636640854.html</id>
-    <content type="html">
-<![CDATA[<h2 id="toc_0">Vagrant初步使用</h2>
+    <content type="html"><![CDATA[
+<h2 id="toc_0">Vagrant初步使用</h2>
 
 <p>Vagrant本为方便移植开发环境出现，正是因为该目的，可以部署好一台虚拟机从而copy出多个生成集群，例如虚拟Spark环境，只需要部署好一台，即可通过修改Vagrantfile生成多台，达到虚拟集群部署。再加上Ansible工具，可以大大节省部署时间。</p>
 
@@ -2402,7 +2405,7 @@ Group By Tablespace_Name
 
 <p>以下是<code>vagrant -h</code>之后结果：</p>
 
-<pre class="line-numbers"><code class="language-text">Usage: vagrant [options] &lt;command&gt; [&lt;args&gt;]
+<pre><code class="language-text">Usage: vagrant [options] &lt;command&gt; [&lt;args&gt;]
 
     -v, --version                    Print the version and exit.
     -h, --help                       Print this help.
@@ -2476,7 +2479,7 @@ or not commonly used. To see all subcommands, run the command
 
 <p>各种自定义话配置都在<code>Vagrantfile</code>文件中，Vagrant为<code>ruby</code>语言编写，所以配置文件遵循<code>ruby</code>语法。以下为虚拟集群示例：</p>
 
-<pre class="line-numbers"><code class="language-ruby"># -*- mode: ruby -*-
+<pre><code class="language-ruby"># -*- mode: ruby -*-
 # vi: set ft=ruby :
 
 Vagrant.configure(&quot;2&quot;) do |config|
@@ -2542,7 +2545,7 @@ end
 <li><p>配置文件可以通过循环配置，节约时间，节省代码：</p></li>
 </ul>
 
-<pre class="line-numbers"><code class="language-ruby">  
+<pre><code class="language-ruby">  
   (1..4).each do |i|
 
     config.vm.define &quot;node#{i}&quot; do |node|
@@ -2575,13 +2578,13 @@ end
 
 <p>在迁移到其他机器出现认证失败的错误，即长时间无法通过ssh登录：</p>
 
-<pre class="line-numbers"><code class="language-text">localvm2: Warning: Remote connection disconnect. Retrying...
+<pre><code class="language-text">localvm2: Warning: Remote connection disconnect. Retrying...
 localvm2: Warning: Authentication failure. Retrying...
 </code></pre>
 
 <p>这种情况大多为本机密钥和虚拟机公钥不匹配，可以通过修改<code>Vagrantfile</code>使用用户名密码登录，也可重新匹配私钥和公钥。参考该<a href="https://biohyper.github.io/2017/03/31/%E5%AF%86%E9%92%A5--%E5%85%8D%E5%AF%86SSH%E4%BA%92%E4%BF%A1/">文章</a></p>
-]]>
-    </content>
+
+]]></content>
   </entry>
   
   <entry>
@@ -2589,8 +2592,8 @@ localvm2: Warning: Authentication failure. Retrying...
     <link href="https://biohyper.github.io/xiaobio/15548636640889.html"/>
     <updated>2019-04-10T10:34:24+08:00</updated>
     <id>https://biohyper.github.io/xiaobio/15548636640889.html</id>
-    <content type="html">
-<![CDATA[<p>研究虚拟机搭建Hadoop环境，过程中master主机出现磁盘容量不足问题，查阅资料后解决，作此记录。</p>
+    <content type="html"><![CDATA[
+<p>研究虚拟机搭建Hadoop环境，过程中master主机出现磁盘容量不足问题，查阅资料后解决，作此记录。</p>
 
 <h2 id="toc_0">准备工作</h2>
 
@@ -2599,7 +2602,7 @@ localvm2: Warning: Authentication failure. Retrying...
 
 <span id="more"></span><!-- more -->
 
-<pre class="line-numbers"><code class="language-bash">[root@c0 opt]# fdisk -l
+<pre><code class="language-bash">[root@c0 opt]# fdisk -l
 
 Disk /dev/sda: 8589 MB, 8589934592 bytes
 255 heads, 63 sectors/track, 1044 cylinders
@@ -2635,7 +2638,7 @@ Disk identifier: 0x00000000
 
 <p><code>VirtualBox</code>的说明文档中明确给出了调整虚拟机磁盘大小的方法：</p>
 
-<pre class="line-numbers"><code class="language-text">VBoxManage modifyhd         &lt;uuid&gt;|&lt;filename&gt;
+<pre><code class="language-text">VBoxManage modifyhd         &lt;uuid&gt;|&lt;filename&gt;
                             [--type normal|writethrough|immutable|shareable|
                                     readonly|multiattach]
                             [--autoreset on|off]
@@ -2647,7 +2650,7 @@ Disk identifier: 0x00000000
 
 <p><code>VBoxManage list hdds</code>命令是用来查看有哪些虚拟机的磁盘可供修改，包括了磁盘路径和<code>UUID</code>，如下：</p>
 
-<pre class="line-numbers"><code class="language-text">$ VBoxManage list hdds
+<pre><code class="language-text">$ VBoxManage list hdds
 UUID:           b81ac2f6-a6a9-434a-9aab-c92858be6d24
 Parent UUID:    base
 State:          created
@@ -2671,7 +2674,7 @@ Encryption:     disabled
 
 <p><code>modifyhd</code>指令就是用来调整磁盘大小的。对象可以是虚拟机的<code>uuid</code>，也可以直接指定要调整大小的虚拟机磁盘文件名(全路径)。</p>
 
-<pre class="line-numbers"><code class="language-text">$ VBoxManage modifyhd &quot;/Users/yourname/VirtualBox VMs/c0/c0.vdi&quot; --resize 30720
+<pre><code class="language-text">$ VBoxManage modifyhd &quot;/Users/yourname/VirtualBox VMs/c0/c0.vdi&quot; --resize 30720
 0%...10%...20%...30%...40%...50%...60%...70%...80%...90%...100%
 </code></pre>
 
@@ -2685,7 +2688,7 @@ Encryption:     disabled
 
 <p>重新启动该虚拟机，再次查看磁盘情况：</p>
 
-<pre class="line-numbers"><code class="language-bash">[root@c0 ~]# fdisk -l
+<pre><code class="language-bash">[root@c0 ~]# fdisk -l
 
 Disk /dev/sda: 32.2 GB, 32212254720 bytes
 255 heads, 63 sectors/track, 3916 cylinders
@@ -2717,7 +2720,7 @@ Disk identifier: 0x00000000
 
 <p>此时，磁盘容量已经为30G，磁盘占用情况却没有发生变化：</p>
 
-<pre class="line-numbers"><code class="language-bash">[root@c0 ~]# df -h
+<pre><code class="language-bash">[root@c0 ~]# df -h
 Filesystem            Size  Used Avail Use% Mounted on
 /dev/mapper/vg_c0-lv_root
                       6.5G  5.5G  663M  90% /
@@ -2727,7 +2730,7 @@ tmpfs                 499M     0  499M   0% /dev/shm
 
 <p>试试看用 dd 命令创建一个大小为 1GB 的块文件：</p>
 
-<pre class="line-numbers"><code class="language-bash"># dd if=/dev/zero of=1.0G.img bs=1M count=1000
+<pre><code class="language-bash"># dd if=/dev/zero of=1.0G.img bs=1M count=1000
 dd: writing `1.0G.img&#39;: No space left on device
 1+0 records in
 0+0 records out
@@ -2742,7 +2745,7 @@ dd: writing `1.0G.img&#39;: No space left on device
 
 <p>重新启动虚拟机，登入 CentOS，使用 fdisk 将虚拟磁盘的空闲空间创建为一个新的分区。注意要使用代表 Linux LVM 的分区号 8e 来作为 ID。</p>
 
-<pre class="line-numbers"><code class="language-bash">[root@c0 ~]# fdisk /dev/sda
+<pre><code class="language-bash">[root@c0 ~]# fdisk /dev/sda
 
 WARNING: DOS-compatible mode is deprecated. It&#39;s strongly recommended to
          switch off the mode (command &#39;c&#39;) and change display units to
@@ -2819,7 +2822,7 @@ Syncing disks.
 
 <p>简化后操作如下：</p>
 
-<pre class="line-numbers"><code class="language-text"># fdisk /dev/sda
+<pre><code class="language-text"># fdisk /dev/sda
   n {new partition}
   p {primary partition}
   3 {partition number}
@@ -2832,7 +2835,7 @@ Syncing disks.
 
 <p>再次查看分区表，发现sda3已经成功创建</p>
 
-<pre class="line-numbers"><code class="language-bash">[root@c0 ~]# fdisk -l
+<pre><code class="language-bash">[root@c0 ~]# fdisk -l
 
 Disk /dev/sda: 32.2 GB, 32212254720 bytes
 255 heads, 63 sectors/track, 3916 cylinders
@@ -2869,7 +2872,7 @@ Disk identifier: 0x00000000
 
 <p>先看看当前 Volume Group：</p>
 
-<pre class="line-numbers"><code class="language-bash">[root@c0 ~]# vgdisplay
+<pre><code class="language-bash">[root@c0 ~]# vgdisplay
   --- Volume group ---
   VG Name               vg_c0
   System ID
@@ -2895,34 +2898,34 @@ Disk identifier: 0x00000000
 <p>名称为<code>vg_c0</code>，可调整大小（resizable），当前大小为<code>7.51GB</code>。<br/>
 活动的 LVM 卷通过以下命令查看：</p>
 
-<pre class="line-numbers"><code class="language-bash">[root@c0 ~]# lvscan
+<pre><code class="language-bash">[root@c0 ~]# lvscan
   ACTIVE            &#39;/dev/vg_c0/lv_root&#39; [6.71 GiB] inherit
   ACTIVE            &#39;/dev/vg_c0/lv_swap&#39; [816.00 MiB] inherit
 </code></pre>
 
 <p>先将分配过来的新磁盘空间创建为一个新的物理卷，</p>
 
-<pre class="line-numbers"><code class="language-text">[root@c0 ~]# pvcreate /dev/sda3
+<pre><code class="language-text">[root@c0 ~]# pvcreate /dev/sda3
   Physical volume &quot;/dev/sda3&quot; successfully created
 </code></pre>
 
 <p>然后使用新的物理卷来扩展<code>LVM</code>的<code>Volume Group</code>此处为<code>cg_c0</code></p>
 
-<pre class="line-numbers"><code class="language-text">[root@c0 ~]# vgextend vg_c0 /dev/sda3
+<pre><code class="language-text">[root@c0 ~]# vgextend vg_c0 /dev/sda3
   Volume group &quot;vg_c0&quot; successfully extended
 
 </code></pre>
 
 <p>然后扩展 LVM 的逻辑卷 VolGroup-lv_root，</p>
 
-<pre class="line-numbers"><code class="language-text">[root@c0 ~]# lvextend /dev/vg_c0/lv_root  /dev/sda3
+<pre><code class="language-text">[root@c0 ~]# lvextend /dev/vg_c0/lv_root  /dev/sda3
   Size of logical volume vg_c0/lv_root changed from 6.71 GiB (1718 extents) to 28.71 GiB (7349 extents).
   Logical volume lv_root successfully resized.
 </code></pre>
 
 <p>最后，调整逻辑卷文件系统的大小，</p>
 
-<pre class="line-numbers"><code class="language-text">[root@c0 ~]# resize2fs /dev/vg_c0/lv_root
+<pre><code class="language-text">[root@c0 ~]# resize2fs /dev/vg_c0/lv_root
 resize2fs 1.41.12 (17-May-2010)
 Filesystem at /dev/vg_c0/lv_root is mounted on /; on-line resizing required
 old desc_blocks = 1, new_desc_blocks = 2
@@ -2932,12 +2935,12 @@ The filesystem on /dev/vg_c0/lv_root is now 7525376 blocks long.
 
 <p>完成。看看效果：</p>
 
-<pre class="line-numbers"><code class="language-text">[root@c0 ~]# lvscan
+<pre><code class="language-text">[root@c0 ~]# lvscan
   ACTIVE            &#39;/dev/vg_c0/lv_root&#39; [28.71 GiB] inherit
   ACTIVE            &#39;/dev/vg_c0/lv_swap&#39; [816.00 MiB] inherit
 </code></pre>
 
-<pre class="line-numbers"><code class="language-text">  [root@c0 ~]# df -h
+<pre><code class="language-text">  [root@c0 ~]# df -h
 Filesystem            Size  Used Avail Use% Mounted on
 /dev/mapper/vg_c0-lv_root
                        29G  5.6G   22G  21% /
@@ -2960,7 +2963,7 @@ vgscan</p>
 
 <p>部分结果如下：</p>
 
-<pre class="line-numbers"><code class="language-text">[root@c0 opt]# lvmdiskscan
+<pre><code class="language-text">[root@c0 opt]# lvmdiskscan
   /dev/ram0          [      16.00 MiB]
   /dev/root          [      28.71 GiB]
   /dev/ram1          [      16.00 MiB]
@@ -2988,7 +2991,7 @@ vgscan</p>
   2 LVM physical volumes
 </code></pre>
 
-<pre class="line-numbers"><code class="language-[root@c0">  --- Physical volume ---
+<pre><code class="language-[root@c0">  --- Physical volume ---
   PV Name               /dev/sda2
   VG Name               vg_c0
   PV Size               7.51 GiB / not usable 3.00 MiB
@@ -3012,8 +3015,8 @@ vgscan</p>
 </code></pre>
 
 <p>该文章参考<a href="https://cnzhx.net/blog/resizing-lvm-centos-virtualbox-guest/">水景一页</a>，感谢作者!</p>
-]]>
-    </content>
+
+]]></content>
   </entry>
   
   <entry>
@@ -3021,8 +3024,8 @@ vgscan</p>
     <link href="https://biohyper.github.io/xiaobio/15548636640924.html"/>
     <updated>2019-04-10T10:34:24+08:00</updated>
     <id>https://biohyper.github.io/xiaobio/15548636640924.html</id>
-    <content type="html">
-<![CDATA[<h2 id="toc_0">场景：</h2>
+    <content type="html"><![CDATA[
+<h2 id="toc_0">场景：</h2>
 
 <ol>
 <li>因为在<code>/etc/fstab</code>写错<code>UUID</code>，导致系统无法正常启动，自动进入单用户模式；</li>
@@ -3066,8 +3069,8 @@ vgscan</p>
 <p>当出现文件系统错误时，可通过<code>fsck</code>命令修复：<br/>
 一种常见报错为挂载时<code>mount -t ext4 /dev/sdd1 /data2</code>提示<code>can&#39;t find ext4 filesystem</code><br/>
 此处报错提示可能错误，但意思应当不错，此时可通过<code>fsck -y /dev/sdd1</code>来修复该文件系统，<code>-y</code>参数是忽略过程中的确认信息需要输入的<code>yes</code></p>
-]]>
-    </content>
+
+]]></content>
   </entry>
   
   <entry>
@@ -3075,10 +3078,10 @@ vgscan</p>
     <link href="https://biohyper.github.io/xiaobio/15548636640961.html"/>
     <updated>2019-04-10T10:34:24+08:00</updated>
     <id>https://biohyper.github.io/xiaobio/15548636640961.html</id>
-    <content type="html">
-<![CDATA[<h1 id="toc_0">两种SSH免密登录方式</h1>
+    <content type="html"><![CDATA[
+<h1 id="toc_0">两种SSH免密登录方式</h1>
 
-<p><figure><img src="https://ws3.sinaimg.cn/large/006tNc79ly1g1xdretzc6j31900u0nf1.jpg" alt=""/></figure><br/>
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79ly1g1xdretzc6j31900u0nf1.jpg" alt=""/><br/>
 <blockquote class="blockquote-center">面朝大海，春暖花开</blockquote></p>
 
 <span id="more"></span><!-- more -->
@@ -3087,7 +3090,7 @@ vgscan</p>
 
 <p>该方法特别需要注意文件<strong>权限</strong>问题，权限不正确将会导致无法认证成功。</p>
 
-<pre class="line-numbers"><code class="language-text">用户路径权限：755
+<pre><code class="language-text">用户路径权限：755
 .ssh权限：700或者744
 authorized_keys权限：600
 </code></pre>
@@ -3119,7 +3122,7 @@ authorized_keys权限：600
 
 <p>脚本如下：</p>
 
-<pre class="line-numbers"><code class="language-bash">#！/usr/bin/expect -f    # expect程序可通过whereis查看安装路径
+<pre><code class="language-bash">#！/usr/bin/expect -f    # expect程序可通过whereis查看安装路径
 set timeout 10
 set id [lindex $argv 0]
 set ip 192.168.1.$id
@@ -3144,7 +3147,7 @@ interact
 
 <p>查看remote机器文件权限都正常，只有ssh时候还需要密码，报错信息感到异常的有如下内容：</p>
 
-<pre class="line-numbers"><code class="language-text">debug2: we sent a password packet, wait for reply
+<pre><code class="language-text">debug2: we sent a password packet, wait for reply
 ……
 authentications that can continue: publickey,gssapi-keyex,gssapi-with-mic,password
 ……
@@ -3169,7 +3172,7 @@ we did not send a packet, disable method
 
 <h3 id="toc_9">循环1000台机器的IP地址，生成密钥文件authorized_keys</h3>
 
-<pre class="line-numbers"><code class="language-bash">#!/bin/expect
+<pre><code class="language-bash">#!/bin/expect
 #循环1000台机器的IP地址，生成密钥文件authorized_keys
 
 for ip in {cat ip.list}
@@ -3211,7 +3214,7 @@ done
 
 <h3 id="toc_10">拷贝authorized_keys文件到各台机器上面</h3>
 
-<pre class="line-numbers"><code class="language-bash">#scp authorized_keys 文件到各台机器上面
+<pre><code class="language-bash">#scp authorized_keys 文件到各台机器上面
 
 for ip in {cat ip.list}
 
@@ -3229,8 +3232,8 @@ do
 
 done
 </code></pre>
-]]>
-    </content>
+
+]]></content>
   </entry>
   
   <entry>
@@ -3238,8 +3241,8 @@ done
     <link href="https://biohyper.github.io/xiaobio/15548636641006.html"/>
     <updated>2019-04-10T10:34:24+08:00</updated>
     <id>https://biohyper.github.io/xiaobio/15548636641006.html</id>
-    <content type="html">
-<![CDATA[<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=298 height=52 src="//music.163.com/outchain/player?type=2&id=31445772&auto=0&height=32"></iframe>
+    <content type="html"><![CDATA[
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=298 height=52 src="//music.163.com/outchain/player?type=2&id=31445772&auto=0&height=32"></iframe>
 
 <h2 id="toc_0">综述</h2>
 
@@ -3277,7 +3280,7 @@ done
 <ul>
 <li><code>#</code>号等符号快速上屏，尤其针对使用<code>Markdown</code>语法书写的同志；</li>
 <li><p>皮肤及字体优化，效果如下：<br/>
-<figure><img src="http://oninp1nwo.bkt.clouddn.com/fipu.jpg" alt="皮肤"/><figcaption>皮肤</figcaption></figure></p></li>
+<img src="http://oninp1nwo.bkt.clouddn.com/fipu.jpg" alt="皮肤"/></p></li>
 <li><p>实现类似macOS的中英文切换方式，通过大写锁定切换；<em>因个人将<code>⇪capslock</code>键与<code>⌃control</code>交换，且习惯<code>⇧shift</code>键输入大写字母，所以对<code>⇪</code>键需求不大</em></p></li>
 <li><p>修改候选字翻页设置，保留<code>Windows</code>习惯用<code>+</code><code>-</code>切换，增加<code>Mac</code>的方括号<code>[</code><code>]</code>切换；修改<code>control + d</code>调用方案切换</p></li>
 <li><p>配置及数据文件同步到<code>Dropbox</code>等云盘</p></li>
@@ -3308,9 +3311,9 @@ done
 <h2 id="toc_3">全局配置文件</h2>
 
 <p><strong>该文件<code>default.custom.yaml</code>主要配置全局输入选项,例如候选字数、如何切换输入方案等，默认通过「control + `」调出切换方案功能</strong><br/>
-　<figure><img src="http://oninp1nwo.bkt.clouddn.com/fipu.jpg" alt="切换"/><figcaption>切换</figcaption></figure></p>
+　<img src="http://oninp1nwo.bkt.clouddn.com/fipu.jpg" alt="切换"/></p>
 
-<pre class="line-numbers"><code class="language-yaml"># Rime default settings
+<pre><code class="language-yaml"># Rime default settings
 # encoding: utf-8
 patch:
   config_version: &quot;0.37&quot;
@@ -3439,13 +3442,13 @@ patch:
 <p><strong>该文件<code>squirrel.custom.yaml</code>配置输入法皮肤样式，如配色等</strong><br/>
 示例配置为自己常用配置，仅供参考，<code>squirrel.yaml</code>中有默认主题可供选择，只需修改以下内容</p>
 
-<pre class="line-numbers"><code class="language-text">style:
+<pre><code class="language-text">style:
     color_scheme: apathy
 </code></pre>
 
 <p>候选词条中如果出现生显示框问号，代表缺少生僻字字体，可以在方案配色的字体指向上多加一个花园明朝<code>HanaMinA</code>字体，文件示例如下：</p>
 
-<pre class="line-numbers"><code class="language-yaml">patch:
+<pre><code class="language-yaml">patch:
   us_keyboard_layout: false
   
   # options: always | never | appropriate
@@ -3486,7 +3489,7 @@ patch:
 
 <p><strong>该文件<code>luna_pinyin.custom.yaml</code>确认当前方案的自定义和配置</strong></p>
 
-<pre class="line-numbers"><code class="language-yaml"># Rime schema
+<pre><code class="language-yaml"># Rime schema
 # encoding: utf-8
 patch:
   schema:
@@ -3587,7 +3590,7 @@ patch:
 
 <p>通过修改<code>installation.yaml</code>文件可以实现备份功能，通过状态栏的同步功能可实现自动同步，配置文件如下：</p>
 
-<pre class="line-numbers"><code class="language-yaml">distribution_code_name: Squirrel
+<pre><code class="language-yaml">distribution_code_name: Squirrel
 distribution_name: &quot;鼠鬚管&quot;
 distribution_version: 0.9.26.2
 install_time: &quot;Fri Mar 24 22:20:10 2017&quot;
@@ -3601,8 +3604,8 @@ sync_dir: &quot;/Users/`username`/Dropbox/Rime&quot;    # 个人网盘路径
 <p>参考了好多帖子才搞清楚大概，这里做个记录。<br/>
 上文用到的配置文件有部分配置直接从默认配置copy过来，并非自定义配置，详细可以查看<a href="https://github.com/rime/home/wiki/RimeWithSchemata#%E9%97%9C%E6%96%BC%E8%AA%BF%E8%A9%A6">官网配置</a>以及作者<a href="https://gist.github.com/lotem">示例配置</a>。<br/>
 <a href="http://fonts.jp/hanazono/">花园明朝</a>字体<a href="https://www.dropbox.com/s/3sqipigs1liszao/HanaMinA.ttf?dl=0"><code>Dropbox</code>分享</a></p>
-]]>
-    </content>
+
+]]></content>
   </entry>
   
   <entry>
@@ -3610,8 +3613,8 @@ sync_dir: &quot;/Users/`username`/Dropbox/Rime&quot;    # 个人网盘路径
     <link href="https://biohyper.github.io/xiaobio/15548636641044.html"/>
     <updated>2019-04-10T10:34:24+08:00</updated>
     <id>https://biohyper.github.io/xiaobio/15548636641044.html</id>
-    <content type="html">
-<![CDATA[<h2 id="toc_0">一、安全补丁更新</h2>
+    <content type="html"><![CDATA[
+<h2 id="toc_0">一、安全补丁更新</h2>
 
 <p>及时更新数据库的安全补丁，减少数据库系统可能受到的攻击。<br/>
 查看<a href="https://support.oracle.com%EF%BC%8C%E4%B8%8B%E8%BD%BD%E5%B9%B6%E5%AE%89%E8%A3%85%E7%9B%B8%E5%85%B3%E7%9A%84%E5%AE%89%E5%85%A8%E8%A1%A5%E4%B8%81%E3%80%82">https://support.oracle.com，下载并安装相关的安全补丁。</a><br/>
@@ -3683,7 +3686,7 @@ DIP、EXFSYS、OUTLN、TSMSYS、WMSYS默认已锁定，请验证。</p>
 
 <p>修改（需重启监听）</p>
 
-<pre class="line-numbers"><code class="language-text">$ORACLE_HOME/network/admin/listener.ora:
+<pre><code class="language-text">$ORACLE_HOME/network/admin/listener.ora:
 (ADDRESS = (PROTOCOL = TCP)(HOST = 127.0.0.1)(PORT = 1521))
 修改PORT的值为新的监听端口-&gt;
 (ADDRESS = (PROTOCOL = TCP)(HOST = 127.0.0.1)(PORT = 3521))
@@ -3696,7 +3699,7 @@ DIP、EXFSYS、OUTLN、TSMSYS、WMSYS默认已锁定，请验证。</p>
 
 <p>修改（需重启监听）</p>
 
-<pre class="line-numbers"><code class="language-$oracle_home/network/admin/sqlnet.ora">tcp.validnode_checking=yes
+<pre><code class="language-$oracle_home/network/admin/sqlnet.ora">tcp.validnode_checking=yes
 tcp.invited_nodes=(localhost, 本机ip, 应用服务器ip，管理机ip等)
 </code></pre>
 
@@ -3708,7 +3711,7 @@ tcp.invited_nodes=(localhost, 本机ip, 应用服务器ip，管理机ip等)
 
 <h4 id="toc_16">设置空闲连接时间</h4>
 
-<pre class="line-numbers"><code class="language-text">$ vi $ORACLE_HOME/network/admin/sqlnet.ora
+<pre><code class="language-text">$ vi $ORACLE_HOME/network/admin/sqlnet.ora
 SQLNET.EXPIRE_TIME = 60
 </code></pre>
 
@@ -3720,13 +3723,13 @@ SQLNET.EXPIRE_TIME = 60
 使用文本方式，打开数据库配置文件<code>init&lt;sid&gt;.ora</code>,更改以下参数配置<code>AUDIT_TRAIL＝True</code>。<br/>
 <code>init&lt;sid&gt;.ora</code>所在路径：</p>
 
-<pre class="line-numbers"><code class="language-text">$ORACLE_HOME/database/            (windows)
+<pre><code class="language-text">$ORACLE_HOME/database/            (windows)
 $ORACLE_HOME/dbs/               (Linux)
 </code></pre>
 
 <p>接下来在sqlplus中执行以下两条命令：</p>
 
-<pre class="line-numbers"><code class="language-text">alter system set audit_trail=&#39;OS&#39; scope=spfile;
+<pre><code class="language-text">alter system set audit_trail=&#39;OS&#39; scope=spfile;
 alter system set Audit_sys_operations=true scope=spfile;
 </code></pre>
 
@@ -3736,7 +3739,7 @@ alter system set Audit_sys_operations=true scope=spfile;
 
 <p>日志目录管理、建议开启数据库的归档日志、保障数据安全</p>
 
-<pre class="line-numbers"><code class="language-text">SQL&gt; show parameter dump
+<pre><code class="language-text">SQL&gt; show parameter dump
 NAME                   TYPE        VALUE
 ---------------------- ----------- ------------------------------
 background_core_dump   string      partial
@@ -3755,7 +3758,7 @@ audit_file_dest        string      /opt/oracle/admin/portaldb/adump
 
 <p>只有sysdba才能访问数据字典基础表，普通用户不能查看X$开头的表。</p>
 
-<pre class="line-numbers"><code class="language-text">SQL&gt; show parameter O7_DICTIONARY_ACCESSIBILITY
+<pre><code class="language-text">SQL&gt; show parameter O7_DICTIONARY_ACCESSIBILITY
 NAME TYPE VALUE
 ------------------------------------ ----------- ------------------------------
 O7_DICTIONARY_ACCESSIBILITY booleanFALSE
@@ -3777,7 +3780,7 @@ SQL&gt; startup;
 <p><code>DELETE_TRAN</code> 对 <code>DESTINATION</code> 参数的处理存在问题，可能导致 SQL 注入攻击。攻击者利用该漏洞可以提升权限，还可以以系统管理员权限执行 SQL 命令。<br/>
 查看哪些用户有执行权限：</p>
 
-<pre class="line-numbers"><code class="language-text">col pp format a35
+<pre><code class="language-text">col pp format a35
 SELECT s.privilege||&#39; ON &#39;||s.owner||&#39;.&#39;||NVL(l.longname, s.table_name) pp, s.grantable, s.grantee FROM
 sys.dba_tab_privs s, javasnm l WHERE s.table_name = l.short(+)
 and s.privilege = &#39;EXECUTE&#39; and s.table_name like &#39;DBMS_DEFER_SYS%&#39;;
@@ -3785,7 +3788,7 @@ and s.privilege = &#39;EXECUTE&#39; and s.table_name like &#39;DBMS_DEFER_SYS%&#
 
 <p>回收权限：</p>
 
-<pre class="line-numbers"><code class="language-text">REVOKE EXECUTE ON SYS. DBMS_DEFER_SYS FROM DBA;
+<pre><code class="language-text">REVOKE EXECUTE ON SYS. DBMS_DEFER_SYS FROM DBA;
 REVOKE EXECUTE ON SYS. DBMS_DEFER_SYS FROM WMSYS;
 </code></pre>
 
@@ -3793,19 +3796,19 @@ REVOKE EXECUTE ON SYS. DBMS_DEFER_SYS FROM WMSYS;
 
 <p>由于没有对其传入参数进行缓冲区边界检查，当传入超长字符串时，就会引起缓冲区溢出。攻击者利用此漏洞可以在服务器上执行任意代码。默认情况下，属于 <code>AQ_ADMINISTRATOR_ROLE</code> 角色的用户才有 <code>DBMS_AQELM</code> 包的执行权限。</p>
 
-<pre class="line-numbers"><code class="language-sql">SELECT s.privilege||&#39; ON &#39;||s.owner||&#39;.&#39;||NVL(l.longname, s.table_name) pp, s.grantable, s.grantee FROM
+<pre><code class="language-sql">SELECT s.privilege||&#39; ON &#39;||s.owner||&#39;.&#39;||NVL(l.longname, s.table_name) pp, s.grantable, s.grantee FROM
 sys.dba_tab_privs s, javasnm l WHERE s.table_name = l.short(+)
 and s.privilege = &#39;EXECUTE&#39; and s.table_name like &#39;DBMS_AQELM%&#39;;
 </code></pre>
 
 <p>回收权限：</p>
 
-<pre class="line-numbers"><code class="language-text">REVOKE EXECUTE ON SYS. DBMS_AQELM FROM AQ_ADMINISTRATOR_ROLE;
+<pre><code class="language-text">REVOKE EXECUTE ON SYS. DBMS_AQELM FROM AQ_ADMINISTRATOR_ROLE;
 REVOKE EXECUTE ON SYS. DBMS_AQELM FROM EXECUTE_CATALOG_ROLE;
 REVOKE EXECUTE ON SYS. DBMS_AQELM FROM SYSTEM;
 </code></pre>
-]]>
-    </content>
+
+]]></content>
   </entry>
   
 </feed>
